@@ -93,7 +93,7 @@ public:
 	double Susceptible = 100.0;        // People (called Zombies in the text, but used as People)
 	double Zombies = patient_zero;     // Zombies
 	// Conveyor content is the stock "Bitten_Two" (people incubating):
-	std::vector<Batch> conveyor;            // accepts multiple batches
+	std::vector<Batch*> conveyor;            // accepts multiple batches
 
 
 
