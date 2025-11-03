@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Engine/DataTable.h"
+
 #include <vector>
 #include "SimulationController.generated.h"
 
@@ -54,6 +55,8 @@ public:
 
 	// Stocks (initial)
 
+
+	
 	// Just to check if we are correctly updating stocks - used in SimulationHUD
 	float Bitten{ 0.f };          // s Bitten -> in BittenArraySize
 

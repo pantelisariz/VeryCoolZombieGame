@@ -2,6 +2,8 @@
 
 
 #include "SimulationHUD.h"
+
+#include "PopulationSpawner.h"
 #include "Kismet/GameplayStatics.h"
 #include "SimulationController.h"
 
@@ -15,6 +17,18 @@ void ASimulationHUD::BeginPlay()
         UE_LOG(LogTemp, Warning, TEXT("SimulationHUD: SimulationController not found!"));
     }
     UE_LOG(LogTemp, Warning, TEXT("SimulationHUD: SimulationController found!"));
+
+	TArray<AActor*> FoundPopSpawners;
+	
+	// Atheist91. (2015, August). “Get All Actors Of Class” in C++. Retrieved from Unreal Engine: https://forums.unrealengine.com/t/get-all-actors-of-class-in-c/329740/4
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APopulationSpawner::StaticClass(), FoundPopSpawners);
+	if (auto* const CastPopulationSpawner = Cast<APopulationSpawner>(FoundPopSpawners[0]))
+	{
+		if (APlayerController* PlayerCharacterController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController() ))
+		{
+			PopulationSpawner = CastPopulationSpawner;
+		}
+	}
 }
 
 void ASimulationHUD::DrawHUD()
@@ -34,10 +48,10 @@ void ASimulationHUD::DrawHUD()
     //DrawText(message, textColor, screenPosition.X, screenPosition.Y, nullptr, textScale, true);
 
     // Multiple lines for better organization
-    FString stepMessage = FString::Printf(TEXT("Day: %d"), SimulationController->TimeStepsFinished);
-    FString humansMessage = FString::Printf(TEXT("Humans: %d"), (int)SimulationController->Susceptible);
-    FString bittenMessage = FString::Printf(TEXT("Bitten: %d"), (int)SimulationController->Bitten);
-    FString zombiesMessage = FString::Printf(TEXT("Zombies: %d"), (int)SimulationController->Zombies);
+    FString stepMessage = FString::Printf(TEXT("Day: %d"), SimulationController -> TimeStepsFinished);
+    FString humansMessage = FString::Printf(TEXT("Humans: %d"), PopulationSpawner -> HumanPopulation.Num());
+    FString bittenMessage = FString::Printf(TEXT("Bitten: %d"), PopulationSpawner -> BittenPopulation.Num());
+    FString zombiesMessage = FString::Printf(TEXT("Zombies: %d"), PopulationSpawner -> ZombiePopulation.Num());
 
     DrawText(stepMessage, textColor, screenPosition.X, screenPosition.Y, nullptr, textScale, true);
     DrawText(humansMessage, textColor, screenPosition.X, screenPosition.Y + 15.0f, nullptr, textScale, true);

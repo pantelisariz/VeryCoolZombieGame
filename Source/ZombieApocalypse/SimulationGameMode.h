@@ -16,5 +16,4 @@ class ZOMBIEAPOCALYPSE_API ASimulationGameMode : public AGameModeBase
 
 public:
 	ASimulationGameMode();
-	
 };

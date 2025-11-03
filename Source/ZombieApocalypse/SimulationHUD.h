@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PopulationSpawner.h"
 #include "GameFramework/HUD.h"
+#include "ZombieApocalypse.h"
 #include "SimulationHUD.generated.h"
 
 /**
@@ -22,5 +24,6 @@ public:
 private:
 	class ASimulationController* SimulationController{ nullptr };
 
-
+public:
+	APopulationSpawner* PopulationSpawner;
 };
