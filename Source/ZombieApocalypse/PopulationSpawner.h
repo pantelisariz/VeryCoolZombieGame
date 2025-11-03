@@ -30,6 +30,7 @@ public:
 
 	FVector GetRandomSpawnPoint();
 	TArray<AActor*> SpawnActors(int AmountToSpawn, TSubclassOf<AActor> SpawnClass);
+	int AmountOfActorsInArray(TArray<AActor*> ActorArray);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	TArray<FVector> Corners;
@@ -45,6 +46,12 @@ public:
 	TArray<AActor*> ZombiePopulation;
 	TArray<AActor*> BittenPopulation;
 	TArray<AActor*> HumanPopulation;
+
+	
+	int ZombiePopulationCount;
+	int BittenPopulationCount;
+	int HumanPopulationCount;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	TSubclassOf<AZombie> ZombieClass;

@@ -1,8 +1,7 @@
 // Copyright University of Inland Norway
 
-#include "SimulationController.h"
 #include "PopulationSpawner.h"
-
+#include "SimulationController.h"
 #include "Field/FieldSystemNodes.h"
 
 // Sets default values
@@ -12,8 +11,13 @@ APopulationSpawner::APopulationSpawner()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MapLenght = FVector(0,0,0);
+	
 	AmountZombiesToSpawnAtStart = 1;
 	AmountHumansToSpawnAtStart = 100;
+
+	ZombiePopulationCount = 0;
+	BittenPopulationCount = 0;
+	HumanPopulationCount = 0;
 
 }
 
@@ -24,8 +28,8 @@ void APopulationSpawner::BeginPlay()
 
 	MapLenght.X = (Corners[0].GetAbs().X) + (Corners[3].GetAbs().X);
 	MapLenght.Y = (Corners[0].GetAbs().Y) + (Corners[1].GetAbs().Y);
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Map Lenght X: %f"), MapLenght.X) );
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Map Lenght Y: %f"), MapLenght.Y) );
+	//GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Map Lenght X: %f"), MapLenght.X) );
+	//GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Map Lenght Y: %f"), MapLenght.Y) );
 
 	/*
 	float TotalPoints = MapLenght.X * MapLenght.Y;
@@ -36,6 +40,8 @@ void APopulationSpawner::BeginPlay()
 	*/
 	
 	HumanPopulation = SpawnActors(AmountHumansToSpawnAtStart, HumanClass);
+	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
+
 }
 
 // Called every frame
@@ -77,7 +83,16 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 		SpawnActors.Add(
 			GetWorld() -> SpawnActor<AActor>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0))
 			);
-		GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Spawned a Human")) );
+		// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Spawned a Human")) );
 	}
+	
 	return SpawnActors;
 }
+
+int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
+{
+	int AmountOfActors = 0;
+	AmountOfActors = ActorArray.Num();
+	return AmountOfActors;
+}
+

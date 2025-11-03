@@ -49,7 +49,7 @@ void ASimulationHUD::DrawHUD()
 
     // Multiple lines for better organization
     FString stepMessage = FString::Printf(TEXT("Day: %d"), SimulationController -> TimeStepsFinished);
-    FString humansMessage = FString::Printf(TEXT("Humans: %d"), PopulationSpawner -> HumanPopulation.Num());
+    FString humansMessage = FString::Printf(TEXT("Humans: %d"), PopulationSpawner -> HumanPopulationCount);
     FString bittenMessage = FString::Printf(TEXT("Bitten: %d"), PopulationSpawner -> BittenPopulation.Num());
     FString zombiesMessage = FString::Printf(TEXT("Zombies: %d"), PopulationSpawner -> ZombiePopulation.Num());
 
