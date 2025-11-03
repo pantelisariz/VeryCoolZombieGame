@@ -115,3 +115,16 @@ int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
 	return AmountOfActors;
 }
 
+void APopulationSpawner::CullHumanActor(AHuman* TargetHuman)
+{
+	BittenPopulation.Add(
+	GetWorld() -> SpawnActor<ABitten>(BittenClass, TargetHuman->GetActorLocation(), FRotator(0,0,0))
+	);
+	HumanPopulation.Remove(TargetHuman);
+}
+
+void APopulationSpawner::UpdatePopulationCount(AHuman* TargetHuman)
+{
+	CullHumanActor(TargetHuman);
+}
+

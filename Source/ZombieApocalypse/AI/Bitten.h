@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CustomPawnBase.h"
 #include "GameFramework/Pawn.h"
 #include "Bitten.generated.h"
 
 UCLASS()
-class ZOMBIEAPOCALYPSE_API ABitten : public APawn
+class ZOMBIEAPOCALYPSE_API ABitten : public ACustomPawnBase
 {
 	GENERATED_BODY()
 

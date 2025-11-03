@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CustomPawnBase.h"
 #include "GameFramework/Pawn.h"
+#include "ZombieApocalypse/PopulationSpawner.h"
 #include "Zombie.generated.h"
 
 UCLASS()
-class ZOMBIEAPOCALYPSE_API AZombie : public APawn
+class ZOMBIEAPOCALYPSE_API AZombie : public ACustomPawnBase
 {
 	GENERATED_BODY()
 
@@ -25,5 +27,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	APopulationSpawner* PopulationSpawner;
 
 };

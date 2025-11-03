@@ -32,6 +32,9 @@ public:
 	TArray<AActor*> SpawnActors(int AmountToSpawn, TSubclassOf<AActor> SpawnClass);
 	int AmountOfActorsInArray(TArray<AActor*> ActorArray);
 
+	void CullHumanActor(AHuman* TargetHuman);
+	void UpdatePopulationCount(AHuman* TargetHuman);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	TArray<FVector> Corners;
 

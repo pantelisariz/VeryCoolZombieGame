@@ -19,16 +19,21 @@ void ASimulationHUD::BeginPlay()
     UE_LOG(LogTemp, Warning, TEXT("SimulationHUD: SimulationController found!"));
 
 	TArray<AActor*> FoundPopSpawners;
-	
 	// Atheist91. (2015, August). “Get All Actors Of Class” in C++. Retrieved from Unreal Engine: https://forums.unrealengine.com/t/get-all-actors-of-class-in-c/329740/4
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APopulationSpawner::StaticClass(), FoundPopSpawners);
-	if (auto* const CastPopulationSpawner = Cast<APopulationSpawner>(FoundPopSpawners[0]))
+	
+	auto* const CastPopulationSpawner = Cast<APopulationSpawner>(FoundPopSpawners[0]);
+	if (not CastPopulationSpawner)
 	{
-		if (APlayerController* PlayerCharacterController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController() ))
-		{
-			PopulationSpawner = CastPopulationSpawner;
-		}
+		return;
 	}
+	
+	APlayerController* PlayerCharacterController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+	if (not PlayerCharacterController)
+	{
+		return;
+	}
+	PopulationSpawner = CastPopulationSpawner;
 }
 
 void ASimulationHUD::DrawHUD()

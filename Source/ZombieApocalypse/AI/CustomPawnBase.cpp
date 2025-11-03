@@ -1,0 +1,42 @@
+// Copyright University of Inland Norway
+
+
+#include "CustomPawnBase.h"
+
+// Sets default values
+ACustomPawnBase::ACustomPawnBase()
+{
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	health = 100;
+	maxSpeed = 100;
+	PawnAIController = nullptr;
+}
+
+// Called when the game starts or when spawned
+void ACustomPawnBase::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void ACustomPawnBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+// Called to bind functionality to input
+void ACustomPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+}
+
+void ACustomPawnBase::Interact()
+{
+}
+
+
