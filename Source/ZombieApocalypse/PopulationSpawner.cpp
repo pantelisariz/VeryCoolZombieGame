@@ -1,6 +1,9 @@
 // Copyright University of Inland Norway
 
 #include "PopulationSpawner.h"
+
+#include "NavigationSystem.h"
+#include "NavMesh/RecastNavMesh.h"
 #include "SimulationController.h"
 #include "Field/FieldSystemNodes.h"
 
@@ -52,9 +55,25 @@ void APopulationSpawner::Tick(float DeltaTime)
 }
 FVector APopulationSpawner::GetRandomSpawnPoint()
 {
-	FVector RandomSpawnPoint = FVector( FMath::FRandRange(Corners[0].X, Corners[3].X ), FMath::FRandRange(Corners[0].Y, Corners[1].Y ), 0 );
-
-	return RandomSpawnPoint;
+	// auto* const NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
+	UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>( GetWorld() );
+	if (not NavSys)
+	{
+		return FVector(0,0,0);
+	}
+	ARecastNavMesh* NavMesh = Cast<ARecastNavMesh>( NavSys -> GetDefaultNavDataInstance() );
+	
+	if (not NavMesh)
+	{
+		return FVector(0,0,0);
+	}
+	FNavLocation Loc;
+	if (not NavMesh -> GetRandomPointInNavigableRadius(GetActorLocation(), 10000.f, Loc))
+	{
+		return FVector(0,0,0);
+	}
+	
+	return Loc.Location;
 }
 
 TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<AActor> SpawnClass)

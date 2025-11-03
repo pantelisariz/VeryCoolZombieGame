@@ -8,7 +8,22 @@ public class ZombieApocalypse : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { 
+			"Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			"EnhancedInput",
+			"AIModule",
+			"NavigationSystem",
+			"StateTreeModule",
+			"GameplayStateTreeModule",
+			"Niagara",
+			"UMG",
+			"Slate",
+			"Json",
+			"JsonUtilities"
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
