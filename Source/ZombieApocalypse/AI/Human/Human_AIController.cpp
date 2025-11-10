@@ -17,7 +17,7 @@ void AHuman_AIController::OnPossess(APawn* InPawn)
 
 void AHuman_AIController::SetupPerceptionSystem()
 {
-	/*
+	
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	if (SightConfig)
 	{
@@ -34,10 +34,10 @@ void AHuman_AIController::SetupPerceptionSystem()
 		SightConfig -> DetectionByAffiliation.bDetectNeutrals = true;
 
 		GetPerceptionComponent() -> SetDominantSense(*SightConfig -> GetSenseImplementation());
-		GetPerceptionComponent() -> OnTargetPerceptionUpdated.AddDynamic(this, &AZombie_AIController::OnTargetDetected);
+		GetPerceptionComponent() -> OnTargetPerceptionUpdated.AddDynamic(this, &AHuman_AIController::OnTargetDetected);
 		GetPerceptionComponent() -> ConfigureSense(*SightConfig);
 	}
-	*/
+	
 }
 
 void AHuman_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
