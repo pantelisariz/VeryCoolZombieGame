@@ -19,7 +19,7 @@ void AZombie_AIController::OnPossess(APawn* InPawn)
 
 void AZombie_AIController::SetupPerceptionSystem()
 {
-	/*
+	
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	if (SightConfig)
 	{
@@ -39,7 +39,7 @@ void AZombie_AIController::SetupPerceptionSystem()
 		GetPerceptionComponent() -> OnTargetPerceptionUpdated.AddDynamic(this, &AZombie_AIController::OnTargetDetected);
 		GetPerceptionComponent() -> ConfigureSense(*SightConfig);
 	}
-	*/
+	
 }
 
 void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
@@ -58,7 +58,7 @@ void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Sti
 	float DistanceToPawnBase = ZombieCast -> GetDistanceTo(PawnBaseCast);
 
 	
-	GetBlackboardComponent() -> SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
+	GetBlackboardComponent() -> SetValueAsBool("CanSeeHuman", Stimulus.WasSuccessfullySensed());
 
 	
 	FVector ZombieLocation = GetPawn() -> GetActorLocation();
