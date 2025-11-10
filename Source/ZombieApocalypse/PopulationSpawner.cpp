@@ -91,7 +91,6 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 		SpawnPoints.Add(RandomSpawnPoint);
 
 		ACustomPawnBase* SpawnedActor = GetWorld() -> SpawnActor<ACustomPawnBase>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0));
-		SpawnedActor -> SpawnDefaultController();
 		SpawnedActors.Add(SpawnedActor);
 		// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Spawned a Human")) );
 	}
