@@ -29,7 +29,7 @@ public:
 
 
 	FVector GetRandomSpawnPoint();
-	TArray<AActor*> SpawnActors(int AmountToSpawn, TSubclassOf<AActor> SpawnClass);
+	TArray<AActor*> SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass);
 	int AmountOfActorsInArray(TArray<AActor*> ActorArray);
 
 	void CullHumanActor(AHuman* TargetHuman);

@@ -19,6 +19,7 @@ void AZombie_AIController::OnPossess(APawn* InPawn)
 
 void AZombie_AIController::SetupPerceptionSystem()
 {
+	/*
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	if (SightConfig)
 	{
@@ -38,6 +39,7 @@ void AZombie_AIController::SetupPerceptionSystem()
 		GetPerceptionComponent() -> OnTargetPerceptionUpdated.AddDynamic(this, &AZombie_AIController::OnTargetDetected);
 		GetPerceptionComponent() -> ConfigureSense(*SightConfig);
 	}
+	*/
 }
 
 void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
@@ -63,6 +65,6 @@ void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Sti
 	FVector PawnBaseLocation = PawnBaseCast -> GetActorLocation();
 
 	
-	GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Zombie Location; X: %f Y: %f Z: %f"), ZombieLocation.X, ZombieLocation.Y, ZombieLocation.Z));
-	GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("PawnBase Location; X: %f Y: %f Z: %f"), PawnBaseLocation.X, PawnBaseLocation.Y, PawnBaseLocation.Z));
+	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Zombie Location; X: %f Y: %f Z: %f"), ZombieLocation.X, ZombieLocation.Y, ZombieLocation.Z));
+	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("PawnBase Location; X: %f Y: %f Z: %f"), PawnBaseLocation.X, PawnBaseLocation.Y, PawnBaseLocation.Z));
 }

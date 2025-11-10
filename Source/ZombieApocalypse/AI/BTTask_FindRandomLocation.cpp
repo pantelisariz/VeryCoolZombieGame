@@ -23,7 +23,7 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 	{
 		return EBTNodeResult::Failed;
 	}
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to AIController")) );
+	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to AIController")) );
 
 
 	ACustomPawnBase* const PawnBaseCast = Cast<ACustomPawnBase>( AIControllerCast -> GetPawn() );
@@ -31,7 +31,7 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 	{
 		return EBTNodeResult::Failed;
 	}
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to PawnBase")) );
+	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to PawnBase")) );
 
 
 	FVector const Origin = PawnBaseCast -> GetActorLocation();
@@ -41,18 +41,16 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 	{
 		return EBTNodeResult::Failed;
 	}
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to NavMesh")) );
+	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to NavMesh")) );
 
 
 	FNavLocation Location;
-	bool IfLocationFound = NavSys -> GetRandomPointInNavigableRadius( Origin, SearchRadius, Location );
-	if (not IfLocationFound)
+	if (NavSys -> GetRandomPointInNavigableRadius( Origin, SearchRadius, Location ))
 	{
-		return EBTNodeResult::Failed;
+		OwnerComp.GetBlackboardComponent() -> SetValueAsVector( RandomPointInNavMesh.SelectedKeyName, Location.Location );
 	}
 
-	OwnerComp.GetBlackboardComponent() -> SetValueAsVector( RandomPointInNavMesh.SelectedKeyName, Location.Location );
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Random Location: %f, %f"), Location.Location.X, Location.Location.Y) );
+	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Random Location: %f, %f"), Location.Location.X, Location.Location.Y) );
 
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

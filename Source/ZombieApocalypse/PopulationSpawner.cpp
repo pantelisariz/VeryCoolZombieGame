@@ -66,10 +66,10 @@ FVector APopulationSpawner::GetRandomSpawnPoint()
 	return Loc.Location;
 }
 
-TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<AActor> SpawnClass)
+TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass)
 {
 	TArray<FVector> SpawnPoints;
-	TArray<AActor*> SpawnActors;
+	TArray<AActor*> SpawnedActors;
 	
 	for (int i = 0; i < AmountToSpawn; i++)
 	{
@@ -89,13 +89,14 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 
 		
 		SpawnPoints.Add(RandomSpawnPoint);
-		SpawnActors.Add(
-			GetWorld() -> SpawnActor<AActor>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0))
-			);
+
+		ACustomPawnBase* SpawnedActor = GetWorld() -> SpawnActor<ACustomPawnBase>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0));
+		SpawnedActor -> SpawnDefaultController();
+		SpawnedActors.Add(SpawnedActor);
 		// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Spawned a Human")) );
 	}
 	
-	return SpawnActors;
+	return SpawnedActors;
 }
 
 int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
