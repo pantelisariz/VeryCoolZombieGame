@@ -3,7 +3,7 @@
 
 #include "Zombie.h"
 
-#include "Human.h"
+#include "../Human//Human.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CustomPawnBase.h"
+#include "../CustomPawnBase.h"
 #include "GameFramework/Pawn.h"
 #include "Zombie.generated.h"
 

@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CustomPawnBase.h"
+#include "../CustomPawnBase.h"
 #include "GameFramework/Pawn.h"
-#include "Human.generated.h"
+#include "Bitten.generated.h"
 
 UCLASS()
-class ZOMBIEAPOCALYPSE_API AHuman : public ACustomPawnBase
+class ZOMBIEAPOCALYPSE_API ABitten : public ACustomPawnBase
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	AHuman();
+	ABitten();
 
 protected:
 	// Called when the game starts or when spawned

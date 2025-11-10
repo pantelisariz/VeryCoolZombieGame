@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PawnBase_AIController.h"
+#include "../PawnBase_AIController.h"
 #include "Zombie_AIController.generated.h"
 
 /**
