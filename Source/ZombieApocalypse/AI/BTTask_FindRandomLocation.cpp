@@ -46,7 +46,7 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 	FNavLocation Location;
 	if (NavSys -> GetRandomPointInNavigableRadius( Origin, SearchRadius, Location ))
 	{
-		OwnerComp.GetBlackboardComponent() -> SetValueAsVector( RandomPointInNavMesh.SelectedKeyName, Location.Location );
+		OwnerComp.GetBlackboardComponent() -> SetValueAsVector( Out_RandomPointInNavMesh.SelectedKeyName, Location.Location );
 	}
 
 	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Random Location: %f, %f"), Location.Location.X, Location.Location.Y) );

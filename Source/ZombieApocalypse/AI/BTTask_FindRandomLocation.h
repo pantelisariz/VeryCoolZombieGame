@@ -22,5 +22,5 @@ public:
 	float SearchRadius = 1500.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blackboard", meta = (AllowPrivateAccess = "true"))
-	FBlackboardKeySelector RandomPointInNavMesh;
+	FBlackboardKeySelector Out_RandomPointInNavMesh;
 };

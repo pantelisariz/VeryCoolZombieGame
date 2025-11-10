@@ -26,6 +26,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
 	float SearchRadius = 150.f;
 
+
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blackboard", meta = (AllowPrivateAccess = "true"))
-	FBlackboardKeySelector HumanActor;
+	FBlackboardKeySelector In_HumanActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blackboard", meta = (AllowPrivateAccess = "true"))
+	FBlackboardKeySelector Out_HumanTargetLocation;
 };

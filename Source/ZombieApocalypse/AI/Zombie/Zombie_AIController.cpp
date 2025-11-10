@@ -5,6 +5,7 @@
 
 #include "Zombie.h"
 #include "ZombieApocalypse/AI/CustomPawnBase.h"
+#include "ZombieApocalypse/AI/Human/Human.h"
 
 
 AZombie_AIController::AZombie_AIController(FObjectInitializer const& ObjectInitializer)
@@ -44,8 +45,8 @@ void AZombie_AIController::SetupPerceptionSystem()
 
 void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
-	ACustomPawnBase* PawnBaseCast = Cast<ACustomPawnBase>(Actor);
-	if (not PawnBaseCast)
+	AHuman* HumanCast = Cast<AHuman>(Actor);
+	if (not HumanCast)
 	{
 		return;
 	}
@@ -55,11 +56,12 @@ void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Sti
 	{
 		return;
 	}
-	float DistanceToPawnBase = ZombieCast -> GetDistanceTo(PawnBaseCast);
-
 	
 	GetBlackboardComponent() -> SetValueAsBool("bCanSeeHuman", Stimulus.WasSuccessfullySensed());
-	GetBlackboardComponent() -> SetValueAsObject("HumanObject", PawnBaseCast);
+	GetBlackboardComponent() -> SetValueAsObject("TargetActor", Actor);
+
+	GEngine -> AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Actor class: %s"), *Actor->GetClass()->GetName() ));
+
 	
 
 	
