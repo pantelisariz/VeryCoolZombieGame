@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AI/Zombie.h"
-#include "AI/Human.h"
-#include "AI/Bitten.h"
+#include "AI/Zombie//Zombie.h"
+#include "AI/Human//Human.h"
+#include "AI/Bitten//Bitten.h"
 
 
 
