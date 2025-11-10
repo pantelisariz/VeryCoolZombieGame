@@ -9,10 +9,17 @@ ACustomPawnBase::ACustomPawnBase()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
+	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	Mesh -> SetupAttachment(GetRootComponent());
 
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereCollider -> SetupAttachment(GetRootComponent());
+
+	
+	FloatingPawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovementComponent"));
+	FloatingPawnMovementComponent -> UpdatedComponent = RootComponent;
+	FloatingPawnMovementComponent -> bConstrainToPlane = 1;
+	FloatingPawnMovementComponent -> SetPlaneConstraintNormal( FVector(0,0, 1) );
 
 
 	health = 100;
