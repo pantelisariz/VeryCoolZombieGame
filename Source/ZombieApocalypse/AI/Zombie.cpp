@@ -5,16 +5,12 @@
 
 #include "Human.h"
 #include "Kismet/GameplayStatics.h"
-#include "ZombieApocalypse/PopulationSpawner.h"
 
 // Sets default values
 AZombie::AZombie()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collider"));
-	SphereCollider -> OnComponentBeginOverlap.AddDynamic( this, &AZombie::Interact );
 
 }
 
@@ -46,22 +42,11 @@ void AZombie::Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 	{
 		return;
 	}
-
-	TArray<AActor*> FoundPopSpawners;
-	// Atheist91. (2015, August). “Get All Actors Of Class” in C++. Retrieved from Unreal Engine: https://forums.unrealengine.com/t/get-all-actors-of-class-in-c/329740/4
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APopulationSpawner::StaticClass(), FoundPopSpawners);
 	
-	auto* const CastPopulationSpawner = Cast<APopulationSpawner>(FoundPopSpawners[0]);
-	if (not CastPopulationSpawner)
-	{
-		return;
-	}
 	
 	APlayerController* PlayerCharacterController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 	if (not PlayerCharacterController)
 	{
 		return;
 	}
-	PopulationSpawner = CastPopulationSpawner;
-		
 }

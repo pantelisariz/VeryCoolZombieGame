@@ -9,9 +9,18 @@ ACustomPawnBase::ACustomPawnBase()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	Mesh -> SetupAttachment(GetRootComponent());
+
+	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
+	SphereCollider -> SetupAttachment(Mesh);
+
+
 	health = 100;
 	maxSpeed = 100;
+	
 	PawnAIController = nullptr;
+	BehaviorTree = nullptr;
 }
 
 // Called when the game starts or when spawned

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "CustomPawnBase.h"
 #include "GameFramework/Pawn.h"
-#include "ZombieApocalypse/PopulationSpawner.h"
 #include "Zombie.generated.h"
 
 UCLASS()
@@ -29,9 +28,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) override;
+	virtual void Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	APopulationSpawner* PopulationSpawner;
+
 
 };

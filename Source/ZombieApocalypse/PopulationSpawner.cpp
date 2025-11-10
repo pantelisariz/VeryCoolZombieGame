@@ -28,22 +28,12 @@ APopulationSpawner::APopulationSpawner()
 void APopulationSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
-	MapLenght.X = (Corners[0].GetAbs().X) + (Corners[3].GetAbs().X);
-	MapLenght.Y = (Corners[0].GetAbs().Y) + (Corners[1].GetAbs().Y);
-	//GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Map Lenght X: %f"), MapLenght.X) );
-	//GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Map Lenght Y: %f"), MapLenght.Y) );
-
-	/*
-	float TotalPoints = MapLenght.X * MapLenght.Y;
-	float TotalSpawnablePoints = TotalPoints / AmountHumansToSpawnAtStart;
-
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Total Points: %f"), TotalPoints) );
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Total Spawnable Points: %f"), TotalSpawnablePoints) );
-	*/
 	
 	HumanPopulation = SpawnActors(AmountHumansToSpawnAtStart, HumanClass);
 	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
+
+	ZombiePopulation = SpawnActors(AmountZombiesToSpawnAtStart, ZombieClass);
+	ZombiePopulationCount = AmountOfActorsInArray(ZombiePopulation);
 
 }
 
@@ -110,8 +100,7 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 
 int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
 {
-	int AmountOfActors = 0;
-	AmountOfActors = ActorArray.Num();
+	int AmountOfActors = ActorArray.Num();
 	return AmountOfActors;
 }
 

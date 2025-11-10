@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Components/SphereComponent.h"
+#include "PawnBase_AIController.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "GameFramework/Pawn.h"
 #include "CustomPawnBase.generated.h"
 
@@ -28,10 +30,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	
 	//	+++ PAST THIS POINT OUR IMPLEMENTATION STARTS +++
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
-	UStaticMeshComponent* Mesh;
+	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	USphereComponent* SphereCollider;
@@ -42,10 +46,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	int health;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
-	TSubclassOf<AAIController> PawnAIController;
 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	UBehaviorTree*  BehaviorTree;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	TSubclassOf<APawnBase_AIController> PawnAIController;
+
+
+	
 	virtual void Interact();
 
 };

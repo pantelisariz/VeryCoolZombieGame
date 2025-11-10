@@ -35,9 +35,6 @@ public:
 	void CullHumanActor(AHuman* TargetHuman);
 	void UpdatePopulationCount(AHuman* TargetHuman);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
-	TArray<FVector> Corners;
-
 	FVector MapLenght;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
