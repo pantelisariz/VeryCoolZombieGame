@@ -4,13 +4,12 @@
 #include "PawnBase_AIController.h"
 #include "CustomPawnBase.h"
 
-APawnBase_AIController::APawnBase_AIController(FObjectInitializer const& ObjectInitializer)
-{
-}
 
 void APawnBase_AIController::OnPossess(APawn* InPawn)
 {
+	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("On Possessed")) );
 	Super::OnPossess(InPawn);
+
 
 	ACustomPawnBase* const CustomPawnBaseCast = Cast<ACustomPawnBase>(InPawn);
 	if (not CustomPawnBaseCast)
@@ -24,12 +23,15 @@ void APawnBase_AIController::OnPossess(APawn* InPawn)
 		return;
 	}
 
-	/*
+	
 	UBlackboardComponent* BlackBoardComponent;
 	UseBlackboard(BehaviorTreeCast -> BlackboardAsset, BlackBoardComponent);
 	Blackboard = BlackBoardComponent;
 	RunBehaviorTree(BehaviorTreeCast);
-	*/
+
+	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Possessed")) );
+
+	
 }
 
 void APawnBase_AIController::SetupPerceptionSystem()

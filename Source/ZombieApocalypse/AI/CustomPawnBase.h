@@ -31,8 +31,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	
 	//	+++ PAST THIS POINT OUR IMPLEMENTATION STARTS +++
+	virtual void Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
+
+
+
+	
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh;
@@ -56,6 +61,5 @@ public:
 
 
 	
-	virtual void Interact();
 
 };

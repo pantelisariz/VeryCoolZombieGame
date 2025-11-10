@@ -14,6 +14,15 @@ class ZOMBIEAPOCALYPSE_API AZombie_AIController : public APawnBase_AIController
 {
 	GENERATED_BODY()
 
+	
+public:
+	explicit AZombie_AIController(FObjectInitializer const& ObjectInitializer);
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
+
+private:
+	
 	virtual void SetupPerceptionSystem() override;
 
 	UFUNCTION()

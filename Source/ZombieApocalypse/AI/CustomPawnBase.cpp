@@ -44,8 +44,10 @@ void ACustomPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void ACustomPawnBase::Interact()
+void ACustomPawnBase::Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
 }
+
 
 
