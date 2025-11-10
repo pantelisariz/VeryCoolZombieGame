@@ -32,7 +32,6 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 
 
 	FVector const Origin = PawnBaseCast -> GetActorLocation();
-
 	UNavigationSystemV1* const NavSys = UNavigationSystemV1::GetCurrent( GetWorld() );
 	if (not NavSys)
 	{
@@ -40,6 +39,9 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 	}
 	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Successfully casted to NavMesh")) );
 
+	/*
+	 *Here the code actually starts. Everything over is just to make sure there's no nesting
+	 */
 
 	FNavLocation Location;
 	if (NavSys -> GetRandomPointInNavigableRadius( Origin, SearchRadius, Location ))

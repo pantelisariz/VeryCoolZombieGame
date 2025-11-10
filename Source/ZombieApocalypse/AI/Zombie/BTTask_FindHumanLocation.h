@@ -18,8 +18,14 @@ public:
 	explicit UBTTask_FindHumanLocation(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-	
-	UPROPERTY(EditAnywhere, Category = "Blackboard", meta = (AllowPrivateAccess = "true"))
-	FBlackboardKeySelector RandomPointInNavMesh;
-	
+private:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
+	bool bSearchRandom = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
+	float SearchRadius = 150.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blackboard", meta = (AllowPrivateAccess = "true"))
+	FBlackboardKeySelector HumanActor;
 };

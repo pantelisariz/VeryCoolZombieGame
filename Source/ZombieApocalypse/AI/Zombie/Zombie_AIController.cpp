@@ -58,11 +58,9 @@ void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Sti
 	float DistanceToPawnBase = ZombieCast -> GetDistanceTo(PawnBaseCast);
 
 	
-	GetBlackboardComponent() -> SetValueAsBool("CanSeeHuman", Stimulus.WasSuccessfullySensed());
-
+	GetBlackboardComponent() -> SetValueAsBool("bCanSeeHuman", Stimulus.WasSuccessfullySensed());
+	GetBlackboardComponent() -> SetValueAsObject("HumanObject", PawnBaseCast);
 	
-	FVector ZombieLocation = GetPawn() -> GetActorLocation();
-	FVector PawnBaseLocation = PawnBaseCast -> GetActorLocation();
 
 	
 	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Zombie Location; X: %f Y: %f Z: %f"), ZombieLocation.X, ZombieLocation.Y, ZombieLocation.Z));
