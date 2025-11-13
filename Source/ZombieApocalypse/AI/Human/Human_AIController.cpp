@@ -4,6 +4,7 @@
 #include "Human_AIController.h"
 #include "ZombieApocalypse/AI/CustomPawnBase.h"
 #include "Human.h"
+#include "ZombieApocalypse/AI/Zombie/Zombie.h"
 
 AHuman_AIController::AHuman_AIController(FObjectInitializer const& ObjectInitializer)
 {
@@ -23,10 +24,10 @@ void AHuman_AIController::SetupPerceptionSystem()
 	{
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception  Component")));
 		SightConfig -> SightRadius = 900.0f;
-		SightConfig -> LoseSightRadius = 1000.0f;
+		SightConfig -> LoseSightRadius = 1100.0f;
 		SightConfig -> PointOfViewBackwardOffset = 80.0f;
 		SightConfig -> NearClippingRadius = 50.0f;
-		SightConfig -> PeripheralVisionAngleDegrees = 90.0f;
+		SightConfig -> PeripheralVisionAngleDegrees = 180.0f;
 		SightConfig -> SetMaxAge(3.0f);
 		// SightConfig -> AutoSuccessRangeFromLastSeenLocation = 50.f;
 		SightConfig -> DetectionByAffiliation.bDetectEnemies = true;
@@ -42,25 +43,10 @@ void AHuman_AIController::SetupPerceptionSystem()
 
 void AHuman_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
-	ACustomPawnBase* PawnBaseCast = Cast<ACustomPawnBase>(Actor);
-	if (not PawnBaseCast)
-	{
-		return;
-	}
+	if (!Actor->IsA(AZombie::StaticClass())) return;
 
-	AHuman* const HumanCast = Cast<AHuman>(GetPawn());
-	if (not HumanCast)
-	{
-		return;
-	}
-	float DistanceToPawnBase = HumanCast->GetDistanceTo(PawnBaseCast);
-
-
-	GetBlackboardComponent()->SetValueAsBool("CanSeeZombie", Stimulus.WasSuccessfullySensed());
-
-
-	FVector HumanLocation = GetPawn()->GetActorLocation();
-	FVector PawnBaseLocation = PawnBaseCast->GetActorLocation();
+	GetBlackboardComponent()->SetValueAsBool("bCanSeeZombie", Stimulus.WasSuccessfullySensed());
+	GetBlackboardComponent()->SetValueAsObject("TargetActor", Stimulus.WasSuccessfullySensed() ? Actor : nullptr);
 
 
 	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Zombie Location; X: %f Y: %f Z: %f"), ZombieLocation.X, ZombieLocation.Y, ZombieLocation.Z));

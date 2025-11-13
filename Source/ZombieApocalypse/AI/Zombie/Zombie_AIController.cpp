@@ -25,11 +25,11 @@ void AZombie_AIController::SetupPerceptionSystem()
 	if (SightConfig)
 	{
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception  Component")));
-		SightConfig -> SightRadius = 900.0f;
+		SightConfig -> SightRadius = 800.f;
 		SightConfig -> LoseSightRadius = 1000.0f;
 		SightConfig -> PointOfViewBackwardOffset = 80.0f;
 		SightConfig -> NearClippingRadius = 50.0f;
-		SightConfig -> PeripheralVisionAngleDegrees = 90.0f;
+		SightConfig -> PeripheralVisionAngleDegrees = 180.0f;
 		SightConfig -> SetMaxAge(3.0f);
 		// SightConfig -> AutoSuccessRangeFromLastSeenLocation = 50.f;
 		SightConfig -> DetectionByAffiliation.bDetectEnemies = true;
@@ -45,24 +45,10 @@ void AZombie_AIController::SetupPerceptionSystem()
 
 void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
-	AHuman* HumanCast = Cast<AHuman>(Actor);
-	if (not HumanCast)
-	{
-		return;
-	}
-	
-	AZombie* const ZombieCast = Cast<AZombie>(GetPawn());
-	if (not ZombieCast)
-	{
-		return;
-	}
-	
-	GetBlackboardComponent() -> SetValueAsBool("bCanSeeHuman", Stimulus.WasSuccessfullySensed());
-	GetBlackboardComponent() -> SetValueAsObject("TargetActor", Actor);
+	if (!Actor->IsA(AHuman::StaticClass())) return;
 
-	GEngine -> AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Actor class: %s"), *Actor->GetClass()->GetName() ));
-
-	
+	GetBlackboardComponent()->SetValueAsBool("bCanSeeHuman", Stimulus.WasSuccessfullySensed());
+	GetBlackboardComponent()->SetValueAsObject("TargetActor", Stimulus.WasSuccessfullySensed() ? Actor : nullptr);
 
 	
 	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Zombie Location; X: %f Y: %f Z: %f"), ZombieLocation.X, ZombieLocation.Y, ZombieLocation.Z));
