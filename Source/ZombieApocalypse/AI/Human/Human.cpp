@@ -31,4 +31,16 @@ void AHuman::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+void AHuman::PrepareToBeBitten()
+{
+    // Stop movement so the pawn doesn't slide while being converted
+    if (FloatingPawnMovementComponent)
+    {
+        FloatingPawnMovementComponent->StopMovementImmediately();
+    }
+    else
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString("Human has no FloatingPawnMovementComponent"));
+    }
+}
 

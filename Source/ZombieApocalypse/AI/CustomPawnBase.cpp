@@ -13,7 +13,7 @@ ACustomPawnBase::ACustomPawnBase()
 	Mesh -> SetupAttachment(GetRootComponent());
 
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
-	SphereCollider -> SetupAttachment(GetRootComponent());
+	SphereCollider->SetupAttachment(Mesh);
 
 	
 	FloatingPawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovementComponent"));

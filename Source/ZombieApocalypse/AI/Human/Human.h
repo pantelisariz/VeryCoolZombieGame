@@ -27,4 +27,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Function to stop the human from moving and get fucked in the ass
+	void PrepareToBeBitten();
+
 };
