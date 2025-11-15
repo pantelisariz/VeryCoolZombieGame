@@ -4,11 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
 #include "ControllerPawn.generated.h"
 
 class UCapsuleComponent;
 class USpringArmComponent;
 class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
+
 
 UCLASS()
 class ZOMBIEAPOCALYPSE_API AControllerPawn : public APawn

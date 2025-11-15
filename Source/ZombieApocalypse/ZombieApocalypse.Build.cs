@@ -1,6 +1,7 @@
 // Copyright University of Inland Norway
 
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class ZombieApocalypse : ModuleRules
 {
@@ -25,7 +26,9 @@ public class ZombieApocalypse : ModuleRules
 			"JsonUtilities"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] {
+        "EnhancedInput"
+        });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
