@@ -14,7 +14,6 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 
-
 UCLASS()
 class ZOMBIEAPOCALYPSE_API AControllerPawn : public APawn
 {
@@ -31,6 +30,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
 
 public:
 	// Sets default values for this pawn's properties
@@ -39,6 +40,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void Move(const FInputActionValue& Value);
+
 
 public:	
 	// Called every frame

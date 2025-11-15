@@ -1,9 +1,9 @@
-// Copyright University of Inland Norway
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "UObject/SoftObjectPtr.h"
 #include "PawnOverlord.generated.h"
 
 /**
@@ -16,9 +16,8 @@ class ZOMBIEAPOCALYPSE_API APawnOverlord : public APlayerController
 public:
 	APawnOverlord();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAcces = true))
-	TObjectPtr<UInputMappingContext> DefaultInputMappingContext;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = true))
+	TSoftObjectPtr<UInputMappingContext> DefaultInputMappingContext;
 
 protected:
 

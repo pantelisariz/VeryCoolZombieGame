@@ -1,7 +1,12 @@
 #include "..\PlayerCharacter/ControllerPawn.h"
+#include "CoreMinimal.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "InputActionValue.h"
+#include "EnhancedInputComponent.h"
+
+class EnhancedInputComponent;
 
 // Sets default values
 AControllerPawn::AControllerPawn()
@@ -23,6 +28,7 @@ AControllerPawn::AControllerPawn()
 
 	/* Attachments and Components Completed */
 
+
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +36,11 @@ void AControllerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AControllerPawn::Move(const FInputActionValue& Value)
+{
+
 }
 
 // Called every frame
@@ -43,6 +54,9 @@ void AControllerPawn::Tick(float DeltaTime)
 void AControllerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	if(UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AControllerPawn::Move );
+	}
 }
 
