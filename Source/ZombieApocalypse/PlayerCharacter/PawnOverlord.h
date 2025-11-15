@@ -19,8 +19,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAcces = true))
 	TObjectPtr<UInputMappingContext> DefaultInputMappingContext;
 
-	//UPROPERTY(EditDefaultsOnly, Category = "Input", meta = (AllowPrivateAcces = true))
-	//UInputMappingContext* OverlordInputMappingContext;
 
 protected:
 
