@@ -61,19 +61,19 @@ void AControllerPawn::Move(const FInputActionValue& Value)
 	}
 }
 
-void AControllerPawn::MoveRight(const FInputActionValue& Value)
-{
-
-}
 
 void AControllerPawn::Zoom(const FInputActionValue& Value)
 {
 	const float ZoomDirection = Value.Get<float>();
-	if (Controller != nullptr) 
-	{
-		float DesiredOrthoWidth = Camera->OrthoWidth + ZoomDirection * CameraZoomSpeed;
-		Camera->OrthoWidth = DesiredOrthoWidth;
-	}
+
+	float DesiredOrthoWidth = Camera->OrthoWidth + ZoomDirection * CameraZoomSpeed;
+	DesiredOrthoWidth = FMath::Clamp(DesiredOrthoWidth, MinCameraZoom, MaxCameraZoom);
+	Camera->SetOrthoWidth(DesiredOrthoWidth);
+}
+
+void AControllerPawn::UnitMove(const FInputActionValue& Value)
+{
+
 }
 
 // Called every frame
