@@ -6,6 +6,7 @@
 #include "NavMesh/RecastNavMesh.h"
 #include "SimulationController.h"
 #include "Field/FieldSystemNodes.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APopulationSpawner::APopulationSpawner()
@@ -21,7 +22,7 @@ APopulationSpawner::APopulationSpawner()
 	ZombiePopulationCount = 0;
 	BittenPopulationCount = 0;
 	HumanPopulationCount = 0;
-
+	
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +36,13 @@ void APopulationSpawner::BeginPlay()
 	ZombiePopulation = SpawnActors(AmountZombiesToSpawnAtStart, ZombieClass);
 	ZombiePopulationCount = AmountOfActorsInArray(ZombiePopulation);
 
+	SetupHUD();
+
+	UpdateHUD();
+
 }
+
+
 
 // Called every frame
 void APopulationSpawner::Tick(float DeltaTime)
@@ -43,6 +50,9 @@ void APopulationSpawner::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+
+
 FVector APopulationSpawner::GetRandomSpawnPoint()
 {
 	// auto* const NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -65,6 +75,8 @@ FVector APopulationSpawner::GetRandomSpawnPoint()
 	
 	return Loc.Location;
 }
+
+
 
 TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass)
 {
@@ -92,17 +104,35 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 
 		ACustomPawnBase* SpawnedActor = GetWorld() -> SpawnActor<ACustomPawnBase>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0));
 		SpawnedActors.Add(SpawnedActor);
+
+		if (SpawnedActor -> GetClass() == ZombieClass)
+		{
+			SpawnedActor -> OnDestroyed.AddDynamic(this, &APopulationSpawner::UpdateZombieCounterOnDestroy);
+		}
+		else if (SpawnedActor -> GetClass() == HumanClass)
+		{
+			SpawnedActor -> OnDestroyed.AddDynamic(this, &APopulationSpawner::UpdateHumanCounterOnDestroy);
+		}
+		else if (SpawnedActor -> GetClass() == BittenClass)
+		{
+			SpawnedActor -> OnDestroyed.AddDynamic(this, &APopulationSpawner::UpdateBittenCounterOnDestroy);
+		}
+		
 		// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Spawned a Human")) );
 	}
 	
 	return SpawnedActors;
 }
 
+
+
 int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
 {
 	int AmountOfActors = ActorArray.Num();
 	return AmountOfActors;
 }
+
+
 
 void APopulationSpawner::CullHumanActor(AHuman* TargetHuman)
 {
@@ -112,8 +142,79 @@ void APopulationSpawner::CullHumanActor(AHuman* TargetHuman)
 	HumanPopulation.Remove(TargetHuman);
 }
 
+
+
 void APopulationSpawner::UpdatePopulationCount(AHuman* TargetHuman)
 {
 	CullHumanActor(TargetHuman);
 }
 
+
+
+void APopulationSpawner::UpdateZombieCounterOnDestroy(AActor* ActorDestroyed)
+{
+	ZombiePopulationCount = ZombiePopulation.Num();
+	
+	CounterHUD -> ZombiePopulation = ZombiePopulationCount;
+	CounterHUD -> SetZombieTextCounter();
+
+	ZombiePopulation.Remove(ActorDestroyed);
+}
+
+
+
+void APopulationSpawner::UpdateHumanCounterOnDestroy(AActor* ActorDestroyed)
+{
+	HumanPopulation.Remove(ActorDestroyed);
+
+	HumanPopulationCount = HumanPopulation.Num();
+	CounterHUD -> HumanPopulation = HumanPopulationCount;
+	CounterHUD -> SetHumanTextCounter();
+	
+}
+
+
+
+void APopulationSpawner::UpdateBittenCounterOnDestroy(AActor* ActorDestroyed)
+{
+	BittenPopulationCount = BittenPopulation.Num();
+	
+	CounterHUD -> BittenPopulation = BittenPopulationCount;
+	CounterHUD -> SetBittenTextCounter();
+	
+	BittenPopulation.Remove(ActorDestroyed);
+}
+
+void APopulationSpawner::SetupHUD()
+{
+	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
+	if (not CastPlayerController)
+	{
+		return;
+	}
+	CounterHUD = CreateWidget<UCounterHUD>(CastPlayerController, *(CounterHUDClass));
+	
+	check(CounterHUD);
+
+	CounterHUD -> ZombiePopulation = ZombiePopulationCount;
+	CounterHUD -> BittenPopulation = BittenPopulationCount;
+	CounterHUD -> HumanPopulation = HumanPopulationCount;
+	
+	CounterHUD -> AddToViewport();
+}
+
+
+
+void APopulationSpawner::UpdateHUD()
+{
+	ZombiePopulationCount = AmountOfActorsInArray(ZombiePopulation);
+	BittenPopulationCount = AmountOfActorsInArray(BittenPopulation);
+	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
+	
+	CounterHUD -> ZombiePopulation = ZombiePopulationCount;
+	CounterHUD -> BittenPopulation = BittenPopulationCount;
+	CounterHUD -> HumanPopulation = HumanPopulationCount;
+
+	CounterHUD -> UpdateAllText();
+}

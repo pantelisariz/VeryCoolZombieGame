@@ -33,6 +33,8 @@ void AZombie::BeginPlay()
 	}
 }
 
+
+
 // Called every frame
 void AZombie::Tick(float DeltaTime)
 {
@@ -40,11 +42,15 @@ void AZombie::Tick(float DeltaTime)
 
 }
 
+
+
 // Called to bind functionality to input
 void AZombie::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
+
 
 // Inherited function
 //Pantelis No idea what the fuck is this so gonna write it my way
@@ -62,6 +68,9 @@ void AZombie::Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 		return;
 	}
 }
+
+
+
 //here will do the overlap
 void AZombie::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -75,6 +84,9 @@ void AZombie::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlapped"));
 	}
 }
+
+
+
 //The function making him into bitten guy or gal
 void AZombie::TryConvertHuman(AHuman* Human)
 {
@@ -114,5 +126,6 @@ void AZombie::TryConvertHuman(AHuman* Human)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString("There was no controller in the human bitch"));
 	}
 	//my favorite part
+	
 	Human->Destroy();
 }

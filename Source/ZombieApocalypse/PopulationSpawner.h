@@ -8,6 +8,7 @@
 #include "AI/Zombie//Zombie.h"
 #include "AI/Human//Human.h"
 #include "AI/Bitten//Bitten.h"
+#include "HUD/CounterHUD.h"
 #include "PopulationSpawner.generated.h"
 
 UCLASS()
@@ -35,6 +36,24 @@ public:
 	void CullHumanActor(AHuman* TargetHuman);
 	void UpdatePopulationCount(AHuman* TargetHuman);
 
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateZombieCounterOnDestroy(AActor* ActorDestroyed);
+	UFUNCTION(BlueprintCallable)
+	void UpdateHumanCounterOnDestroy(AActor* ActorDestroyed);
+	UFUNCTION(BlueprintCallable)
+	void UpdateBittenCounterOnDestroy(AActor* ActorDestroyed);
+
+	void SetupHUD();
+	void UpdateHUD();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	TSubclassOf<UCounterHUD> CounterHUDClass;
+	UPROPERTY()
+	UCounterHUD* CounterHUD;
+
+
+	
 	FVector MapLenght;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
@@ -47,9 +66,11 @@ public:
 	TArray<AActor*> BittenPopulation;
 	TArray<AActor*> HumanPopulation;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	int ZombiePopulationCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	int BittenPopulationCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	int HumanPopulationCount;
 
 
@@ -60,4 +81,3 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	TSubclassOf<AHuman> HumanClass;
 };
-

@@ -7,7 +7,8 @@
 
 void APawnBase_AIController::OnPossess(APawn* InPawn)
 {
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("On Possessed")) );
+	UE_LOG(LogTemp, Warning, TEXT("On Possessed"));
+	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("On Possessed")) );
 	Super::OnPossess(InPawn);
 
 
@@ -29,7 +30,8 @@ void APawnBase_AIController::OnPossess(APawn* InPawn)
 	Blackboard = BlackBoardComponent;
 	RunBehaviorTree(BehaviorTreeCast);
 
-	GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Possessed")) );
+	UE_LOG(LogTemp, Warning, TEXT("Possessed"));
+	// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Possessed")) );
 
 	
 }
