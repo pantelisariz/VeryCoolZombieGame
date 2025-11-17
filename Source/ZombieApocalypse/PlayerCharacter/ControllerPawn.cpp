@@ -28,6 +28,8 @@ AControllerPawn::AControllerPawn()
 
 	/* Attachments and Components Completed */
 
+	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovement"));
+
 
 }
 
@@ -40,7 +42,38 @@ void AControllerPawn::BeginPlay()
 
 void AControllerPawn::Move(const FInputActionValue& Value)
 {
+	const FVector2d MovementInput = Value.Get<FVector2D>();
+	if(Controller)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+		const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector Right = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(Forward, MovementInput.Y);
+		AddMovementInput(Right, MovementInput.X);
+
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_Move Activated"));
+		}
+	}
+}
+
+void AControllerPawn::MoveRight(const FInputActionValue& Value)
+{
+
+}
+
+void AControllerPawn::Zoom(const FInputActionValue& Value)
+{
+	const float ZoomDirection = Value.Get<float>();
+	if (Controller != nullptr) 
+	{
+		float DesiredOrthoWidth = Camera->OrthoWidth + ZoomDirection * CameraZoomSpeed;
+		Camera->OrthoWidth = DesiredOrthoWidth;
+	}
 }
 
 // Called every frame
@@ -57,6 +90,7 @@ void AControllerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	if(UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AControllerPawn::Move );
+		EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AControllerPawn::Zoom );
 	}
 }
 
