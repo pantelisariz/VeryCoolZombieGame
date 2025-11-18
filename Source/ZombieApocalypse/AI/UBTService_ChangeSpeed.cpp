@@ -7,6 +7,8 @@
 
 UUBTService_ChangeSpeed::UUBTService_ChangeSpeed()
 {
+	bNotifyBecomeRelevant = true;
+	NodeName = TEXT("Change Speed");
 	Speed = 600;
 }
 
@@ -17,7 +19,7 @@ void UUBTService_ChangeSpeed::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp
 	{
 		if (auto* const PawnBase = Cast<ACustomPawnBase>(AIController -> GetPawn()))
 		{
-			PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> maxSpeed;
+			PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = Speed;
 		}
 	}
 }
