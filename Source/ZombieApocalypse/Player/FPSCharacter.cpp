@@ -13,7 +13,7 @@ AFPSCharacter::AFPSCharacter()
 	
 	
 	
-	// CameraArmComponent = nullptr;
+	CameraArmComponent = nullptr;
 	CameraComponent = nullptr;
 	
 	bUseControllerRotationPitch = false;
@@ -23,18 +23,20 @@ AFPSCharacter::AFPSCharacter()
 	TObjectPtr<UCharacterMovementComponent> MovementComponent = GetCharacterMovement();
 	MovementComponent -> bOrientRotationToMovement = true;
 	
-	/*
 	CameraArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SrpingArmComponent"));
 	CameraArmComponent -> SetupAttachment(RootComponent.Get());
-	CameraArmComponent -> TargetArmLength = 400.f;
+	CameraArmComponent -> TargetArmLength = -10.f;
 	CameraArmComponent -> bUsePawnControlRotation = true;
-	*/
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-	CameraComponent -> SetupAttachment(RootComponent.Get());
+	CameraComponent -> SetupAttachment(CameraArmComponent.Get(), USpringArmComponent::SocketName);
 	CameraComponent -> bUsePawnControlRotation = false;
 	
+	RunSpeed = 1000.f;
+	WalkSpeed = 600.f;
 	
+	MaxHealth = 100;
+	CurrentHealth = MaxHealth;
 	
 	Cash = 600;
 
@@ -44,6 +46,8 @@ AFPSCharacter::AFPSCharacter()
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	GetCharacterMovement() -> MaxWalkSpeed = WalkSpeed;
 	
 }
 
@@ -58,21 +62,6 @@ void AFPSCharacter::Tick(float DeltaTime)
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Setting up Player Input"));
 
-	
-
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
-	if (!EnhancedInputComponent)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed setting up Player Input"));
-		return;	
-	}
-
-	
-	// EnhancedInputComponent -> BindAction(BackAction, ETriggerEvent::Triggered, this, &AFPSCharacter::BackEvent);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Finished setting up Player Input"));
 }
 

@@ -52,7 +52,7 @@ void APopulationSpawner::Tick(float DeltaTime)
 	Time = GetWorld() -> GetTimeSeconds();
 	CounterHUD -> Time = Time;
 	CounterHUD -> SetTimeTextCounter();
-	UE_LOG(LogTemp, Warning, TEXT("Time: %d"), Time);
+	// UE_LOG(LogTemp, Warning, TEXT("Time: %d"), Time);
 	
 
 }
@@ -369,7 +369,7 @@ void APopulationSpawner::TryConvertBitten(ABitten* Bitten)
 	
 	if (OldController)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Bitten has controller"));
+		// UE_LOG(LogTemp, Warning, TEXT("Bitten has controller"));
 		OldController -> UnPossess();
 		OldController -> Possess(NewZombie);
 	}
@@ -429,8 +429,8 @@ void APopulationSpawner::OnHumanSpawn(ACustomPawnBase* HumanSpawned)
 	
 	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
 	
-	UE_LOG(LogTemp, Warning, TEXT("Human pop: %d"), HumanPopulationCount);
-	UE_LOG(LogTemp, Warning, TEXT("Human pop in HUD: %d"), CounterHUD -> HumanPopulationCount);
+	// UE_LOG(LogTemp, Warning, TEXT("Human pop: %d"), HumanPopulationCount);
+	// UE_LOG(LogTemp, Warning, TEXT("Human pop in HUD: %d"), CounterHUD -> HumanPopulationCount);
 	
 	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
 	CounterHUD -> SetHumanTextCounter();

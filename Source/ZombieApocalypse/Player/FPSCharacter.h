@@ -23,12 +23,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	/*
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> CameraArmComponent;
-	*/
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> CameraComponent;
 	
 
@@ -42,11 +40,26 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true"))
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "hp"))
+	int32 MaxHealth;
+	int32 CurrentHealth;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
+	float RunSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
+	float WalkSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "$"))
 	int32 Cash;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	AGun* CurrentGun;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AGun> StartingGun;
 	
 	
 	// Will be empty, so we can use this point as where the gun should spawn in

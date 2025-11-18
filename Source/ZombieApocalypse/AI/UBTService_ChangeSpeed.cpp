@@ -17,25 +17,32 @@ void UUBTService_ChangeSpeed::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp
 	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
 	
 	
+	//UE_LOG(LogTemp, Warning, TEXT("Change speed"));
+	
+	
 	auto const AIController = OwnerComp.GetAIOwner();
-	if (AIController)
+	if (not AIController)
 	{
+		// UE_LOG(LogTemp, Warning, TEXT("Cant get Ownercomp"));
 		return;
 	}
 	
 	auto* const PawnBase = Cast<ACustomPawnBase>(AIController -> GetPawn());
 	if (not PawnBase)
 	{
+		// UE_LOG(LogTemp, Warning, TEXT("Cant cast to PawnBase"));
 		return;
 	}
 	
 	
 	if (bUseRunInsteadOfWalk)
 	{
+		// UE_LOG(LogTemp, Warning, TEXT("Use Run Instead Of Walk"));
 		PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> MaxRunSpeed;
 	}
 	else
 	{
+		// UE_LOG(LogTemp, Warning, TEXT("Don't Use Run Instead Of Walk"));
 		PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> MaxWalkSpeed;
 	}
 }

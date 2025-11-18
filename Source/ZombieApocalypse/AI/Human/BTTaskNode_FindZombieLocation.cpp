@@ -45,7 +45,7 @@ EBTNodeResult::Type UBTTaskNode_FindZombieLocation::ExecuteTask(UBehaviorTreeCom
 	}
 
 
-	UE_LOG(LogTemp, Warning, TEXT("Found AHuman"));
+	// UE_LOG(LogTemp, Warning, TEXT("Found AHuman"));
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

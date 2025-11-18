@@ -28,7 +28,9 @@ void AFPSController::SetupInputComponent()
 	// Set up user input
 	
 	EnhancedInputComponent -> BindAction(MoveAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Move);
+	
 	EnhancedInputComponent -> BindAction(LookAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Look);
+	
 	
 	EnhancedInputComponent -> BindAction(JumpAction.Get(), ETriggerEvent::Started, this, &AFPSController::JumpStart);
 	EnhancedInputComponent -> BindAction(JumpAction.Get(), ETriggerEvent::Completed, this, &AFPSController::JumpEnd);
@@ -48,17 +50,20 @@ void AFPSController::SetupInputComponent()
 void AFPSController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+	UE_LOG(LogTemp, Warning, TEXT("Controller possessed Player"));
+	
 	
 	FPSCharacter = Cast<AFPSCharacter>(InPawn);
-	
 	TObjectPtr<UEnhancedInputLocalPlayerSubsystem> InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	
-	if (not InputLocalPlayerSubsystem)
+	if (InputLocalPlayerSubsystem)
 	{
+		InputLocalPlayerSubsystem -> AddMappingContext(CurrentMappingContext.Get(), 0);
 		return;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Cant get InputLocalPlayerSubsystem"));
 	
-	InputLocalPlayerSubsystem -> AddMappingContext(CurrentMappingContext.Get(), 0);
+	
 }
 
 
@@ -66,6 +71,9 @@ void AFPSController::OnPossess(APawn* InPawn)
 
 void AFPSController::Move(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Move"));
+	
+	
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 	
 	const FRotator Rotation = GetControlRotation();
@@ -81,22 +89,32 @@ void AFPSController::Move(const FInputActionValue& Value)
 
 void AFPSController::Look(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Look"));
+	
+	const FVector2d LookAxisVector = Value.Get<FVector2d>();
+	
+	FPSCharacter -> AddControllerYawInput(LookAxisVector.X);
+	FPSCharacter -> AddControllerPitchInput(LookAxisVector.Y);
 }
 
 void AFPSController::JumpStart()
 {
+	FPSCharacter -> Jump();
 }
 
 void AFPSController::JumpEnd()
 {
+	FPSCharacter -> StopJumping();
 }
 
 void AFPSController::RunStart()
 {
+	FPSCharacter -> GetCharacterMovement() -> MaxWalkSpeed = FPSCharacter -> RunSpeed;
 }
 
 void AFPSController::RunEnd()
 {
+	FPSCharacter -> GetCharacterMovement() -> MaxWalkSpeed = FPSCharacter -> WalkSpeed;
 }
 
 void AFPSController::FireStart()
