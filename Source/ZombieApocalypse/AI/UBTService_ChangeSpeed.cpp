@@ -9,17 +9,33 @@ UUBTService_ChangeSpeed::UUBTService_ChangeSpeed()
 {
 	bNotifyBecomeRelevant = true;
 	NodeName = TEXT("Change Speed");
-	Speed = 600;
+	bUseRunInsteadOfWalk = false;
 }
 
 void UUBTService_ChangeSpeed::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
-	if (auto const AIController = OwnerComp.GetAIOwner())
+	
+	
+	auto const AIController = OwnerComp.GetAIOwner();
+	if (AIController)
 	{
-		if (auto* const PawnBase = Cast<ACustomPawnBase>(AIController -> GetPawn()))
-		{
-			PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = Speed;
-		}
+		return;
+	}
+	
+	auto* const PawnBase = Cast<ACustomPawnBase>(AIController -> GetPawn());
+	if (not PawnBase)
+	{
+		return;
+	}
+	
+	
+	if (bUseRunInsteadOfWalk)
+	{
+		PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> MaxRunSpeed;
+	}
+	else
+	{
+		PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> MaxWalkSpeed;
 	}
 }

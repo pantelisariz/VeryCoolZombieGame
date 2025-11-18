@@ -10,6 +10,7 @@ void UCounterHUD::NativeConstruct()
 	BittenPopulationCount = 0;
 	HumanPopulationCount = 0;
 	Time = 0;
+	Cash = 0;
 
 	UpdateAllText();
 }
@@ -49,4 +50,10 @@ void UCounterHUD::SetTimeTextCounter()
 {
 	FText TimeText = FText::FromString( FString::Printf(TEXT("Time: %d"), (int)Time ));
 	TimeTextCounter -> SetText(TimeText);
+}
+
+void UCounterHUD::SetCashTextCounter()
+{
+	FText CashText = FText::FromString( FString::Printf(TEXT("Time: %d"), (int)Time ));
+	CashTextCounter -> SetText(CashText);
 }

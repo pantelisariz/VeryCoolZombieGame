@@ -23,7 +23,8 @@ ACustomPawnBase::ACustomPawnBase()
 
 
 	health = 100;
-	maxSpeed = 100;
+	MaxWalkSpeed = 100;
+	MaxRunSpeed = 300;
 	
 	PawnAIController = nullptr;
 	BehaviorTree = nullptr;
