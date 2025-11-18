@@ -1,7 +1,7 @@
 // Copyright University of Inland Norway
 
 
-#include "Interactables/InteractableActor.h"
+#include "InteractableActor.h"
 
 // Sets default values
 AInteractableActor::AInteractableActor()
