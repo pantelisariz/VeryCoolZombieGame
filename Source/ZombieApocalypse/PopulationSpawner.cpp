@@ -110,6 +110,11 @@ TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSub
 		SpawnPoints.Add(RandomSpawnPoint);
 
 		ACustomPawnBase* SpawnedActor = GetWorld() -> SpawnActor<ACustomPawnBase>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0));
+		if (not SpawnedActor)
+		{
+			continue;
+		}
+		
 		SpawnedActors.Add(SpawnedActor);
 
 		if (SpawnedActor -> GetClass() == ZombieClass)
