@@ -4,6 +4,7 @@
 #include "FPSCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -48,6 +49,25 @@ void AFPSCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	GetCharacterMovement() -> MaxWalkSpeed = WalkSpeed;
+	
+	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
+	if (not CastPlayerController)
+	{
+		return;
+	}
+	
+	
+	if (not PlayerInfoHUDClass)
+	{
+		return;
+	}
+	
+	PlayerInfoHUD = CreateWidget<UPlayerStatHUD>(CastPlayerController, *(PlayerInfoHUDClass));
+	
+	check(PlayerInfoHUD);
+	PlayerInfoHUD -> AddToViewport();
+	PlayerInfoHUD -> UpdateCashText(Cash);
 	
 }
 

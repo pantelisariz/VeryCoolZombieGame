@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "ZombieApocalypse/Gun/Gun.h"
+#include "ZombieApocalypse/HUD/PlayerStatHUD.h"
 #include "FPSCharacter.generated.h"
 
 
@@ -40,30 +41,33 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UPlayerStatHUD> PlayerInfoHUDClass;
+	UPROPERTY()
+	TObjectPtr<UPlayerStatHUD> PlayerInfoHUD;
 	
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "hp"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "hp"))
 	int32 MaxHealth;
 	int32 CurrentHealth;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
 	float RunSpeed;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
 	float WalkSpeed;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "$"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true", ForceUnits = "$"))
 	int32 Cash;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	AGun* CurrentGun;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> StartingGun;
 	
 	
 	// Will be empty, so we can use this point as where the gun should spawn in
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCharacter", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
 	
 

@@ -24,7 +24,6 @@ public:
 	void SetBittenTextCounter();
 	void SetHumanTextCounter();
 	void SetTimeTextCounter();
-	void SetCashTextCounter();
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
@@ -51,12 +50,7 @@ public:
 	UTextBlock* TimeTextCounter;
 	int32 Time;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
-	UBorder* CashBorder;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
-	UTextBlock* CashTextCounter;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI_Variable", meta = (BindWidget))
-	int32 Cash;
+
 	
 	
 };

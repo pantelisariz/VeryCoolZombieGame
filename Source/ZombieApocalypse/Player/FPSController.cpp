@@ -71,7 +71,7 @@ void AFPSController::OnPossess(APawn* InPawn)
 
 void AFPSController::Move(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Move"));
+	// UE_LOG(LogTemp, Warning, TEXT("Move"));
 	
 	
 	const FVector2D MovementVector = Value.Get<FVector2D>();
@@ -89,7 +89,7 @@ void AFPSController::Move(const FInputActionValue& Value)
 
 void AFPSController::Look(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Look"));
+	// UE_LOG(LogTemp, Warning, TEXT("Look"));
 	
 	const FVector2d LookAxisVector = Value.Get<FVector2d>();
 	
