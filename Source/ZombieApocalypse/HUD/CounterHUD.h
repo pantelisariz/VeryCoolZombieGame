@@ -23,6 +23,7 @@ public:
 	void SetZombieTextCounter();
 	void SetBittenTextCounter();
 	void SetHumanTextCounter();
+	void SetTimeTextCounter();
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
@@ -42,6 +43,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UTextBlock* HumanTextCounter;
 	int32 HumanPopulationCount;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UBorder* TimeBorder;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UTextBlock* TimeTextCounter;
+	int32 Time;
 	
 	
 };

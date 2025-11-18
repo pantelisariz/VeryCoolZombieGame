@@ -22,8 +22,9 @@ APopulationSpawner::APopulationSpawner()
 	ZombiePopulationCount = 0;
 	BittenPopulationCount = 0;
 	HumanPopulationCount = 0;
+	Time = 0;
 	
-	ZombieBiteCooldown = 5.0f;
+	ZombieBiteCooldown = 15.0f;
 	
 }
 
@@ -49,6 +50,11 @@ void APopulationSpawner::BeginPlay()
 void APopulationSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	Time = GetWorld() -> GetTimeSeconds();
+	CounterHUD -> Time = Time;
+	CounterHUD -> SetTimeTextCounter();
+	UE_LOG(LogTemp, Warning, TEXT("Time: %d"), Time);
+	
 
 }
 
@@ -228,10 +234,12 @@ void APopulationSpawner::UpdateHUD()
 	ZombiePopulationCount = AmountOfActorsInArray(ZombiePopulation);
 	BittenPopulationCount = AmountOfActorsInArray(BittenPopulation);
 	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
+	Time = GetWorld() -> GetTimeSeconds();
 	
 	CounterHUD -> ZombiePopulationCount = ZombiePopulationCount;
 	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
 	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
+	CounterHUD -> Time = Time;
 
 	CounterHUD -> UpdateAllText();
 }

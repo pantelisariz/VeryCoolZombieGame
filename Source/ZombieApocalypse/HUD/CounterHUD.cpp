@@ -9,6 +9,7 @@ void UCounterHUD::NativeConstruct()
 	ZombiePopulationCount = 0;
 	BittenPopulationCount = 0;
 	HumanPopulationCount = 0;
+	Time = 0;
 
 	UpdateAllText();
 }
@@ -18,6 +19,7 @@ void UCounterHUD::UpdateAllText()
 	SetZombieTextCounter();
 	SetBittenTextCounter();
 	SetHumanTextCounter();
+	SetTimeTextCounter();
 }
 
 
@@ -41,4 +43,10 @@ void UCounterHUD::SetHumanTextCounter()
 {
 	FText HumanText = FText::FromString( FString::Printf(TEXT("Amount of Humans: %d"), (int)HumanPopulationCount ));
 	HumanTextCounter -> SetText(HumanText);
+}
+
+void UCounterHUD::SetTimeTextCounter()
+{
+	FText TimeText = FText::FromString( FString::Printf(TEXT("Time: %d"), (int)Time ));
+	TimeTextCounter -> SetText(TimeText);
 }
