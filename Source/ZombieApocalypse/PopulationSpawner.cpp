@@ -23,6 +23,8 @@ APopulationSpawner::APopulationSpawner()
 	BittenPopulationCount = 0;
 	HumanPopulationCount = 0;
 	
+	ZombieBiteCooldown = 5.0f;
+	
 }
 
 // Called when the game starts or when spawned
@@ -30,16 +32,15 @@ void APopulationSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SetupHUD();
+	
 	HumanPopulation = SpawnActors(AmountHumansToSpawnAtStart, HumanClass);
 	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
 
 	ZombiePopulation = SpawnActors(AmountZombiesToSpawnAtStart, ZombieClass);
 	ZombiePopulationCount = AmountOfActorsInArray(ZombiePopulation);
 
-	SetupHUD();
-
 	UpdateHUD();
-
 }
 
 
@@ -78,10 +79,10 @@ FVector APopulationSpawner::GetRandomSpawnPoint()
 
 
 
-TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass)
+TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass)
 {
 	TArray<FVector> SpawnPoints;
-	TArray<AActor*> SpawnedActors;
+	TArray<ACustomPawnBase*> SpawnedActors;
 	
 	for (int i = 0; i < AmountToSpawn; i++)
 	{
@@ -107,15 +108,15 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 
 		if (SpawnedActor -> GetClass() == ZombieClass)
 		{
-			SpawnedActor -> OnDestroyed.AddDynamic(this, &APopulationSpawner::UpdateZombieCounterOnDestroy);
+			OnZombieSpawn(SpawnedActor);
 		}
 		else if (SpawnedActor -> GetClass() == HumanClass)
 		{
-			SpawnedActor -> OnDestroyed.AddDynamic(this, &APopulationSpawner::UpdateHumanCounterOnDestroy);
+			OnHumanSpawn(SpawnedActor);
 		}
 		else if (SpawnedActor -> GetClass() == BittenClass)
 		{
-			SpawnedActor -> OnDestroyed.AddDynamic(this, &APopulationSpawner::UpdateBittenCounterOnDestroy);
+			OnBittenSpawn(SpawnedActor);
 		}
 		
 		// GEngine -> AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, FString::Printf(TEXT("Spawned a Human")) );
@@ -126,7 +127,7 @@ TArray<AActor*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<A
 
 
 
-int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
+int APopulationSpawner::AmountOfActorsInArray(TArray<ACustomPawnBase*> ActorArray)
 {
 	int AmountOfActors = ActorArray.Num();
 	return AmountOfActors;
@@ -134,56 +135,72 @@ int APopulationSpawner::AmountOfActorsInArray(TArray<AActor*> ActorArray)
 
 
 
-void APopulationSpawner::CullHumanActor(AHuman* TargetHuman)
+void APopulationSpawner::AddBittenToArray(AZombie* BittenToAdd)
 {
-	BittenPopulation.Add(
-	GetWorld() -> SpawnActor<ABitten>(BittenClass, TargetHuman->GetActorLocation(), FRotator(0,0,0))
-	);
-	HumanPopulation.Remove(TargetHuman);
+	BittenPopulation.Add(BittenToAdd);
 }
 
 
 
-void APopulationSpawner::UpdatePopulationCount(AHuman* TargetHuman)
+void APopulationSpawner::AddZombieToArray(AZombie* ZombieToAdd)
 {
-	CullHumanActor(TargetHuman);
+	ZombiePopulation.Add(ZombieToAdd);
 }
 
 
 
-void APopulationSpawner::UpdateZombieCounterOnDestroy(AActor* ActorDestroyed)
+void APopulationSpawner::OnZombieDestroy(AActor* ActorDestroyed)
 {
+	AZombie* ZombieCast = Cast<AZombie>(ActorDestroyed);
+	if (not ZombieCast)
+	{
+		return;
+	}
+	
 	ZombiePopulationCount = ZombiePopulation.Num();
 	
-	CounterHUD -> ZombiePopulation = ZombiePopulationCount;
+	CounterHUD -> ZombiePopulationCount = ZombiePopulationCount;
 	CounterHUD -> SetZombieTextCounter();
 
-	ZombiePopulation.Remove(ActorDestroyed);
+	ZombiePopulation.Remove(ZombieCast);
 }
 
 
 
-void APopulationSpawner::UpdateHumanCounterOnDestroy(AActor* ActorDestroyed)
+void APopulationSpawner::OnHumanDestroy(AActor* ActorDestroyed)
 {
-	HumanPopulation.Remove(ActorDestroyed);
+	AHuman* HumanCast = Cast<AHuman>(ActorDestroyed);
+	if (not HumanCast)
+	{
+		return;
+	}
+	HumanPopulation.Remove(HumanCast);
 
 	HumanPopulationCount = HumanPopulation.Num();
-	CounterHUD -> HumanPopulation = HumanPopulationCount;
+	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
 	CounterHUD -> SetHumanTextCounter();
 	
 }
 
 
 
-void APopulationSpawner::UpdateBittenCounterOnDestroy(AActor* ActorDestroyed)
+void APopulationSpawner::OnBittenDestroy(AActor* ActorDestroyed)
 {
+	ABitten* BittenCast = Cast<ABitten>(ActorDestroyed);
+	if (not BittenCast)
+	{
+		return;
+	}
+	BittenPopulation.Remove(BittenCast);
+	
+	TryConvertBitten(BittenCast);
+	
 	BittenPopulationCount = BittenPopulation.Num();
-	
-	CounterHUD -> BittenPopulation = BittenPopulationCount;
+	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
 	CounterHUD -> SetBittenTextCounter();
-	
-	BittenPopulation.Remove(ActorDestroyed);
 }
+
+
 
 void APopulationSpawner::SetupHUD()
 {
@@ -197,9 +214,9 @@ void APopulationSpawner::SetupHUD()
 	
 	check(CounterHUD);
 
-	CounterHUD -> ZombiePopulation = ZombiePopulationCount;
-	CounterHUD -> BittenPopulation = BittenPopulationCount;
-	CounterHUD -> HumanPopulation = HumanPopulationCount;
+	CounterHUD -> ZombiePopulationCount = ZombiePopulationCount;
+	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
+	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
 	
 	CounterHUD -> AddToViewport();
 }
@@ -212,9 +229,219 @@ void APopulationSpawner::UpdateHUD()
 	BittenPopulationCount = AmountOfActorsInArray(BittenPopulation);
 	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
 	
-	CounterHUD -> ZombiePopulation = ZombiePopulationCount;
-	CounterHUD -> BittenPopulation = BittenPopulationCount;
-	CounterHUD -> HumanPopulation = HumanPopulationCount;
+	CounterHUD -> ZombiePopulationCount = ZombiePopulationCount;
+	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
+	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
 
 	CounterHUD -> UpdateAllText();
+}
+
+
+
+
+
+//here will do the overlap
+void APopulationSpawner::OnZombieSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (not OtherActor or OtherActor == this) 
+	{
+		return;
+	}
+
+	AHuman* HumanCast = Cast<AHuman>(OtherActor);
+	if (not HumanCast)
+	{
+		return;
+	}
+	AActor* OwnerActor = OverlappedComponent -> GetAttachParentActor();
+	AZombie* ZombieCast = Cast<AZombie>(OwnerActor);
+	if (not ZombieCast)
+	{
+		return;
+	}
+	
+	TryConvertHuman(ZombieCast, HumanCast);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlapped"));
+	
+}
+
+
+
+
+//The function making him into bitten guy or gal
+void APopulationSpawner::TryConvertHuman(AZombie* OwnerZombie, AHuman* Human)
+{
+	if (not Human)
+	{
+		return;
+	}
+
+	const float Now = GetWorld()->GetTimeSeconds();
+	if (Now - OwnerZombie ->  LastBiteTime < ZombieBiteCooldown)
+	{
+		return;
+	}
+	OwnerZombie -> LastBiteTime = Now;
+
+	const FTransform SpawnTransform = Human->GetActorTransform();
+	//Unsure if there is a controller in this bad boy still doing this shit to save it.
+	AController* OldController = Human->GetController();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	
+	//You have to set the bittenclass on the zombie bp!
+	if (!BittenClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AZombie::TryConvertHuman - BittenClass not set"));
+		
+		return;
+	}
+	
+	
+	// Spawn the bitten actor
+	ABitten* NewBitten = GetWorld()->SpawnActor<ABitten>(BittenClass, SpawnTransform, SpawnParams);
+	if (!NewBitten)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to spawn the guy that got chomped"));
+		
+		return;
+	}
+	
+	
+	// Transfer controller (works for PlayerController or AIController that was possessing the human)
+	if (OldController)
+	{
+		OldController->UnPossess();
+		OldController->Possess(NewBitten);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("here was no controller in the human bitch"));
+		
+	}
+	
+	//my favorite part
+	GetWorldTimerManager().SetTimer(NewBitten -> BittenTurningTimerHandle, NewBitten, &ABitten::ComposeAfterTime, BittenTurningTime, false);
+	Human -> Destroy();
+	
+	OnBittenSpawn(NewBitten);
+}
+
+
+
+void APopulationSpawner::TryConvertBitten(ABitten* Bitten)
+{
+	if ( not Bitten)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Bitten is nullptr"));
+		return;
+	}
+	
+	
+	const FTransform SpawnTransform = Bitten->GetActorTransform();
+	//Unsure if there is a controller in this bad boy still doing this shit to save it.
+	AController* OldController = Bitten -> GetController();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	if (not ZombieClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ZombieClass is nullptr"));
+		return;
+	}
+	
+	AZombie* NewZombie = GetWorld( )-> SpawnActor<AZombie>(ZombieClass, SpawnTransform, SpawnParams);
+	
+	
+	if (OldController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Bitten has controller"));
+		OldController -> UnPossess();
+		OldController -> Possess(NewZombie);
+	}
+	
+	CounterHUD -> SetZombieTextCounter();
+	Bitten -> Destroy();
+	
+	OnZombieSpawn(NewZombie);
+}
+
+
+
+void APopulationSpawner::OnZombieSpawn(ACustomPawnBase* ZombieSpawned)
+{
+	AZombie* ZombieCast = Cast<AZombie>(ZombieSpawned);
+	if (not ZombieCast)
+	{
+		return;
+	}
+	
+	
+	
+	if (not ZombiePopulation.Contains(ZombieCast))
+	{
+		ZombiePopulation.Add(ZombieCast);
+	}
+	
+	
+	ZombieCast -> OnDestroyed.AddDynamic(this, &APopulationSpawner::OnZombieDestroy);
+	if (ZombieCast -> SphereCollider)
+	{
+		ZombieCast -> SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &APopulationSpawner::OnZombieSphereBeginOverlap);
+	}
+	
+	ZombiePopulationCount = AmountOfActorsInArray(ZombiePopulation);
+	CounterHUD -> ZombiePopulationCount = ZombiePopulationCount;
+	CounterHUD -> SetZombieTextCounter();
+}
+
+
+
+void APopulationSpawner::OnHumanSpawn(ACustomPawnBase* HumanSpawned)
+{
+	AHuman* HumanCast = Cast<AHuman>(HumanSpawned);
+	if (not HumanCast)
+	{
+		return;
+	}
+	
+	
+	if (not HumanPopulation.Contains(HumanCast))
+	{
+		HumanPopulation.Add(HumanCast);
+	}
+	
+	HumanCast -> OnDestroyed.AddDynamic(this, &APopulationSpawner::OnHumanDestroy);
+	
+	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
+	
+	UE_LOG(LogTemp, Warning, TEXT("Human pop: %d"), HumanPopulationCount);
+	UE_LOG(LogTemp, Warning, TEXT("Human pop in HUD: %d"), CounterHUD -> HumanPopulationCount);
+	
+	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
+	CounterHUD -> SetHumanTextCounter();
+}
+
+
+
+void APopulationSpawner::OnBittenSpawn(ACustomPawnBase* BittenSpawn)
+{
+	ABitten* BittenCast = Cast<ABitten>(BittenSpawn);
+	if (not BittenCast)
+	{
+		return;
+	}
+	
+	
+	if (not BittenPopulation.Contains(BittenCast))
+	{
+		BittenPopulation.Add(BittenCast);
+	}
+	
+	BittenCast -> OnDestroyed.AddDynamic(this, &APopulationSpawner::OnBittenDestroy);
+	BittenPopulationCount = AmountOfActorsInArray(BittenPopulation);
+	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
+	CounterHUD -> SetBittenTextCounter();
 }

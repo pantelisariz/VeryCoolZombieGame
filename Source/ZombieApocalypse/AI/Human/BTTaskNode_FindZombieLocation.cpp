@@ -44,7 +44,8 @@ EBTNodeResult::Type UBTTaskNode_FindZombieLocation::ExecuteTask(UBehaviorTreeCom
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(Out_ZombieTargetLocation.SelectedKeyName, Location.Location);
 	}
 
-	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Purple, FString::Printf(TEXT("Found AHuman")));
+
+	UE_LOG(LogTemp, Warning, TEXT("Found AHuman"));
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

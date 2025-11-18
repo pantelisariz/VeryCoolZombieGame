@@ -6,9 +6,9 @@
 void UCounterHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
-	ZombiePopulation = 0;
-	BittenPopulation = 0;
-	HumanPopulation = 0;
+	ZombiePopulationCount = 0;
+	BittenPopulationCount = 0;
+	HumanPopulationCount = 0;
 
 	UpdateAllText();
 }
@@ -23,7 +23,7 @@ void UCounterHUD::UpdateAllText()
 
 void UCounterHUD::SetZombieTextCounter()
 {
-	FText ZombieText = FText::FromString( FString::Printf(TEXT("Amount of Zombies: %d"), (int)ZombiePopulation) );
+	FText ZombieText = FText::FromString( FString::Printf(TEXT("Amount of Zombies: %d"), (int)ZombiePopulationCount) );
 	ZombieTextCounter -> SetText(ZombieText);
 }
 
@@ -31,7 +31,7 @@ void UCounterHUD::SetZombieTextCounter()
 
 void UCounterHUD::SetBittenTextCounter()
 {
-	FText BittenText = FText::FromString( FString::Printf(TEXT("Amount of Bitten: %d"), (int)BittenPopulation) );
+	FText BittenText = FText::FromString( FString::Printf(TEXT("Amount of Bitten: %d"), (int)BittenPopulationCount) );
 	BittenTextCounter -> SetText(BittenText);
 }
 
@@ -39,6 +39,6 @@ void UCounterHUD::SetBittenTextCounter()
 
 void UCounterHUD::SetHumanTextCounter()
 {
-	FText HumanText = FText::FromString( FString::Printf(TEXT("Amount of Humans: %d"), (int)HumanPopulation) );
+	FText HumanText = FText::FromString( FString::Printf(TEXT("Amount of Humans: %d"), (int)HumanPopulationCount ));
 	HumanTextCounter -> SetText(HumanText);
 }

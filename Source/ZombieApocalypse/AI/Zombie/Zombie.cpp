@@ -14,8 +14,7 @@ AZombie::AZombie()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	BiteCooldown = 1.0f;
-	LastBiteTime = -BiteCooldown;
+	LastBiteTime = -1;
 
 }
 
@@ -23,14 +22,6 @@ AZombie::AZombie()
 void AZombie::BeginPlay()
 {
 	Super::BeginPlay();
-	if (SphereCollider)
-	{
-		SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &AZombie::OnSphereBeginOverlap);
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString("Zombie has no SphereCollider"));
-	}
 }
 
 
@@ -70,62 +61,3 @@ void AZombie::Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 }
 
 
-
-//here will do the overlap
-void AZombie::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (!OtherActor || OtherActor == this) return;
-
-	AHuman* Human = Cast<AHuman>(OtherActor);
-	if (Human)
-	{
-		TryConvertHuman(Human);
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlapped"));
-	}
-}
-
-
-
-//The function making him into bitten guy or gal
-void AZombie::TryConvertHuman(AHuman* Human)
-{
-	if (!Human) return;
-
-	const float Now = GetWorld()->GetTimeSeconds();
-	if (Now - LastBiteTime < BiteCooldown) return;
-	LastBiteTime = Now;
-
-	const FTransform SpawnTransform = Human->GetActorTransform();
-	//Unsure if there is a controller in this bad boy still doing this shit to save it.
-	AController* OldController = Human->GetController();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-	//You have to set the bittenclass on the zombie bp!
-	if (!BittenClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("AZombie::TryConvertHuman - BittenClass not set"));
-		return;
-	}
-	// Spawn the bitten actor
-	ABitten* NewBitten = GetWorld()->SpawnActor<ABitten>(BittenClass, SpawnTransform, SpawnParams);
-	if (!NewBitten)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString("Failed to spawn the guy that got chomped"));
-		return;
-	}
-	// Transfer controller (works for PlayerController or AIController that was possessing the human)
-	if (OldController)
-	{
-		OldController->UnPossess();
-		OldController->Possess(NewBitten);
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString("There was no controller in the human bitch"));
-	}
-	//my favorite part
-	
-	Human->Destroy();
-}

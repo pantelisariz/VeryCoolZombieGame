@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_FindHumanLocation::ExecuteTask(UBehaviorTreeComponen
 	AHuman* const HumanCast = Cast<AHuman>(bob);
 	if (not HumanCast)
 	{
-		GEngine -> AddOnScreenDebugMessage(-1, 1.0f, FColor::Purple, FString::Printf(TEXT("Failed cast to AHuman")) );
+		UE_LOG(LogTemp, Warning, TEXT("Failed cast to AHuman"));
 		return EBTNodeResult::Failed;
 	}
 

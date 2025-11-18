@@ -29,19 +29,19 @@ public:
 	UBorder* ZombieBorder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UTextBlock* ZombieTextCounter;
-	int32 ZombiePopulation;
+	int32 ZombiePopulationCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UBorder* BittenBorder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UTextBlock* BittenTextCounter;
-	int32 BittenPopulation;
+	int32 BittenPopulationCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UBorder* HumanBorder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UTextBlock* HumanTextCounter;
-	int32 HumanPopulation;
+	int32 HumanPopulationCount;
 	
 	
 };
