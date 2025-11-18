@@ -3,12 +3,38 @@
 
 #include "FPSCharacter.h"
 #include "EnhancedInputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	
+	
+	// CameraArmComponent = nullptr;
+	CameraComponent = nullptr;
+	
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	TObjectPtr<UCharacterMovementComponent> MovementComponent = GetCharacterMovement();
+	MovementComponent -> bOrientRotationToMovement = true;
+	
+	/*
+	CameraArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SrpingArmComponent"));
+	CameraArmComponent -> SetupAttachment(RootComponent.Get());
+	CameraArmComponent -> TargetArmLength = 400.f;
+	CameraArmComponent -> bUsePawnControlRotation = true;
+	*/
+	
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+	CameraComponent -> SetupAttachment(RootComponent.Get());
+	CameraComponent -> bUsePawnControlRotation = false;
+	
+	
 	
 	Cash = 600;
 
