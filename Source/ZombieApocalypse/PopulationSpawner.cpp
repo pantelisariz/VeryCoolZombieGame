@@ -4,7 +4,6 @@
 
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
-#include "SimulationController.h"
 #include "Field/FieldSystemNodes.h"
 #include "Kismet/GameplayStatics.h"
 
