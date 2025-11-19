@@ -30,36 +30,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> CameraComponent;
 
-	/*   stuff for shooting  */
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
-	float BaseDamage = 25.f;
 
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
-	float TraceDistance = 10000.f;
 
-	//shots per second
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
-	float FireRate = 1.f;
-
-	//ray casting for shooting
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
-	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
-
-	//is the player holding down the fire button
-	bool bIsFiring = false;
-
-	// Probably need this to handle automatic fire
-	FTimerHandle TimerHandle_AutoFire;
-
-	//Functions for shooting logic
-	//this one is for the ray casting
-	void FireShot();
-	//had to move 2 functions to public to be able to call them from the controller
-	/*   end stuff for shooting  */
-
-	
 	
 public:	
 	// Called every frame
@@ -67,6 +40,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	void SetupGun();
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
@@ -91,17 +66,11 @@ public:
 	AGun* CurrentGun;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AGun> StartingGun;
+	TSubclassOf<AGun> StartingGunClass;
 	
 	
 	// Will be empty, so we can use this point as where the gun should spawn in
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
-
-	//The stuff i had to move to public to be able to call from controller
-	//This will be called when the player presses the fire button
-	void StartFire();
-	//duh
-	void StopFire();
-
+	
 };

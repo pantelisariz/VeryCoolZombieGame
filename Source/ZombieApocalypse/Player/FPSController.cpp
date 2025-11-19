@@ -122,7 +122,7 @@ void AFPSController::FireStart()
 {
 	if (FPSCharacter)
 	{
-		FPSCharacter->StartFire();
+		FPSCharacter->CurrentGun->StartFire();
 	}
 }
 
@@ -130,7 +130,7 @@ void AFPSController::FireEnd()
 {
 	if (FPSCharacter)
 	{
-		FPSCharacter->StopFire();
+		FPSCharacter->CurrentGun->EndFire();
 	}
 }
 

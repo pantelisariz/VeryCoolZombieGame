@@ -117,4 +117,14 @@ public:
 	TSubclassOf<ABitten> BittenClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	TSubclassOf<AHuman> HumanClass;
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WaveInfo", meta = (AllowPrivateAccess = "true"))
+	int32 Wave;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WaveInfo", meta = (AllowPrivateAccess = "true"))
+	int32 ZombiePerWave;	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WaveInfo", meta = (AllowPrivateAccess = "true"))
+	int32 HumanPerWave;
+	
 };

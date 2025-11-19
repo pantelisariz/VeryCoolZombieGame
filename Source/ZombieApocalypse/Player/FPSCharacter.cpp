@@ -37,6 +37,12 @@ AFPSCharacter::AFPSCharacter()
 	CameraComponent -> SetupAttachment(CameraArmComponent.Get(), USpringArmComponent::SocketName);
 	CameraComponent -> bUsePawnControlRotation = false;
 	
+	GunPlacementPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunPlacementPoint"));
+	GunPlacementPoint -> SetupAttachment(RootComponent.Get());
+	
+	
+	
+	
 	RunSpeed = 1000.f;
 	WalkSpeed = 600.f;
 	
@@ -45,11 +51,8 @@ AFPSCharacter::AFPSCharacter()
 	
 	Cash = 600;
 
-	// Gun stuff, can also be changed in blueprint
-	BaseDamage = 25.f;
-	TraceDistance = 10000.f;
-	FireRate = 1.f;
-	TraceChannel = ECC_Visibility;
+
+
 
 }
 
@@ -79,6 +82,20 @@ void AFPSCharacter::BeginPlay()
 	PlayerInfoHUD -> AddToViewport();
 	PlayerInfoHUD -> UpdateCashText(Cash);
 	
+	
+	
+	
+	if (not StartingGunClass)
+	{
+		return;
+	}
+	
+	CurrentGun = GetWorld() -> SpawnActor<AGun>(StartingGunClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
+	SetupGun();
+
+	
+	
+	
 }
 
 // Called every frame
@@ -94,91 +111,10 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-//The shooting logic when the player holds down the fire button
-void AFPSCharacter::StartFire()
+void AFPSCharacter::SetupGun()
 {
-	bIsFiring = true;
-
-	// If FireRate <= 0,do semi-automatic fire
-	if (FireRate <= 0.f)
-	{
-		FireShot();
-		return;
-	}
-
-	if (!GetWorld())
-	{
-		return;
-	}
-
-	// Fire immediately then start timer for subsequent shots
-	FireShot();
-	const float TimeBetweenShots = 1.0f / FMath::Max(0.0001f, FireRate);
-	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AFPSCharacter::FireShot, TimeBetweenShots, true, TimeBetweenShots);
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
+	CurrentGun -> PlayerCameraComponent = CameraComponent;
 }
 
-void AFPSCharacter::StopFire()
-{
-	bIsFiring = false;
-	if (GetWorld())
-	{
-		GetWorldTimerManager().ClearTimer(TimerHandle_AutoFire);
-	}
-}
-
-// The actual ray casting and damage application
-void AFPSCharacter::FireShot()
-{
-	UWorld* World = GetWorld();
-	if (!World || !CameraComponent)
-	{
-		return;
-	}
-
-	// Trace origin / direction
-	const FVector TraceStart = CameraComponent->GetComponentLocation();
-	const FVector Direction = CameraComponent->GetForwardVector();
-	const FVector TraceEnd = TraceStart + Direction * TraceDistance;
-
-	// Prepare collision params
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-	QueryParams.bTraceComplex = true;
-	QueryParams.bReturnPhysicalMaterial = true;
-
-	// Perform trace
-	FHitResult Hit;
-	const bool bDidHit = World->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, TraceChannel, QueryParams);
-
-	// No hit
-	if (!bDidHit)
-	{
-		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Blue, false, 1.0f, 0, 0.5f);
-		return;
-	}
-
-	// We hit something.
-	DrawDebugSphere(World, Hit.ImpactPoint, 8.0f, 8, FColor::Red, false, 1.0f);
-
-	AActor* HitActor = Hit.GetActor();
-	if (!HitActor)
-	{
-		// Hit something without an actor, in our case it will be probably nothing
-		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
-		return;
-	}
-
-	// If the hit actor is one of our pawns, nuke it (TODO: or apply damage later)
-	if (ACustomPawnBase* HitPawn = Cast<ACustomPawnBase>(HitActor))
-	{
-		HitPawn->Destroy();
-
-		//apply damage placehodler for later
-		//UGameplayStatics::ApplyPointDamage(HitPawn, BaseDamage, Direction, Hit, GetController(), this, UDamageType::StaticClass());
-	}
-	else
-	{
-		// We hit an actor that is NOT a target, this will happen a lot
-		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
-	}
-}
