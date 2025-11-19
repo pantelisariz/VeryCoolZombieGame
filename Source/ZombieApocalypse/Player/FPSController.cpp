@@ -39,6 +39,9 @@ void AFPSController::SetupInputComponent()
 	EnhancedInputComponent -> BindAction(RunAction.Get(), ETriggerEvent::Completed, this, &AFPSController::RunEnd);
 	
 	EnhancedInputComponent -> BindAction(InteractAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Interact);
+	
+	EnhancedInputComponent -> BindAction(ReloadAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Reload);
+	
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Started, this, &AFPSController::FireStart);
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Completed, this, &AFPSController::FireEnd);
 
@@ -136,6 +139,13 @@ void AFPSController::FireEnd()
 
 void AFPSController::Reload()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Reloading in controller"));
+	
+	if (FPSCharacter)
+	{
+		FPSCharacter->CurrentGun->StartReloading();
+	}
+	
 }
 
 void AFPSController::Interact()

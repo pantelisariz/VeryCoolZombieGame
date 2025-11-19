@@ -26,6 +26,7 @@ AGun::AGun()
 	Range = 1000;
 	ReloadTime = 3;
 	MaxAmmoCount = 6;
+	AmmoUsedPerShot = 1;
 	CurrentAmmoCount = MaxAmmoCount;
 	
 	TraceChannel = ECC_Visibility;
@@ -105,6 +106,12 @@ void AGun::EndFire()
 
 
 
+void AGun::StartReloading()
+{
+	GetWorldTimerManager().SetTimer(TimerHandle_Reload, this, &AGun::Reload, ReloadTime, false, ReloadTime);
+}
+
+
 void AGun::FireShot()
 {
 	UWorld* World = GetWorld();
@@ -112,9 +119,19 @@ void AGun::FireShot()
 	{
 		return;
 	}
+	if (GetWorldTimerManager().IsTimerActive(TimerHandle_Reload))
+	{
+		return;
+	}
 	
 	if (TimeLastShot + TimeBetweenShots >= GetWorld() -> TimeSeconds)
 	{
+		return;
+	}
+	
+	if (CurrentAmmoCount <= 0)
+	{
+		StartReloading();
 		return;
 	}
 
@@ -165,6 +182,24 @@ void AGun::FireShot()
 		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
 	}
 	
+	FireShotStatChanges();
+}
+
+void AGun::FireShotStatChanges()
+{
 	TimeLastShot = GetWorld() -> TimeSeconds;
+	CurrentAmmoCount -= AmmoUsedPerShot;
+	
+	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
+}
+
+void AGun::Reload()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Reloading"));
+
+	CurrentAmmoCount = MaxAmmoCount;
+	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
+	
+	GetWorldTimerManager().ClearTimer(TimerHandle_Reload);
 }
 

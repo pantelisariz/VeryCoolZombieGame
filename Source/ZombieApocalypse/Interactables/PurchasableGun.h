@@ -19,6 +19,16 @@ class ZOMBIEAPOCALYPSE_API APurchasableGun : public APurchasableActor
 public:
 	APurchasableGun();
 	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableActor", meta = (AllowPrivateAccess = "true"))
 	AGun* PurchasableGun;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableActor", meta = (AllowPrivateAccess = "true"))
+	float Value1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableActor", meta = (AllowPrivateAccess = "true"))
+	float Value2;
+	
 };

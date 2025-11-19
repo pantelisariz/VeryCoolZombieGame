@@ -35,8 +35,9 @@ protected:
 	//had to move 2 functions to public to be able to call them from the controller
 	/*   end stuff for shooting  */
 	
+	void FireShotStatChanges();
 	
-	
+	void Reload();
 	
 	
 	
@@ -50,6 +51,7 @@ protected:
 	// Probably need this to handle automatic fire
 	FTimerHandle TimerHandle_AutoFire;
 	FTimerHandle TimerHandle_Fire;
+	FTimerHandle TimerHandle_Reload;
 
 	
 	
@@ -62,6 +64,8 @@ public:
 	//This will be called when the player presses the fire button
 	void StartFire();
 	void EndFire();
+	
+	void StartReloading();
 	
 
 	
@@ -96,8 +100,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
 	int32 MaxAmmoCount;
-	
 	int32 CurrentAmmoCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	int32 AmmoUsedPerShot;
 	
 	
 	
