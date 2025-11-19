@@ -125,7 +125,15 @@ void AFPSCharacter::ChangeCash(int32 CashChangeValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Delegate worked"));
 	
-	Cash += CashChangeValue;
+	if (Cash - CashChangeValue <= 0 or Cash <= 0)
+	{
+		Cash = 0;
+	}
+	else
+	{
+		Cash += CashChangeValue;
+	}
+
 	PlayerInfoHUD -> UpdateCashText(Cash);
 }
 
