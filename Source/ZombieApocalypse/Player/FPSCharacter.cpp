@@ -116,5 +116,16 @@ void AFPSCharacter::SetupGun()
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
+	CurrentGun -> CashGained.AddDynamic(this, &AFPSCharacter::ChangeCash);
+	
+	
+}
+
+void AFPSCharacter::ChangeCash(int32 CashChangeValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Delegate worked"));
+	
+	Cash += CashChangeValue;
+	PlayerInfoHUD -> UpdateCashText(Cash);
 }
 

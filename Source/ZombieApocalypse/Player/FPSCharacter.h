@@ -11,6 +11,7 @@
 #include "FPSCharacter.generated.h"
 
 
+
 UCLASS()
 class ZOMBIEAPOCALYPSE_API AFPSCharacter : public ACharacter
 {
@@ -43,6 +44,9 @@ public:
 	
 	void SetupGun();
 	
+	UFUNCTION()
+	void ChangeCash(int32 CashChangeValue);
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UPlayerStatHUD> PlayerInfoHUDClass;
@@ -72,5 +76,7 @@ public:
 	// Will be empty, so we can use this point as where the gun should spawn in
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
+	
+	
 	
 };

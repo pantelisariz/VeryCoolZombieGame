@@ -101,6 +101,8 @@ void AGun::EndFire()
 	}
 }
 
+
+
 void AGun::FireShot()
 {
 	UWorld* World = GetWorld();
@@ -146,7 +148,7 @@ void AGun::FireShot()
 	if (ACustomPawnBase* HitPawn = Cast<ACustomPawnBase>(HitActor))
 	{
 		HitPawn->Destroy();
-
+		CashGained.Broadcast(HitPawn -> CashChangeValue);
 		//apply damage placehodler for later
 		//UGameplayStatics::ApplyPointDamage(HitPawn, BaseDamage, Direction, Hit, GetController(), this, UDamageType::StaticClass());
 	}

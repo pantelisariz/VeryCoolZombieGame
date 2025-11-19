@@ -56,7 +56,11 @@ public:
 	double MaxRunSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
-	int health;
+	int32 Health;	
+	
+	// Basically money gained from killing zombies or lost when killing humans
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	int32 CashChangeValue;
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))

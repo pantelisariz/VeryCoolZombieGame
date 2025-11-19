@@ -20,9 +20,10 @@ ACustomPawnBase::ACustomPawnBase()
 	FloatingPawnMovementComponent -> SetPlaneConstraintNormal( FVector(0,0, 1) );
 
 
-	health = 100;
+	Health = 100;
 	MaxWalkSpeed = 100;
 	MaxRunSpeed = 300;
+	CashChangeValue = 0;
 	
 	PawnAIController = nullptr;
 	BehaviorTree = nullptr;

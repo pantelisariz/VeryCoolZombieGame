@@ -8,6 +8,10 @@
 #include "ZombieApocalypse/HUD/GunInfoHUD.h"
 #include "Gun.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FZombieKilledDelegate, int32, CashChangeValue);
+
+
 UCLASS()
 class ZOMBIEAPOCALYPSE_API AGun : public AActor
 {
@@ -98,6 +102,9 @@ public:
 
 
 	TObjectPtr<UCameraComponent> PlayerCameraComponent;
+	
+	
+	FZombieKilledDelegate CashGained;
 
 
 
