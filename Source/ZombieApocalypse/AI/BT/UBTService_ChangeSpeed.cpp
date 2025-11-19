@@ -3,7 +3,7 @@
 
 #include "UBTService_ChangeSpeed.h"
 
-#include "CustomPawnBase.h"
+#include "../CustomPawnBase.h"
 
 UUBTService_ChangeSpeed::UUBTService_ChangeSpeed()
 {

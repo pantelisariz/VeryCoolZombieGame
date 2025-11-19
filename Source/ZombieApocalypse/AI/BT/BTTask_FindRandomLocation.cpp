@@ -3,9 +3,9 @@
 
 #include "BTTask_FindRandomLocation.h"
 
-#include "CustomPawnBase.h"
+#include "../CustomPawnBase.h"
 #include "NavigationSystem.h"
-#include "PawnBase_AIController.h"
+#include "../PawnBase_AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation(FObjectInitializer const& ObjectInitializer)
