@@ -10,8 +10,6 @@ ACustomPawnBase::ACustomPawnBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	Mesh -> SetupAttachment(GetRootComponent());
-
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereCollider->SetupAttachment(Mesh);
 
