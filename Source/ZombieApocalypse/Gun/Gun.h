@@ -9,7 +9,7 @@
 #include "Gun.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FZombieKilledDelegate, int32, CashChangeValue);
+DECLARE_DELEGATE_OneParam(FZombieKilledDelegate, int32 /*CashChangeValue */);
 
 
 UCLASS()

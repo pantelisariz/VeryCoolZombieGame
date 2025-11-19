@@ -148,7 +148,7 @@ void AGun::FireShot()
 	if (ACustomPawnBase* HitPawn = Cast<ACustomPawnBase>(HitActor))
 	{
 		HitPawn->Destroy();
-		CashGained.Broadcast(HitPawn -> CashChangeValue);
+		CashGained.Execute(HitPawn -> CashChangeValue);
 		//apply damage placehodler for later
 		//UGameplayStatics::ApplyPointDamage(HitPawn, BaseDamage, Direction, Hit, GetController(), this, UDamageType::StaticClass());
 	}
