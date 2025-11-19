@@ -4,6 +4,7 @@
 #include "Gun.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "ZombieApocalypse/AI/CustomPawnBase.h"
 
 // Sets default values
@@ -32,6 +33,9 @@ AGun::AGun()
 	TraceChannel = ECC_Visibility;
 	
 	TimeLastShot = 0.f;
+	
+	
+	bIsReloading = false;
 
 }
 
@@ -68,6 +72,12 @@ void AGun::BeginPlay()
 void AGun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	if (bIsReloading)
+	{
+		ReloadProgress = FMath::FInterpConstantTo(ReloadProgress, 1.f, DeltaTime, ReloadTime / 8);
+		GunInfoHUD -> UpdateReloadProgressBar(ReloadProgress);
+	}
 	
 }
 
@@ -109,6 +119,7 @@ void AGun::EndFire()
 void AGun::StartReloading()
 {
 	GetWorldTimerManager().SetTimer(TimerHandle_Reload, this, &AGun::Reload, ReloadTime, false, ReloadTime);
+	bIsReloading = true;
 }
 
 
@@ -201,5 +212,11 @@ void AGun::Reload()
 	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
 	
 	GetWorldTimerManager().ClearTimer(TimerHandle_Reload);
+	
+	bIsReloading = false;
+	ReloadProgress = 0.f;
+	
+	
+	GunInfoHUD -> UpdateReloadProgressBar(ReloadProgress);
 }
 

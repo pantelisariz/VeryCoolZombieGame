@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Border.h"
+#include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "GunInfoHUD.generated.h"
 
@@ -23,6 +24,7 @@ public:
 	void UpdateAllText();
 	
 	void UpdateBulletCount(int32 NewBulletCount);
+	void UpdateReloadProgressBar(float ReloadProgressPercentile);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UBorder* BulletCountBorder;
@@ -31,4 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI_Variable", meta = (BindWidget))
 	int32 BulletCount;
 	int32 MaxBulletCount;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
+	UProgressBar* ReloadProgressBar;
+	float ReloadProgress;
 };

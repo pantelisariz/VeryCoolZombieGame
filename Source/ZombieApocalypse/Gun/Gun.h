@@ -52,6 +52,7 @@ protected:
 	FTimerHandle TimerHandle_AutoFire;
 	FTimerHandle TimerHandle_Fire;
 	FTimerHandle TimerHandle_Reload;
+	FTimerHandle TimerHandle_HUDReload;
 
 	
 	
@@ -77,7 +78,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UGunInfoHUD> GunInfoHUDClass;
 	UPROPERTY()
-	TObjectPtr<UGunInfoHUD> GunInfoHUD;
+	UGunInfoHUD* GunInfoHUD;
 	
 
 	
@@ -103,6 +104,8 @@ public:
 	int32 CurrentAmmoCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
 	int32 AmmoUsedPerShot;
+	bool bIsReloading;
+	float ReloadProgress;
 	
 	
 	
