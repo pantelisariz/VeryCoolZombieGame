@@ -49,6 +49,7 @@ protected:
 
 	// Probably need this to handle automatic fire
 	FTimerHandle TimerHandle_AutoFire;
+	FTimerHandle TimerHandle_Fire;
 
 	
 	
@@ -82,27 +83,26 @@ public:
 	int32 Damage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
-	int32 FireRate;
+	float FireRate;
+	float TimeBetweenShots;
+	float TimeLastShot;
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
-	int32 Range;
+	float Range;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
-	int32 ReloadTime;
+	float ReloadTime;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
 	int32 MaxAmmoCount;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
 	int32 CurrentAmmoCount;
 	
 	
 	
 
-
-
 	TObjectPtr<UCameraComponent> PlayerCameraComponent;
-	
 	
 	FZombieKilledDelegate CashGained;
 

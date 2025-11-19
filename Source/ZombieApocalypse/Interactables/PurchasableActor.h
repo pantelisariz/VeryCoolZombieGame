@@ -17,7 +17,6 @@ class ZOMBIEAPOCALYPSE_API APurchasableActor : public AInteractableActor
 public:
 	APurchasableActor();
 	
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableActor", meta = (AllowPrivateAccess = "true"))
 	int32 Cost;
 	

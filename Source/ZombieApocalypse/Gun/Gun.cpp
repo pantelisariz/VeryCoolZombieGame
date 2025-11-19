@@ -22,13 +22,15 @@ AGun::AGun()
 	 * Here you can set the default stats of the gun
 	 */
 	Damage = 10;
-	FireRate = 3;
+	FireRate = 1;
 	Range = 1000;
 	ReloadTime = 3;
 	MaxAmmoCount = 6;
 	CurrentAmmoCount = MaxAmmoCount;
 	
 	TraceChannel = ECC_Visibility;
+	
+	TimeLastShot = 0.f;
 
 }
 
@@ -57,13 +59,15 @@ void AGun::BeginPlay()
 	GunInfoHUD -> MaxBulletCount = MaxAmmoCount;
 	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
 	
+	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
+	
 }
 
 // Called every frame
 void AGun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 
@@ -85,9 +89,7 @@ void AGun::StartFire()
 	}
 
 	// Fire immediately then start timer for subsequent shots
-	FireShot();
-	const float TimeBetweenShots = 1.0f / FMath::Max(0.0001f, FireRate);
-	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AGun::FireShot, TimeBetweenShots, true, TimeBetweenShots);
+	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AGun::FireShot, TimeBetweenShots, true, 0);
 }
 
 
@@ -107,6 +109,11 @@ void AGun::FireShot()
 {
 	UWorld* World = GetWorld();
 	if (!World || !PlayerCameraComponent)
+	{
+		return;
+	}
+	
+	if (TimeLastShot + TimeBetweenShots >= GetWorld() -> TimeSeconds)
 	{
 		return;
 	}
@@ -157,5 +164,7 @@ void AGun::FireShot()
 		// We hit an actor that is NOT a target, this will happen a lot
 		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
 	}
+	
+	TimeLastShot = GetWorld() -> TimeSeconds;
 }
 
