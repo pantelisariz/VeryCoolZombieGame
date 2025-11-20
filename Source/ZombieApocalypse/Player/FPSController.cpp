@@ -46,7 +46,7 @@ void AFPSController::SetupInputComponent()
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Started, this, &AFPSController::FireStart);
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Completed, this, &AFPSController::FireEnd);
 	
-	EnhancedInputComponent -> BindAction(PauseAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Pause);
+	EnhancedInputComponent -> BindAction(PauseAction.Get(), ETriggerEvent::Completed, this, &AFPSController::TogglePause);
 	
 
 	UE_LOG(LogTemp, Warning, TEXT("Added DefaultInputMappingContext"));
@@ -152,21 +152,42 @@ void AFPSController::Reload()
 	
 }
 
-void AFPSController::Pause()
+void AFPSController::TogglePause()
 {
-	/*
+	UE_LOG(LogTemp, Warning, TEXT("Function Fired"));
 	if (bIsPaused)
 	{
-		UGameplayStatics::SetGamePaused(GetWorld(), bIsPaused);
+		UE_LOG(LogTemp, Warning, TEXT("IF fired"));
 
 		bIsPaused = false;
+		// Unpause the game
+		SetPause(false);
+		// Return game input
+		bShowMouseCursor = false;
+		FInputModeGameOnly InputMode;
+		SetInputMode(InputMode);
+
+		UE_LOG(LogTemp, Warning, TEXT("IF finished"));
+
 	}
 	else
 	{
-		UGameplayStatics::SetGamePaused(GetWorld(), bIsPaused);
+		UE_LOG(LogTemp, Warning, TEXT("ELSE fired"));
+
+		// Pause the game
+		SetPause(true);
 		bIsPaused = true;
+		// Free mouse cursor and UI input
+		bShowMouseCursor = true;
+		FInputModeGameAndUI InputMode;
+		//it was used for pause might be useful for score
+		//InputMode.SetWidgetToFocus(PauseMenuWidget->TakeWidget());
+		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		SetInputMode(InputMode);
+		UE_LOG(LogTemp, Warning, TEXT("ELSE finished"));
+
 	}
-	*/
+	
 }
 
 
