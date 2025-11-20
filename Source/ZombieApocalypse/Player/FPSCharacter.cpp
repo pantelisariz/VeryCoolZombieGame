@@ -125,7 +125,7 @@ void AFPSCharacter::ChangeCash(int32 CashChangeValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Delegate worked"));
 	
-	if (Cash - CashChangeValue <= 0 or Cash <= 0)
+	if (Cash + CashChangeValue <= 0)
 	{
 		Cash = 0;
 	}
