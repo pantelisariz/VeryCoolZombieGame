@@ -333,6 +333,7 @@ void APopulationSpawner::TryConvertHuman(AZombie* OwnerZombie, AHuman* Human)
 		UE_LOG(LogTemp, Warning, TEXT("here was no controller in the human bitch"));
 		
 	}
+
 	
 	//my favorite part
 	GetWorldTimerManager().SetTimer(NewBitten -> BittenTurningTimerHandle, NewBitten, &ABitten::ComposeAfterTime, BittenTurningTime, false);
@@ -432,6 +433,7 @@ void APopulationSpawner::OnHumanSpawn(ACustomPawnBase* HumanSpawned)
 	// UE_LOG(LogTemp, Warning, TEXT("Human pop: %d"), HumanPopulationCount);
 	// UE_LOG(LogTemp, Warning, TEXT("Human pop in HUD: %d"), CounterHUD -> HumanPopulationCount);
 	
+	HumanPopulationCount = AmountOfActorsInArray(HumanPopulation);
 	CounterHUD -> HumanPopulationCount = HumanPopulationCount;
 	CounterHUD -> SetHumanTextCounter();
 }
@@ -453,6 +455,7 @@ void APopulationSpawner::OnBittenSpawn(ACustomPawnBase* BittenSpawn)
 	}
 	
 	BittenCast -> OnDestroyed.AddDynamic(this, &APopulationSpawner::OnBittenDestroy);
+	
 	BittenPopulationCount = AmountOfActorsInArray(BittenPopulation);
 	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
 	CounterHUD -> SetBittenTextCounter();
