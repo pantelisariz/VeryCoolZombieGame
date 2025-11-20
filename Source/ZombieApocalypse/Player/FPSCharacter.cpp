@@ -122,7 +122,7 @@ void AFPSCharacter::SetupGun()
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
 	CurrentGun -> CashGained.BindUObject(this, &AFPSCharacter::ChangeCash);
-	CurrentGun -> AddHUDInfo();
+	CurrentGun -> AddCombatHUD();
 }
 
 

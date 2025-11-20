@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
-#include "ZombieApocalypse/HUD/GunInfoHUD.h"
+#include "ZombieApocalypse/HUD/CombatHUD.h"
 #include "Gun.generated.h"
 
 
@@ -68,7 +68,7 @@ public:
 	
 	void StartReloading();
 	
-	void AddHUDInfo();
+	void AddCombatHUD();
 	
 
 	
@@ -78,9 +78,9 @@ public:
 	UStaticMeshComponent* GunMesh;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UGunInfoHUD> GunInfoHUDClass;
+	TSubclassOf<UCombatHUD> CombatHUDClass;
 	UPROPERTY()
-	UGunInfoHUD* GunInfoHUD;
+	UCombatHUD* CombatHUD;
 	
 
 	

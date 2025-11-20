@@ -47,8 +47,8 @@ AGun::AGun()
 	TimeLastShot = 0.f;
 	bIsReloading = false;
 	
-	GunInfoHUDClass = nullptr;
-	GunInfoHUD = nullptr;
+	CombatHUDClass = nullptr;
+	CombatHUD = nullptr;
 
 }
 
@@ -67,7 +67,7 @@ void AGun::Tick(float DeltaTime)
 	if (bIsReloading)
 	{
 		ReloadProgress = FMath::FInterpConstantTo(ReloadProgress, 1.f, DeltaTime, 1 / ReloadTime);
-		GunInfoHUD -> UpdateReloadProgressBar(ReloadProgress);
+		CombatHUD -> UpdateReloadProgressBar(ReloadProgress);
 	}
 	
 }
@@ -119,7 +119,7 @@ void AGun::StartReloading()
 
 
 
-void AGun::AddHUDInfo()
+void AGun::AddCombatHUD()
 {
 	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
@@ -129,18 +129,18 @@ void AGun::AddHUDInfo()
 	}
 	
 	
-	if (not GunInfoHUDClass)
+	if (not CombatHUDClass)
 	{
 		return;
 	}
 	
 
 	
-	GunInfoHUD = CreateWidget<UGunInfoHUD>(CastPlayerController, *(GunInfoHUDClass));
+	CombatHUD = CreateWidget<UCombatHUD>(CastPlayerController, *(CombatHUDClass));
 	
-	check(GunInfoHUD);
-	GunInfoHUD -> AddToViewport();
-	GunInfoHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+	check(CombatHUD);
+	CombatHUD -> AddToViewport();
+	CombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 	
 	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 	
@@ -226,7 +226,7 @@ void AGun::FireShotStatChanges()
 	TimeLastShot = GetWorld() -> TimeSeconds;
 	
 	CurrentMagazineAmmo -= AmmoUsedPerShot;
-	GunInfoHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+	CombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 }
 
 void AGun::Reload()
@@ -252,7 +252,7 @@ void AGun::Reload()
 	UE_LOG(LogTemp, Warning, TEXT("Reloading before, %d, %d, %d"), CurrentMagazineAmmo, MagazineCapacity, CurrentCarryAmmo);
 	CurrentCarryAmmo -= ReloadAmount;
 	CurrentMagazineAmmo += ReloadAmount;
-	GunInfoHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+	CombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 	UE_LOG(LogTemp, Warning, TEXT("Reloading after, %d, %d, %d"), CurrentMagazineAmmo, MagazineCapacity, CurrentCarryAmmo);
 	
 	
@@ -267,6 +267,6 @@ void AGun::FinishedReloading()
 	ReloadProgress = 0.f;
 	
 	
-	GunInfoHUD -> UpdateReloadProgressBar(ReloadProgress);
+	CombatHUD -> UpdateReloadProgressBar(ReloadProgress);
 }
 
