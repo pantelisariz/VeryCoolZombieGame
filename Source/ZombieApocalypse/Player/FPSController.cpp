@@ -8,6 +8,7 @@
 #include  "FPSCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 
 AFPSController::AFPSController()
@@ -44,6 +45,9 @@ void AFPSController::SetupInputComponent()
 	
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Started, this, &AFPSController::FireStart);
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Completed, this, &AFPSController::FireEnd);
+	
+	EnhancedInputComponent -> BindAction(PauseAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Pause);
+	
 
 	UE_LOG(LogTemp, Warning, TEXT("Added DefaultInputMappingContext"));
 	
@@ -148,7 +152,26 @@ void AFPSController::Reload()
 	
 }
 
+void AFPSController::Pause()
+{
+	/*
+	if (bIsPaused)
+	{
+		UGameplayStatics::SetGamePaused(GetWorld(), bIsPaused);
+
+		bIsPaused = false;
+	}
+	else
+	{
+		UGameplayStatics::SetGamePaused(GetWorld(), bIsPaused);
+		bIsPaused = true;
+	}
+	*/
+}
+
+
 void AFPSController::Interact()
 {
+	
 }
 

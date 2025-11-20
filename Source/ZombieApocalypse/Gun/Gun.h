@@ -83,26 +83,28 @@ public:
 
 	
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	FString GunTypeInText;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float FireRate;
 	float TimeBetweenShots;
 	float TimeLastShot;
 	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float Range;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float ReloadTime;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 MaxAmmoCount;
 	int32 CurrentAmmoCount;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 AmmoUsedPerShot;
 	bool bIsReloading;
 	float ReloadProgress;

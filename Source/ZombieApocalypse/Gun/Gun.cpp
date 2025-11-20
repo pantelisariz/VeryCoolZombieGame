@@ -22,6 +22,7 @@ AGun::AGun()
 	/*
 	 * Here you can set the default stats of the gun
 	 */
+	GunTypeInText = ("Gun");
 	Damage = 10;
 	FireRate = 1;
 	Range = 1000;

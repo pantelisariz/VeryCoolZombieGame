@@ -5,6 +5,8 @@
 
 APistol::APistol()
 {
+	GunTypeInText = ("Pistol");
+
 }
 
 void APistol::BeginPlay()
