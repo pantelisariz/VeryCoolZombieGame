@@ -42,7 +42,7 @@ protected:
 	
 	void Reload();
 	
-	virtual void Pause() override;
+	void TogglePause();
 	
 
 	
