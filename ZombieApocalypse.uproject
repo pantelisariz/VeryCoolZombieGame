@@ -22,10 +22,26 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
+			"Name": "StateTree",
+			"Enabled": true
+		},
+		{
+			"Name": "GameplayStateTree",
+			"Enabled": true
+		},
+		{
+			"Name": "Niagara",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
-		"Mac",
-		"Windows"
+		"Windows",
+		"Mac"
 	]
 }
