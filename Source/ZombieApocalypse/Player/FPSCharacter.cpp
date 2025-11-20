@@ -105,11 +105,15 @@ void AFPSCharacter::Tick(float DeltaTime)
 
 }
 
+
+
 // Called to bind functionality to input
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
+
 
 void AFPSCharacter::SetupGun()
 {
@@ -117,9 +121,10 @@ void AFPSCharacter::SetupGun()
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
 	CurrentGun -> CashGained.BindUObject(this, &AFPSCharacter::ChangeCash);
-	
-	
+	CurrentGun -> AddHUDInfo();
 }
+
+
 
 void AFPSCharacter::ChangeCash(int32 CashChangeValue)
 {

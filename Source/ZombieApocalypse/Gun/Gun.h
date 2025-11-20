@@ -68,6 +68,8 @@ public:
 	
 	void StartReloading();
 	
+	void AddHUDInfo();
+	
 
 	
 	

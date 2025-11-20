@@ -18,7 +18,8 @@ void UGunInfoHUD::UpdateAllText()
 
 void UGunInfoHUD::UpdateBulletCount(int32 NewBulletCount)
 {
-	FText BulletCountText = FText::FromString( FString::Printf(TEXT("%d / %d"), (int)NewBulletCount, (int)MaxBulletCount ));
+	BulletTextCounter -> SetText(FText::FromString(""));
+	FText BulletCountText = FText::FromString( FString::Printf(TEXT("%d / %d"), NewBulletCount, MaxBulletCount ));
 	BulletTextCounter -> SetText(BulletCountText);
 }
 

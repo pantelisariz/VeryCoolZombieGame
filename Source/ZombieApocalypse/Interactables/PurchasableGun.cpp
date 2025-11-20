@@ -12,7 +12,6 @@ APurchasableGun::APurchasableGun()
 	TextBlock -> SetupAttachment(Mesh);	
 	
 	
-
 }
 
 void APurchasableGun::BeginPlay()

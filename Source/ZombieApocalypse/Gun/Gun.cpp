@@ -24,9 +24,9 @@ AGun::AGun()
 	 */
 	GunTypeInText = ("Gun");
 	Damage = 10;
-	FireRate = 1;
-	Range = 1000;
-	ReloadTime = 3;
+	FireRate = 3.f;
+	Range = 1500.f;
+	ReloadTime = 1.5f;
 	MaxAmmoCount = 6;
 	AmmoUsedPerShot = 1;
 	CurrentAmmoCount = MaxAmmoCount;
@@ -34,9 +34,10 @@ AGun::AGun()
 	TraceChannel = ECC_Visibility;
 	
 	TimeLastShot = 0.f;
-	
-	
 	bIsReloading = false;
+	
+	GunInfoHUDClass = nullptr;
+	GunInfoHUD = nullptr;
 
 }
 
@@ -44,29 +45,7 @@ AGun::AGun()
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
-	if (not CastPlayerController)
-	{
-		return;
-	}
-	
-	
-	if (not GunInfoHUDClass)
-	{
-		return;
-	}
-	
-	GunInfoHUD = CreateWidget<UGunInfoHUD>(CastPlayerController, *(GunInfoHUDClass));
-	
-	check(GunInfoHUD);
-	GunInfoHUD -> AddToViewport();
-	GunInfoHUD -> MaxBulletCount = MaxAmmoCount;
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
-	
-	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
-	
+
 }
 
 // Called every frame
@@ -76,7 +55,7 @@ void AGun::Tick(float DeltaTime)
 	
 	if (bIsReloading)
 	{
-		ReloadProgress = FMath::FInterpConstantTo(ReloadProgress, 1.f, DeltaTime, ReloadTime / 8);
+		ReloadProgress = FMath::FInterpConstantTo(ReloadProgress, 1.f, DeltaTime, 1 / ReloadTime);
 		GunInfoHUD -> UpdateReloadProgressBar(ReloadProgress);
 	}
 	
@@ -101,7 +80,7 @@ void AGun::StartFire()
 	}
 
 	// Fire immediately then start timer for subsequent shots
-	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AGun::FireShot, TimeBetweenShots, true, 0);
+	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AGun::FireShot, 0.1f, true, 0);
 }
 
 
@@ -122,6 +101,37 @@ void AGun::StartReloading()
 	GetWorldTimerManager().SetTimer(TimerHandle_Reload, this, &AGun::Reload, ReloadTime, false, ReloadTime);
 	bIsReloading = true;
 }
+
+
+
+void AGun::AddHUDInfo()
+{
+	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
+	if (not CastPlayerController)
+	{
+		return;
+	}
+	
+	
+	if (not GunInfoHUDClass)
+	{
+		return;
+	}
+	
+
+	
+	GunInfoHUD = CreateWidget<UGunInfoHUD>(CastPlayerController, *(GunInfoHUDClass));
+	
+	check(GunInfoHUD);
+	GunInfoHUD -> AddToViewport();
+	GunInfoHUD -> MaxBulletCount = MaxAmmoCount;
+	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
+	
+	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
+	
+}
+
 
 
 void AGun::FireShot()
@@ -200,13 +210,17 @@ void AGun::FireShot()
 void AGun::FireShotStatChanges()
 {
 	TimeLastShot = GetWorld() -> TimeSeconds;
-	CurrentAmmoCount -= AmmoUsedPerShot;
 	
+	CurrentAmmoCount -= AmmoUsedPerShot;
 	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
 }
 
 void AGun::Reload()
 {
+	if (not bIsReloading)
+	{
+		return;
+	}
 	UE_LOG(LogTemp, Warning, TEXT("Reloading"));
 
 	CurrentAmmoCount = MaxAmmoCount;

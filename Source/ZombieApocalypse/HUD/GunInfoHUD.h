@@ -30,7 +30,7 @@ public:
 	UBorder* BulletCountBorder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UTextBlock* BulletTextCounter;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI_Variable", meta = (BindWidget))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Variable", meta = (BindWidget))
 	int32 BulletCount;
 	int32 MaxBulletCount;
 	
