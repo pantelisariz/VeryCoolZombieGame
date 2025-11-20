@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PurchasableActor.h"
+#include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "ZombieApocalypse/Gun/Gun.h"
 #include "PurchasableGun.generated.h"
@@ -32,6 +33,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* TextBlock;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	USphereComponent* SphereCollider;
+	
 	
 	
 public:
@@ -42,6 +46,10 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> GunType;
+	
+	
+	
+	
 	
 	
 	// Gun variables

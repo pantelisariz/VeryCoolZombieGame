@@ -11,6 +11,9 @@ APurchasableGun::APurchasableGun()
 	TextBlock = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextBlock"));
 	TextBlock -> SetupAttachment(Mesh);	
 	
+	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
+	SphereCollider->SetupAttachment(Mesh);
+	
 	
 }
 
