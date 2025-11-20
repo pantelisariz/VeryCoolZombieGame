@@ -7,8 +7,6 @@ void UGunInfoHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-	BulletCount = 0;
-	
 	UpdateReloadProgressBar(0);
 }
 
@@ -16,7 +14,7 @@ void UGunInfoHUD::UpdateAllText()
 {
 }
 
-void UGunInfoHUD::UpdateBulletCount(int32 NewBulletCount)
+void UGunInfoHUD::UpdateBulletCount(int8 NewBulletCount, int8 MaxBulletCount)
 {
 	BulletTextCounter -> SetText(FText::FromString(""));
 	FText BulletCountText = FText::FromString( FString::Printf(TEXT("%d / %d"), NewBulletCount, MaxBulletCount ));

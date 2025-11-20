@@ -125,8 +125,7 @@ void AGun::AddHUDInfo()
 	
 	check(GunInfoHUD);
 	GunInfoHUD -> AddToViewport();
-	GunInfoHUD -> MaxBulletCount = MaxAmmoCount;
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
+	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount, MaxAmmoCount);
 	
 	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 	
@@ -156,6 +155,8 @@ void AGun::FireShot()
 		StartReloading();
 		return;
 	}
+	
+	FireShotStatChanges();
 
 	// Trace origin / direction
 	const FVector TraceStart = PlayerCameraComponent->GetComponentLocation();
@@ -203,8 +204,6 @@ void AGun::FireShot()
 		// We hit an actor that is NOT a target, this will happen a lot
 		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
 	}
-	
-	FireShotStatChanges();
 }
 
 void AGun::FireShotStatChanges()
@@ -212,7 +211,7 @@ void AGun::FireShotStatChanges()
 	TimeLastShot = GetWorld() -> TimeSeconds;
 	
 	CurrentAmmoCount -= AmmoUsedPerShot;
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
+	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount, MaxAmmoCount);
 }
 
 void AGun::Reload()
@@ -224,7 +223,7 @@ void AGun::Reload()
 	UE_LOG(LogTemp, Warning, TEXT("Reloading"));
 
 	CurrentAmmoCount = MaxAmmoCount;
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount);
+	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount, MaxAmmoCount);
 	
 	GetWorldTimerManager().ClearTimer(TimerHandle_Reload);
 	

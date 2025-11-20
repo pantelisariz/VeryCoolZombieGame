@@ -23,16 +23,14 @@ public:
 
 	void UpdateAllText();
 	
-	void UpdateBulletCount(int32 NewBulletCount);
+	void UpdateBulletCount(int8 NewBulletCount, int8 MaxBulletCount);
 	void UpdateReloadProgressBar(float ReloadProgressPercentile);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UBorder* BulletCountBorder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UTextBlock* BulletTextCounter;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Variable", meta = (BindWidget))
-	int32 BulletCount;
-	int32 MaxBulletCount;
+
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
