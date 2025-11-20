@@ -145,7 +145,7 @@ void AFPSController::Reload()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Reloading in controller"));
 	
-	if (FPSCharacter)
+	if (FPSCharacter and not FPSCharacter -> CurrentGun -> bIsReloading and FPSCharacter -> CurrentGun -> CurrentMagazineAmmo != FPSCharacter -> CurrentGun -> MagazineCapacity)
 	{
 		FPSCharacter->CurrentGun->StartReloading();
 	}

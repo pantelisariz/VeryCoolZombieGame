@@ -50,6 +50,7 @@ AFPSCharacter::AFPSCharacter()
 	CurrentHealth = MaxHealth;
 	
 	Cash = 600;
+	
 
 
 

@@ -23,16 +23,27 @@ AGun::AGun()
 	 * Here you can set the default stats of the gun
 	 */
 	GunTypeInText = ("Gun");
+	
 	Damage = 10;
+	
 	FireRate = 3.f;
+	
 	Range = 1500.f;
+	
 	ReloadTime = 1.5f;
-	MaxAmmoCount = 6;
+	
+	
+	
+	MagazineCapacity = 10;
+	CurrentMagazineAmmo = MagazineCapacity;
+	CurrentCarryAmmo = MagazineCapacity * 4;
+	MaxCarryAmmo = 300;
+	
 	AmmoUsedPerShot = 1;
-	CurrentAmmoCount = MaxAmmoCount;
+	
+	
 	
 	TraceChannel = ECC_Visibility;
-	
 	TimeLastShot = 0.f;
 	bIsReloading = false;
 	
@@ -98,6 +109,10 @@ void AGun::EndFire()
 
 void AGun::StartReloading()
 {
+	if (CurrentCarryAmmo <= 0)
+	{
+		return;
+	}
 	GetWorldTimerManager().SetTimer(TimerHandle_Reload, this, &AGun::Reload, ReloadTime, false, ReloadTime);
 	bIsReloading = true;
 }
@@ -125,7 +140,7 @@ void AGun::AddHUDInfo()
 	
 	check(GunInfoHUD);
 	GunInfoHUD -> AddToViewport();
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount, MaxAmmoCount);
+	GunInfoHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 	
 	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 	
@@ -150,7 +165,7 @@ void AGun::FireShot()
 		return;
 	}
 	
-	if (CurrentAmmoCount <= 0)
+	if (CurrentMagazineAmmo <= 0)
 	{
 		StartReloading();
 		return;
@@ -210,8 +225,8 @@ void AGun::FireShotStatChanges()
 {
 	TimeLastShot = GetWorld() -> TimeSeconds;
 	
-	CurrentAmmoCount -= AmmoUsedPerShot;
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount, MaxAmmoCount);
+	CurrentMagazineAmmo -= AmmoUsedPerShot;
+	GunInfoHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 }
 
 void AGun::Reload()
@@ -220,11 +235,32 @@ void AGun::Reload()
 	{
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Reloading"));
-
-	CurrentAmmoCount = MaxAmmoCount;
-	GunInfoHUD -> UpdateBulletCount(CurrentAmmoCount, MaxAmmoCount);
 	
+	if (CurrentCarryAmmo <= 0)
+	{
+		FinishedReloading();
+		return;
+	}
+	
+	
+	int32 ReloadAmount = MagazineCapacity - CurrentMagazineAmmo;
+	if (CurrentCarryAmmo < ReloadAmount)
+	{
+		ReloadAmount = CurrentCarryAmmo;
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Reloading before, %d, %d, %d"), CurrentMagazineAmmo, MagazineCapacity, CurrentCarryAmmo);
+	CurrentCarryAmmo -= ReloadAmount;
+	CurrentMagazineAmmo += ReloadAmount;
+	GunInfoHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+	UE_LOG(LogTemp, Warning, TEXT("Reloading after, %d, %d, %d"), CurrentMagazineAmmo, MagazineCapacity, CurrentCarryAmmo);
+	
+	
+	FinishedReloading();
+}
+
+void AGun::FinishedReloading()
+{
 	GetWorldTimerManager().ClearTimer(TimerHandle_Reload);
 	
 	bIsReloading = false;

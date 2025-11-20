@@ -23,7 +23,7 @@ public:
 
 	void UpdateAllText();
 	
-	void UpdateBulletCount(int8 NewBulletCount, int8 MaxBulletCount);
+	void UpdateBulletCount(int32 NewBulletCount, int32 TotalAmmo);
 	void UpdateReloadProgressBar(float ReloadProgressPercentile);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))

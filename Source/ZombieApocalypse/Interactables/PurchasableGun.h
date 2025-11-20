@@ -48,23 +48,33 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	FString GunTypeInText;
 	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
 	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	float FireRate;
+
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	float Range;
 	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	float ReloadTime;
+
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 MaxAmmoCount;
+	int32 MagazineCapacity;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 MaxCarryAmmo;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 BulletPerAmmo;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 AmmoUsedPerShot;
-	
 	
 };

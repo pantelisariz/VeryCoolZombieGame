@@ -38,6 +38,7 @@ protected:
 	void FireShotStatChanges();
 	
 	void Reload();
+	void FinishedReloading();
 	
 	
 	
@@ -52,7 +53,6 @@ protected:
 	FTimerHandle TimerHandle_AutoFire;
 	FTimerHandle TimerHandle_Fire;
 	FTimerHandle TimerHandle_Reload;
-	FTimerHandle TimerHandle_HUDReload;
 
 	
 	
@@ -88,8 +88,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	FString GunTypeInText;
 	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float FireRate;
@@ -100,16 +102,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float Range;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
-	float ReloadTime;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 MaxAmmoCount;
-	int32 CurrentAmmoCount;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 AmmoUsedPerShot;
+	float ReloadTime;
 	bool bIsReloading;
 	float ReloadProgress;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 MagazineCapacity;
+	int32 CurrentMagazineAmmo;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 CurrentCarryAmmo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 MaxCarryAmmo;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 BulletPerAmmo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 AmmoUsedPerShot;
 	
 	
 	
