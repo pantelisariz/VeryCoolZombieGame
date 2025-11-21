@@ -10,10 +10,8 @@ ACustomPawnBase::ACustomPawnBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	Mesh -> SetupAttachment(GetRootComponent());
-
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
-	SphereCollider -> SetupAttachment(GetRootComponent());
+	SphereCollider->SetupAttachment(Mesh);
 
 	
 	FloatingPawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovementComponent"));
@@ -22,8 +20,10 @@ ACustomPawnBase::ACustomPawnBase()
 	FloatingPawnMovementComponent -> SetPlaneConstraintNormal( FVector(0,0, 1) );
 
 
-	health = 100;
-	maxSpeed = 100;
+	Health = 100;
+	MaxWalkSpeed = 100;
+	MaxRunSpeed = 300;
+	CashChangeValue = 0;
 	
 	PawnAIController = nullptr;
 	BehaviorTree = nullptr;

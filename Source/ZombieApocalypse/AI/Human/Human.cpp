@@ -8,6 +8,8 @@ AHuman::AHuman()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	CashChangeValue = -200;
 
 }
 
@@ -30,5 +32,17 @@ void AHuman::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+void AHuman::PrepareToBeBitten()
+{
+    // Stop movement so the pawn doesn't slide while being converted
+    if (FloatingPawnMovementComponent)
+    {
+        FloatingPawnMovementComponent -> StopMovementImmediately();
+    }
+    else
+    {
+		UE_LOG(LogTemp, Warning, TEXT("Human has no FloatingPawnMovementComponent"));
+    }
 }
 

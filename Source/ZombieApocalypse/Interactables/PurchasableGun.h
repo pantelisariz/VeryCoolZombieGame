@@ -1,0 +1,103 @@
+// Copyright University of Inland Norway
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "PurchasableActor.h"
+#include "Components/SphereComponent.h"
+#include "Components/TextRenderComponent.h"
+#include "ZombieApocalypse/Gun/Gun.h"
+#include "PurchasableGun.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class ZOMBIEAPOCALYPSE_API APurchasableGun : public APurchasableActor
+{
+	GENERATED_BODY()
+	
+	
+public:
+	APurchasableGun();
+	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
+	
+	/*
+	 * Source for function under:
+	 * Cody. (2024, March 18). PostEditChangeProperty for visualizing C++ changes in an artist-friendly way. Retrieved from Medium: 
+	 * https://medium.com/@codyjmccarty/posteditchangeproperty-for-visualizing-c-changes-in-an-artist-friendly-way-7e514332eab0
+
+
+	 */
+	
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* GunPlacementPoint;
+	UPROPERTY()
+	AGun* PurchasableGun;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UTextRenderComponent* TextBlock;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	USphereComponent* SphereCollider;
+	
+	
+	
+public:
+	void SpawnPurchasableGun();
+	void CreatePurchasableGun();
+	
+	void SetupPurchasableGun();
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AGun> PurchasableGunClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
+	bool bAutoCreateGun;
+	
+	
+	
+	
+	// Gun variables
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	FString GunTypeInText;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 Damage;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	float FireRate;
+
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	float Range;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	float ReloadTime;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 MagazineCapacity;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 MaxCarryAmmo;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 BulletPerAmmo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 AmmoUsedPerShot;
+	
+};
