@@ -118,6 +118,7 @@ void APurchasableGun::SpawnPurchasableGun()
 
 void APurchasableGun::SetGunStatsToStats()
 {
+	GunTypeInText = PurchasableGun -> GunTypeInText;
 	Damage = PurchasableGun -> Damage;
 	FireRate = PurchasableGun -> FireRate;
 	Range = PurchasableGun -> Range;
@@ -132,6 +133,7 @@ void APurchasableGun::SetGunStatsToStats()
 
 void APurchasableGun::SetStatsToGun()
 {
+	PurchasableGun -> GunTypeInText = GunTypeInText;
 	PurchasableGun -> Damage = Damage;
 	PurchasableGun -> FireRate = FireRate;
 	PurchasableGun -> Range = Range;
