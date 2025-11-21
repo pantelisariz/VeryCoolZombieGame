@@ -25,9 +25,18 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-#if WITH_EDITOR
+	
+	/*
+	 * Source for function under:
+	 * Cody. (2024, March 18). PostEditChangeProperty for visualizing C++ changes in an artist-friendly way. Retrieved from Medium: 
+	 * https://medium.com/@codyjmccarty/posteditchangeproperty-for-visualizing-c-changes-in-an-artist-friendly-way-7e514332eab0
+
+
+	 */
+	
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-#endif
+	
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;

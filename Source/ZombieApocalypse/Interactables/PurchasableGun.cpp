@@ -30,7 +30,6 @@ void APurchasableGun::BeginPlay()
 	
 }
 
-#if WITH_EDITOR
 void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -47,7 +46,6 @@ void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 	CreatePurchasableGun();
 
 }
-#endif
 
 
 void APurchasableGun::SpawnPurchasableGun()
