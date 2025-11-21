@@ -25,12 +25,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+#if WITH_EDITOR
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
 	UPROPERTY()
 	AGun* PurchasableGun;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* TextBlock;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
@@ -40,14 +44,16 @@ protected:
 	
 public:
 	void SpawnPurchasableGun();
+	void CreatePurchasableGun();
 	
 	void SetupPurchasableGun();
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AGun> GunType;
+	TSubclassOf<AGun> PurchasableGunClass;
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
+	bool bAutoCreateGun;
 	
 	
 	
