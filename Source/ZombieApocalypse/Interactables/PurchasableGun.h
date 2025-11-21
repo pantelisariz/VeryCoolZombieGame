@@ -36,6 +36,8 @@ protected:
 	
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	void SetupGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
+	void SetAllGunVariables(FPropertyChangedEvent& PropertyChangedEvent);
+	
 	void SetupGunHUDOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
 	
 	
@@ -57,10 +59,12 @@ protected:
 	
 	
 public:
-	void SpawnPurchasableGun();
 	void CreatePurchasableGun();
-	
+	void SpawnPurchasableGun();
+	void SetGunStatsToStats();
+	void SetStatsToGun();
 	void SetupPurchasableGun();
+	void SetHUDVariables();
 	
 	void SetupStatHUD();
 	

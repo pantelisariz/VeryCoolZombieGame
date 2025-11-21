@@ -55,6 +55,12 @@ PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasabl
 		return;
 	}
 	*/
+	if (PurchasableGunInfoHUD)
+	{
+		SetStatsToGun();
+		SetHUDVariables();
+	}
+	
 	
 }
 
@@ -110,9 +116,8 @@ void APurchasableGun::SpawnPurchasableGun()
 
 
 
-void APurchasableGun::SetupPurchasableGun()
+void APurchasableGun::SetGunStatsToStats()
 {
-	GunTypeInText = PurchasableGun -> GunTypeInText;
 	Damage = PurchasableGun -> Damage;
 	FireRate = PurchasableGun -> FireRate;
 	Range = PurchasableGun -> Range;
@@ -121,8 +126,12 @@ void APurchasableGun::SetupPurchasableGun()
 	MaxCarryAmmo = PurchasableGun -> MaxCarryAmmo;
 	BulletPerAmmo = PurchasableGun -> BulletPerAmmo;
 	AmmoUsedPerShot = PurchasableGun -> AmmoUsedPerShot;
-	
-	/*
+}
+
+
+
+void APurchasableGun::SetStatsToGun()
+{
 	PurchasableGun -> Damage = Damage;
 	PurchasableGun -> FireRate = FireRate;
 	PurchasableGun -> Range = Range;
@@ -131,9 +140,13 @@ void APurchasableGun::SetupPurchasableGun()
 	PurchasableGun -> MaxCarryAmmo = MaxCarryAmmo;
 	PurchasableGun -> BulletPerAmmo = BulletPerAmmo;
 	PurchasableGun -> AmmoUsedPerShot = AmmoUsedPerShot;
-	*/
-	
-	
+}
+
+
+
+void APurchasableGun::SetupPurchasableGun()
+{
+	SetGunStatsToStats();	
 	
 	if (not PurchasableGunInfoHUD)
 	{
@@ -141,18 +154,24 @@ void APurchasableGun::SetupPurchasableGun()
 		return;
 	}
 	
-	
-	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
-	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
-	PurchasableGunInfoHUD -> SetGunInfo();
-	
-	
+	SetHUDVariables();
 	
 	/*
 	FText TextToDisplay = FText::FromString( FString::Printf(TEXT("Damage: %d \n Fire Rate: %.2f \n Range: %.2f \n  Reload Time: %.2f \n Magazine Capacity: %d \n Max Carry Ammo: %d \n Bullet per Ammo: %d \n Ammo Used Per Shot: %d"), Damage, FireRate, Range, ReloadTime, MagazineCapacity, MaxCarryAmmo, BulletPerAmmo, AmmoUsedPerShot));
 	TextBlock -> SetText(TextToDisplay);
 	*/
 }
+
+
+void APurchasableGun::SetHUDVariables()
+{
+	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
+	SetGunStatsToStats();
+	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
+	PurchasableGunInfoHUD -> SetGunInfo();
+}
+
+
 
 void APurchasableGun::SetupStatHUD()
 {
@@ -164,7 +183,5 @@ void APurchasableGun::SetupStatHUD()
 	PurchasableGunInfoHUD = CreateWidget<UPurchasableGunInfoHUD>(GetWorld(), *(PurchasableGunInfoHUDClass));
 	
 	check(PurchasableGunInfoHUD);
-	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
-	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
-	PurchasableGunInfoHUD -> SetGunInfo();
+	SetHUDVariables();
 }
