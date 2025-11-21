@@ -9,7 +9,6 @@
 #include "Gun.generated.h"
 
 
-DECLARE_DELEGATE_OneParam(FZombieKilledDelegate, int32 /*CashChangeValue */);
 
 
 UCLASS()
@@ -127,7 +126,6 @@ public:
 
 	TObjectPtr<UCameraComponent> PlayerCameraComponent;
 	
-	FZombieKilledDelegate CashGained;
 
 
 

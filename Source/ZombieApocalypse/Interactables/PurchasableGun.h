@@ -6,6 +6,8 @@
 #include "PurchasableActor.h"
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "../HUD/PurchasableGunInfoHUD.h"
+#include "Components/WidgetComponent.h"
 #include "ZombieApocalypse/Gun/Gun.h"
 #include "PurchasableGun.generated.h"
 
@@ -35,6 +37,8 @@ protected:
 	 */
 	
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	void SetupGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
+	void SetupGunHUDOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
 	
 	
 	
@@ -57,12 +61,21 @@ public:
 	
 	void SetupPurchasableGun();
 	
+	void SetUpStatHUD();
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> PurchasableGunClass;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	bool bAutoCreateGun;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UPurchasableGunInfoHUD> PurchasableGunInfoHUDClass;
+	UPurchasableGunInfoHUD* PurchasableGunInfoHUD;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
+	UWidgetComponent* InfoWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
+	bool bAutoCreateGunInfoWidget;
 	
 	
 	

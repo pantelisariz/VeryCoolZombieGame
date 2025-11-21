@@ -16,9 +16,13 @@ APurchasableGun::APurchasableGun()
 	
 	PurchasableGunClass = nullptr;
 	PurchasableGun = nullptr;
+	PurchasableGunInfoHUDClass = nullptr;
 	
 	
-	
+	if (PurchasableGunInfoHUDClass)
+	{
+		InfoWidget -> SetWidgetClass(PurchasableGunInfoHUDClass);
+	}
 }
 
 void APurchasableGun::BeginPlay()
@@ -26,6 +30,7 @@ void APurchasableGun::BeginPlay()
 	Super::BeginPlay();
 	
 	SpawnPurchasableGun();
+	SetUpStatHUD();
 	
 	
 }
@@ -34,8 +39,17 @@ void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	
+	SetupGunOnClassChange(PropertyChangedEvent);
+
+
+}
+
+
+
+void APurchasableGun::SetupGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent)
+{
 	if (not (PropertyChangedEvent.Property and 
-		PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunClass)))
+	PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunClass)))
 	{
 		return;
 	}
@@ -44,8 +58,8 @@ void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 		return;
 	}
 	CreatePurchasableGun();
-
 }
+
 
 
 void APurchasableGun::SpawnPurchasableGun()
@@ -109,4 +123,12 @@ void APurchasableGun::SetupPurchasableGun()
 	
 	FText TextToDisplay = FText::FromString( FString::Printf(TEXT("Damage: %d \n Fire Rate: %.2f \n Range: %.2f \n  Reload Time: %.2f \n Magazine Capacity: %d \n Max Carry Ammo: %d \n Bullet per Ammo: %d \n Ammo Used Per Shot: %d"), Damage, FireRate, Range, ReloadTime, MagazineCapacity, MaxCarryAmmo, BulletPerAmmo, AmmoUsedPerShot));
 	TextBlock -> SetText(TextToDisplay);
+}
+
+void APurchasableGun::SetUpStatHUD()
+{
+	if (not PurchasableGunInfoHUDClass)
+	{
+		return;
+	}
 }

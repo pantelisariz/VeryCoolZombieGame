@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ZombieApocalypse/AllDelegates.h"
 #include "ZombieApocalypse/AI/CustomPawnBase.h"
 
 // Sets default values
@@ -23,22 +24,17 @@ AGun::AGun()
 	 * Here you can set the default stats of the gun
 	 */
 	GunTypeInText = ("Gun");
-	
 	Damage = 10;
-	
 	FireRate = 3.f;
-	
 	Range = 1500.f;
-	
 	ReloadTime = 1.5f;
-	
-	
 	
 	MagazineCapacity = 10;
 	CurrentMagazineAmmo = MagazineCapacity;
 	CurrentCarryAmmo = MagazineCapacity * 4;
 	MaxCarryAmmo = 300;
 	
+	BulletPerAmmo = 1;
 	AmmoUsedPerShot = 1;
 	
 	
@@ -210,7 +206,7 @@ void AGun::FireShot()
 	if (ACustomPawnBase* HitPawn = Cast<ACustomPawnBase>(HitActor))
 	{
 		HitPawn->Destroy();
-		CashGained.Execute(HitPawn -> CashChangeValue);
+		CashChanged.Broadcast(HitPawn -> CashChangeValue);
 		//apply damage placehodler for later
 		//UGameplayStatics::ApplyPointDamage(HitPawn, BaseDamage, Direction, Hit, GetController(), this, UDamageType::StaticClass());
 	}

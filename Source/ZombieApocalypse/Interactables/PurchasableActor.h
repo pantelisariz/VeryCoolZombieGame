@@ -17,7 +17,16 @@ class ZOMBIEAPOCALYPSE_API APurchasableActor : public AInteractableActor
 public:
 	APurchasableActor();
 	
+	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
+
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableActor", meta = (AllowPrivateAccess = "true"))
 	int32 Cost;
+	
+
 	
 };

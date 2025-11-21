@@ -2,13 +2,12 @@
 
 
 #include "FPSCharacter.h"
-#include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
 #include "GameFramework/DamageType.h"
-#include "../AI/CustomPawnBase.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "ZombieApocalypse/AllDelegates.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -121,7 +120,7 @@ void AFPSCharacter::SetupGun()
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
-	CurrentGun -> CashGained.BindUObject(this, &AFPSCharacter::ChangeCash);
+	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
 	CurrentGun -> AddCombatHUD();
 }
 
