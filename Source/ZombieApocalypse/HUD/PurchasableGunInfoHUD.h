@@ -18,6 +18,7 @@ class ZOMBIEAPOCALYPSE_API UPurchasableGunInfoHUD : public UUserWidget
 public:
 	void NativeConstruct() override;
 	
+	void Setup(AGun* GunToSet);
 	void SetGun(AGun* GunToSet);
 	AGun* GetGun();
 	void SetGunInfo();
@@ -25,7 +26,7 @@ public:
 	
 protected:
 	UPROPERTY()
-	AGun* CurrentGun;
+	AGun* PurchasableGun;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UTextBlock* GunInfoText;

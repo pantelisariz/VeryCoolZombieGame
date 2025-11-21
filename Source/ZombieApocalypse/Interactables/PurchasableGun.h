@@ -32,8 +32,6 @@ protected:
 	 * Source for function under:
 	 * Cody. (2024, March 18). PostEditChangeProperty for visualizing C++ changes in an artist-friendly way. Retrieved from Medium: 
 	 * https://medium.com/@codyjmccarty/posteditchangeproperty-for-visualizing-c-changes-in-an-artist-friendly-way-7e514332eab0
-
-
 	 */
 	
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -47,8 +45,11 @@ protected:
 	UPROPERTY()
 	AGun* PurchasableGun;
 	
+	// This was previously used for setting text
+	/*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* TextBlock;
+	*/
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	USphereComponent* SphereCollider;
@@ -61,7 +62,7 @@ public:
 	
 	void SetupPurchasableGun();
 	
-	void SetUpStatHUD();
+	void SetupStatHUD();
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
@@ -71,36 +72,30 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UPurchasableGunInfoHUD> PurchasableGunInfoHUDClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
 	UPurchasableGunInfoHUD* PurchasableGunInfoHUD;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* InfoWidget;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
-	bool bAutoCreateGunInfoWidget;
+
 	
 	
 	
 	
 	// Gun variables
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats",  meta = (AllowPrivateAccess = "true"))
 	FString GunTypeInText;
-	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
 	
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	float FireRate;
-
-	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	float Range;
 	
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	float ReloadTime;
-
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 MagazineCapacity;
