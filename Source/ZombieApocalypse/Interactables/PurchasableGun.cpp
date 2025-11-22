@@ -28,6 +28,7 @@ APurchasableGun::APurchasableGun()
 	PurchasableGunInfoHUDClass = nullptr;
 	
 	
+	RespawnStatHUD();
 }
 
 void APurchasableGun::BeginPlay()
@@ -39,10 +40,8 @@ void APurchasableGun::BeginPlay()
 	SetupStatHUD();
 	*/
 	
-	if (not PurchasableGunInfoHUD)
-	{
-		
-	}
+	RespawnStatHUD();
+	
 	
 	
 }
@@ -51,7 +50,7 @@ void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	
-	SetupGunOnClassChange(PropertyChangedEvent);
+	SetUpGunOnClassChange(PropertyChangedEvent);
 	
 	/*
 	if (not (PropertyChangedEvent.Property and 
@@ -71,7 +70,7 @@ PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasabl
 
 
 
-void APurchasableGun::SetupGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent)
+void APurchasableGun::SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	if (PropertyChangedEvent.Property and 
 	PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunClass))
@@ -184,6 +183,21 @@ void APurchasableGun::SetupStatHUD()
 	SetHUDVariables();
 }
 
+void APurchasableGun::RespawnStatHUD()
+{
+	if (not PurchasableGunInfoHUDClass)
+	{
+		return;
+	}
+	
+	PurchasableGunInfoHUD = CreateWidget<UPurchasableGunInfoHUD>(GetWorld(), *(PurchasableGunInfoHUDClass));
+	check(PurchasableGunInfoHUD);
+	
+	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
+	SetStatsToGun();
+	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
+	PurchasableGunInfoHUD -> SetGunInfo();
+}
 
 
 void APurchasableGun::SetHUDVariables()

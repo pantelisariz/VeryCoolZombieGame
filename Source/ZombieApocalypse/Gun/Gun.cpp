@@ -49,26 +49,19 @@ AGun::AGun()
 
 }
 
+void AGun::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	GetAllAttachments();
+	
+}
+
 // Called when the game starts or when spawned
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
+	GetAllAttachments();
 
-}
-
-
-
-void AGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-{
-	Super::PostEditChangeProperty(PropertyChangedEvent);
-	
-	SetupAttachments(PropertyChangedEvent);
-}
-
-
-
-void AGun::SetupAttachments(FPropertyChangedEvent& PropertyChangedEvent)
-{
 }
 
 
@@ -284,3 +277,54 @@ void AGun::FinishedReloading()
 	CombatHUD -> UpdateReloadProgressBar(ReloadProgress);
 }
 
+
+
+void AGun::GetAllAttachments()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Getting All Components"));
+	AttachmentSlots.Empty();
+	for (UGunAttachmentSlotComponent* GunAttachmentComponent : AttachmentSlots)
+	{
+		GunAttachmentComponent -> DestroyComponent();
+	}
+	
+	
+	TInlineComponentArray<UActorComponent*> Components;
+	GetComponents(Components);
+	
+	TArray<USceneComponent*> ChildrenComponents;
+	RootComponent -> GetChildrenComponents(true, ChildrenComponents);
+	
+	for (USceneComponent* ChildrenComponent : ChildrenComponents)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Looking at Component: %s"), *ChildrenComponent->GetName());
+		UGunAttachmentSlotComponent* AttachmentComponent = Cast<UGunAttachmentSlotComponent>(ChildrenComponent);
+		if (not AttachmentComponent)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Failed Cast"));
+			continue;
+		}
+		if (AttachmentSlots.Contains(AttachmentComponent))
+		{
+			continue;
+		}
+		UE_LOG(LogTemp, Warning, TEXT("Added component to Attachment Slots"));
+		AttachmentSlots.Add(AttachmentComponent);
+	}
+}
+
+
+
+void AGun::LogAllAttachments()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Log All Attachments"));
+	
+	for (UGunAttachmentSlotComponent* AttachmentComponent : AttachmentSlots)
+	{
+		for (TSubclassOf<AGunAttachment> AttachmentsClasses : AttachmentComponent -> AttachmentClasses)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *AttachmentsClasses -> GetDisplayNameText().ToString());
+		}
+	}
+	
+}

@@ -35,7 +35,7 @@ protected:
 	 */
 	
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	void SetupGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
+	void SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
 	void SetAllGunVariables(FPropertyChangedEvent& PropertyChangedEvent);
 	
 	void SetupGunHUDOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
@@ -66,6 +66,7 @@ public:
 	void SetupPurchasableGun();
 	
 	void SetupStatHUD();
+	void RespawnStatHUD();
 	
 	void SetHUDVariables();
 	
@@ -113,5 +114,11 @@ public:
 	int32 BulletPerAmmo;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 AmmoUsedPerShot;
+	
+	
+	
+	// Gun Attachments
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PurchasableGun|Attachment", meta = ( AllowPrivateAccess="true"))
+	TArray<UGunAttachmentSlotComponent*> AttachmentSlots;
 	
 };

@@ -17,7 +17,7 @@ ACustomPawnBase::ACustomPawnBase()
 	FloatingPawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovementComponent"));
 	FloatingPawnMovementComponent -> UpdatedComponent = RootComponent;
 	FloatingPawnMovementComponent -> bConstrainToPlane = 1;
-	FloatingPawnMovementComponent -> SetPlaneConstraintNormal( FVector(0,0, 1) );
+	FloatingPawnMovementComponent -> SetPlaneConstraintNormal( FVector(0,0, 0) );
 
 
 	Health = 100;

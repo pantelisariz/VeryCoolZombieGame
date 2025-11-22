@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Attachments/GunAttachment.h"
-#include "Attachments/GunAttachmentComponent.h"
+#include "Attachments/GunAttachmentSlotComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
 #include "ZombieApocalypse/HUD/CombatHUD.h"
@@ -22,6 +22,7 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 
+	virtual void OnConstruction(const FTransform& Transform) override;
 	
 	
 	
@@ -29,8 +30,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	void SetupAttachments(FPropertyChangedEvent& PropertyChangedEvent);
 	
 	
 	
@@ -128,10 +127,14 @@ public:
 	
 	
 	// Attachments
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Gun|Attachments", meta = (AllowPrivateAccess = "true"))
-	TArray<UGunAttachmentComponent*> AttachmentSlots;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Attachments", meta = (AllowPrivateAccess = "true"))
-	TArray<TSubclassOf<UGunAttachmentComponent>> AttachmentSlotClasses;	
+	TArray<UGunAttachmentSlotComponent*> AttachmentSlots;
+	
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Gun")
+	void GetAllAttachments();
+	
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Gun")
+	void LogAllAttachments();
+	
 	
 	
 };
