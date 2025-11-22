@@ -42,17 +42,6 @@ void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedE
 	if (PropertyChangedEvent.Property and 
 	PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UGunAttachmentSlotComponent, CurrentAttachmentClass))
 	{
-		if (not CurrentAttachmentClass)
-		{
-			if (CurrentAttachment)
-			{
-				CurrentAttachment -> ConditionalBeginDestroy();
-				CurrentAttachment -> Destroy();
-				CurrentAttachment = nullptr;
-			}
-			return;
-		}
-		
 		if (not bIsSlotEnabled)
 		{
 			return;
@@ -68,29 +57,61 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 {
 	if (CurrentAttachment and CurrentAttachment -> IsValidLowLevel())
 	{
-		CurrentAttachment -> ConditionalBeginDestroy();
-		CurrentAttachment -> Destroy();
-		CurrentAttachment = nullptr;
+		UE_LOG(LogTemp, Warning, TEXT("Attempt to destroy"));
+		DestroyAttachment();
 	}
+	
 	
 	if (not CurrentAttachmentClass)
 	{
+		if (CurrentAttachment)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Attempt to destroy"));
+			DestroyAttachment();
+		}
+		UE_LOG(LogTemp, Warning, TEXT("Current Attachment Class is a nullptr"));
+		return;
+	}
+	
+	
+	if (not AttachmentClasses.Contains(CurrentAttachmentClass))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Class is not a viable attachment"));
 		return;
 	}
 	CurrentAttachment = NewObject<AGunAttachment>(this, CurrentAttachmentClass);
+	
+	
 	if (not CurrentAttachment)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Current Attachment is a nullptr"));
 		return;
 	}
+	
+	
 	CurrentAttachment -> SetFlags(RF_Transactional);
 	SpawnAttachment();
 }
 
+
+
 void UGunAttachmentSlotComponent::SpawnAttachment()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Spawns Actor"));
 	CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass,  FVector(0, 0, 0), FRotator(0,0,0));
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentAttachment -> AttachToComponent(this, AttachmentRules);
+}
+
+
+
+void UGunAttachmentSlotComponent::DestroyAttachment()
+{
+	FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepRelative, true);
+	CurrentAttachment -> DetachFromActor(DetachmentRules);
+	CurrentAttachment -> ConditionalBeginDestroy();
+	CurrentAttachment -> Destroy();
+	CurrentAttachment = nullptr;
 }
 
 

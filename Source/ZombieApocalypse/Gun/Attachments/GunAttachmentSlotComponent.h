@@ -26,6 +26,7 @@ protected:
 	void SetUpAttachmentOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
 	void CreateAttachment();
 	void SpawnAttachment();
+	void DestroyAttachment();
 
 	
 
