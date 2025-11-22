@@ -24,7 +24,10 @@ void UGunAttachmentSlotComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	if (CurrentAttachmentClass and not CurrentAttachment and bIsSlotEnabled)
+	{
+		SpawnAttachment();
+	}
 }
 
 
