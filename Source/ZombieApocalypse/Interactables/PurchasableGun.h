@@ -64,9 +64,11 @@ public:
 	void SetGunStatsToStats();
 	void SetStatsToGun();
 	void SetupPurchasableGun();
-	void SetHUDVariables();
 	
 	void SetupStatHUD();
+	
+	void SetHUDVariables();
+	
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))

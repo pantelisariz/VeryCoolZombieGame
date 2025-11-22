@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Attachments/GunAttachment.h"
+#include "Attachments/GunAttachmentComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
 #include "ZombieApocalypse/HUD/CombatHUD.h"
@@ -26,6 +28,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	void SetupAttachments(FPropertyChangedEvent& PropertyChangedEvent);
+	
 	
 	
 	//Functions for shooting logic
@@ -81,26 +87,25 @@ public:
 	UPROPERTY()
 	UCombatHUD* CombatHUD;
 	
+	TObjectPtr<UCameraComponent> PlayerCameraComponent;
+	
 
 	
+	// Gun Variables
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	FString GunTypeInText;
 	
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
-	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float FireRate;
 	float TimeBetweenShots;
 	float TimeLastShot;
 	
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float Range;
-	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
 	float ReloadTime;
@@ -122,11 +127,11 @@ public:
 	int32 AmmoUsedPerShot;
 	
 	
+	// Attachments
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Gun|Attachments", meta = (AllowPrivateAccess = "true"))
+	TArray<UGunAttachmentComponent*> AttachmentSlots;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Attachments", meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<UGunAttachmentComponent>> AttachmentSlotClasses;	
 	
-
-	TObjectPtr<UCameraComponent> PlayerCameraComponent;
 	
-
-
-
 };

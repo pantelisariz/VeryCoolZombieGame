@@ -11,7 +11,7 @@
 // Sets default values
 AGun::AGun()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
 	
@@ -45,6 +45,7 @@ AGun::AGun()
 	
 	CombatHUDClass = nullptr;
 	CombatHUD = nullptr;
+	
 
 }
 
@@ -54,6 +55,23 @@ void AGun::BeginPlay()
 	Super::BeginPlay();
 
 }
+
+
+
+void AGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	
+	SetupAttachments(PropertyChangedEvent);
+}
+
+
+
+void AGun::SetupAttachments(FPropertyChangedEvent& PropertyChangedEvent)
+{
+}
+
+
 
 // Called every frame
 void AGun::Tick(float DeltaTime)
@@ -170,8 +188,8 @@ void AGun::FireShot()
 	FireShotStatChanges();
 
 	// Trace origin / direction
-	const FVector TraceStart = PlayerCameraComponent->GetComponentLocation();
-	const FVector Direction = PlayerCameraComponent->GetForwardVector();
+	const FVector TraceStart = PlayerCameraComponent -> GetComponentLocation();
+	const FVector Direction = PlayerCameraComponent-> GetForwardVector();
 	const FVector TraceEnd = TraceStart + Direction * Range;
 
 	// Prepare collision params

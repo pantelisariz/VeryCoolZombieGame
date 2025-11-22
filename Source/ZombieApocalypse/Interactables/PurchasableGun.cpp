@@ -39,6 +39,11 @@ void APurchasableGun::BeginPlay()
 	SetupStatHUD();
 	*/
 	
+	if (not PurchasableGunInfoHUD)
+	{
+		
+	}
+	
 	
 }
 
@@ -165,15 +170,6 @@ void APurchasableGun::SetupPurchasableGun()
 }
 
 
-void APurchasableGun::SetHUDVariables()
-{
-	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
-	SetGunStatsToStats();
-	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
-	PurchasableGunInfoHUD -> SetGunInfo();
-}
-
-
 
 void APurchasableGun::SetupStatHUD()
 {
@@ -186,4 +182,14 @@ void APurchasableGun::SetupStatHUD()
 	
 	check(PurchasableGunInfoHUD);
 	SetHUDVariables();
+}
+
+
+
+void APurchasableGun::SetHUDVariables()
+{
+	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
+	SetGunStatsToStats();
+	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
+	PurchasableGunInfoHUD -> SetGunInfo();
 }
