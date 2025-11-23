@@ -27,6 +27,7 @@ protected:
 	void CreateAttachment();
 	void SpawnAttachment();
 	void DestroyAttachment();
+	
 
 	
 
@@ -39,10 +40,13 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attachment", meta = ( AllowPrivateAccess="true"))
 	TArray<TSubclassOf<AGunAttachment>> AttachmentClasses;
-	TArray<AGunAttachment*> Attachments;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attachment", meta = ( AllowPrivateAccess="true"))
 	TSubclassOf<AGunAttachment> CurrentAttachmentClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attachment", meta = ( AllowPrivateAccess="true"))
 	AGunAttachment* CurrentAttachment;
+	
+private:
+	TArray<AGunAttachment*> Attachments;
 	
 };

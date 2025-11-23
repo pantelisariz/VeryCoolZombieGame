@@ -127,6 +127,7 @@ public:
 	
 	
 	// Attachments
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun|Attachment", meta = ( AllowPrivateAccess="true"))
 	TArray<UGunAttachmentSlotComponent*> AttachmentSlots;
 	
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Gun")
@@ -134,7 +135,6 @@ public:
 	
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Gun")
 	void LogAllAttachments();
-	
 	
 	
 };

@@ -13,6 +13,8 @@ UGunAttachmentSlotComponent::UGunAttachmentSlotComponent()
 	
 	bIsSlotEnabled = false;
 	
+	CurrentAttachmentClass = nullptr;
+	CurrentAttachment = nullptr;
 
 	// ...
 }
@@ -35,6 +37,9 @@ void UGunAttachmentSlotComponent::BeginPlay()
 void UGunAttachmentSlotComponent::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
+	
+	Modify();
+	
 	SetUpAttachmentOnClassChange(PropertyChangedEvent);
 }
 
@@ -42,6 +47,7 @@ void UGunAttachmentSlotComponent::PostEditChangeProperty(FPropertyChangedEvent& 
 
 void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedEvent& PropertyChangedEvent)
 {
+	
 	if (PropertyChangedEvent.Property and 
 	PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UGunAttachmentSlotComponent, CurrentAttachmentClass))
 	{
@@ -49,8 +55,13 @@ void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedE
 		{
 			return;
 		}
-		
 		CreateAttachment();
+        
+		// Mark package as dirty to save changes
+		if (GetOuter())
+		{
+			GetOuter() -> MarkPackageDirty();
+		}
 	}
 }
 
@@ -58,21 +69,27 @@ void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedE
 
 void UGunAttachmentSlotComponent::CreateAttachment()
 {
+	
 	if (CurrentAttachment and CurrentAttachment -> IsValidLowLevel())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("%s Attachment is valid"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
 		UE_LOG(LogTemp, Warning, TEXT("Attempt to destroy"));
 		DestroyAttachment();
+		CurrentAttachment = nullptr;
+	}
+	
+	
+	if (not CurrentAttachment)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Current Attachment is a nullptr, before checking class"));
+		CurrentAttachment = nullptr;
 	}
 	
 	
 	if (not CurrentAttachmentClass)
 	{
-		if (CurrentAttachment)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Attempt to destroy"));
-			DestroyAttachment();
-		}
 		UE_LOG(LogTemp, Warning, TEXT("Current Attachment Class is a nullptr"));
+		CurrentAttachment = nullptr;
 		return;
 	}
 	
@@ -80,20 +97,13 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 	if (not AttachmentClasses.Contains(CurrentAttachmentClass))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Class is not a viable attachment"));
-		return;
-	}
-	CurrentAttachment = NewObject<AGunAttachment>(this, CurrentAttachmentClass);
-	
-	
-	if (not CurrentAttachment)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Current Attachment is a nullptr"));
+		CurrentAttachment = nullptr;
 		return;
 	}
 	
 	
-	CurrentAttachment -> SetFlags(RF_Transactional);
 	SpawnAttachment();
+	UE_LOG(LogTemp, Warning, TEXT("%s Attachment is spawned"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
 }
 
 
@@ -101,21 +111,32 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 void UGunAttachmentSlotComponent::SpawnAttachment()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Spawns Actor"));
-	CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass,  FVector(0, 0, 0), FRotator(0,0,0));
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Owner = GetOwner();
+	
+	AGunAttachment* SpawnedAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass,  FVector(0, 0, 0), FRotator(0,0,0), SpawnParams);
+	CurrentAttachment = SpawnedAttachment;
+	
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentAttachment -> AttachToComponent(this, AttachmentRules);
+	
+	CurrentAttachment -> SetFlags(RF_Transactional);
+	UE_LOG(LogTemp, Warning, TEXT("%s Attachment is spawned"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
 }
 
 
 
 void UGunAttachmentSlotComponent::DestroyAttachment()
 {
-	FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepRelative, true);
-	CurrentAttachment -> DetachFromActor(DetachmentRules);
-	CurrentAttachment -> ConditionalBeginDestroy();
-	CurrentAttachment -> Destroy();
+	CurrentAttachment -> DestroyAttachment();
 	CurrentAttachment = nullptr;
 }
+
+
+
+
+
 
 
 // Called every frame

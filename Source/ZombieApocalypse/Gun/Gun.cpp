@@ -308,7 +308,7 @@ void AGun::GetAllAttachments()
 		{
 			continue;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Added component to Attachment Slots"));
+		UE_LOG(LogTemp, Warning, TEXT("Added component to Attachment Slots array"));
 		AttachmentSlots.Add(AttachmentComponent);
 	}
 }
