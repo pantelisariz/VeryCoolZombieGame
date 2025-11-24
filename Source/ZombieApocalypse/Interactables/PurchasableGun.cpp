@@ -45,7 +45,7 @@ void APurchasableGun::BeginPlay()
 	
 	
 }
-
+#if WITH_EDITOR
 void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -64,9 +64,8 @@ PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasabl
 		SetStatsToGun();
 		SetHUDVariables();
 	}
-	
-	
 }
+#endif
 
 
 
