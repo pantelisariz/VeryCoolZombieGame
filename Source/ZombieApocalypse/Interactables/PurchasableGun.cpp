@@ -42,9 +42,10 @@ void APurchasableGun::BeginPlay()
 	
 	RespawnStatHUD();
 	
-	
-	
 }
+
+
+
 #if WITH_EDITOR
 void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
@@ -84,6 +85,17 @@ void APurchasableGun::SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChang
 
 
 
+void APurchasableGun::PostLoad()
+{
+	Super::PostLoad();
+	if (not IsRunningGame() and PurchasableGunClass and not PurchasableGun)
+	{
+		CreatePurchasableGun();
+	}
+}
+
+
+
 void APurchasableGun::CreatePurchasableGun()
 {
 	if (PurchasableGun and PurchasableGun -> IsValidLowLevel())
@@ -97,7 +109,7 @@ void APurchasableGun::CreatePurchasableGun()
 	{
 		return;
 	}
-	PurchasableGun = NewObject<AGun>(this, PurchasableGunClass);
+	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, FVector(0,0,0), FRotator(0,0,0));
 	if (not PurchasableGun)
 	{
 		return;
@@ -110,7 +122,7 @@ void APurchasableGun::CreatePurchasableGun()
 
 void APurchasableGun::SpawnPurchasableGun()
 {
-	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,0,0));
+	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, FVector(0,0,0), FRotator(0,0,0));
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	PurchasableGun -> AttachToComponent(GunPlacementPoint, AttachmentRules);
 	

@@ -8,11 +8,11 @@
 #include "PawnBase_AIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "GameFramework/FloatingPawnMovement.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "CustomPawnBase.generated.h"
 
 UCLASS()
-class ZOMBIEAPOCALYPSE_API  ACustomPawnBase: public APawn
+class ZOMBIEAPOCALYPSE_API  ACustomPawnBase: public ACharacter
 {
 	GENERATED_BODY()
 
@@ -39,15 +39,18 @@ public:
 
 	
 	
-
+/*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh;
+	*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	USphereComponent* SphereCollider;
 
+	/*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	UFloatingPawnMovement* FloatingPawnMovementComponent;
+	*/
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))

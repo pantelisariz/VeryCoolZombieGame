@@ -92,6 +92,17 @@ void AFPSCharacter::BeginPlay()
 	
 	CurrentGun = GetWorld() -> SpawnActor<AGun>(StartingGunClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
 	SetupGun();
+	for (UGunAttachmentSlotComponent* GunAttachmentSlot : CurrentGun -> AttachmentSlots)
+	{
+		if (GunAttachmentSlot -> GetName() != FString("UnderBarrelAttachmentSlot"))
+		{
+			continue;
+		}
+		GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClass;
+		GunAttachmentSlot -> CreateAttachment();
+		UE_LOG(LogTemp, Warning, TEXT("Attachmentslot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
+		
+	}
 
 	
 	

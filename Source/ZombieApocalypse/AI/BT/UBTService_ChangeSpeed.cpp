@@ -4,6 +4,7 @@
 #include "UBTService_ChangeSpeed.h"
 
 #include "../CustomPawnBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UUBTService_ChangeSpeed::UUBTService_ChangeSpeed()
 {
@@ -38,11 +39,11 @@ void UUBTService_ChangeSpeed::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp
 	if (bUseRunInsteadOfWalk)
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("Use Run Instead Of Walk"));
-		PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> MaxRunSpeed;
+		PawnBase -> GetCharacterMovement() -> MaxWalkSpeed = PawnBase -> MaxRunSpeed;
 	}
 	else
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("Don't Use Run Instead Of Walk"));
-		PawnBase -> FloatingPawnMovementComponent -> MaxSpeed = PawnBase -> MaxWalkSpeed;
+		PawnBase -> GetCharacterMovement() -> MaxWalkSpeed = PawnBase -> MaxWalkSpeed;
 	}
 }

@@ -22,22 +22,20 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	
-	#if WITH_EDITOR
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	#endif
 	
 	virtual void PostLoad() override;
 
 	
 	void SetUpAttachmentOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
+	
+public:	
 	void CreateAttachment();
 	void SpawnAttachment();
 	void DestroyAttachment();
 	
-
 	
 
-public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

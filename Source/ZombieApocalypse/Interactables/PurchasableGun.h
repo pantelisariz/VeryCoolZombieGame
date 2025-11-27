@@ -37,6 +37,9 @@ protected:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	#endif
 	void SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
+	virtual void PostLoad() override;
+	
+	
 	void SetAllGunVariables(FPropertyChangedEvent& PropertyChangedEvent);
 	
 	void SetupGunHUDOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);

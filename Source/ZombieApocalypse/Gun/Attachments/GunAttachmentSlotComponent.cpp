@@ -33,26 +33,22 @@ void UGunAttachmentSlotComponent::BeginPlay()
 }
 
 
-	#if WITH_EDITOR
 void UGunAttachmentSlotComponent::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	
 	SetUpAttachmentOnClassChange(PropertyChangedEvent);
 }
-#endif
 
 
 
 void UGunAttachmentSlotComponent::PostLoad()
 {
 	Super::PostLoad();
-	#if WITH_EDITOR
 	if (not IsRunningGame() and CurrentAttachmentClass and not CurrentAttachment)
 	{
 		CreateAttachment();
 	}
-	#endif
 }
 
 
@@ -92,11 +88,10 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 	{
 		SpawnAttachment();
 	}
-#if WITH_EDITOR
 	else
 	{
 		// Editor-time visualization
-		CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, GetComponentLocation(), GetComponentRotation());
+		CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, FVector(0,0,0), FRotator(0,0,0));
 		if (not CurrentAttachment)
 		{
 			return;
@@ -104,7 +99,6 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 		CurrentAttachment->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
 		
 	}
-#endif
 }
 
 
@@ -113,7 +107,7 @@ void UGunAttachmentSlotComponent::SpawnAttachment()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Spawns Actor"));
 	
-	CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, GetRelativeLocation(), GetRelativeRotation());
+	CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, FVector(0,0,0), FRotator(0,0,0));
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentAttachment -> AttachToActor(GetAttachParentActor(), AttachmentRules);
 	

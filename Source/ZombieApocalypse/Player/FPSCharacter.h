@@ -69,6 +69,8 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> StartingGunClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AGunAttachment> StartingGunAttachmentClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
 	AGun* CurrentGun;
 
