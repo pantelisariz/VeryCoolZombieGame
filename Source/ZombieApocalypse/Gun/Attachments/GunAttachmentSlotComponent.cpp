@@ -38,11 +38,22 @@ void UGunAttachmentSlotComponent::PostEditChangeProperty(FPropertyChangedEvent& 
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	
-	Modify();
-	
 	SetUpAttachmentOnClassChange(PropertyChangedEvent);
 }
+#endif
+
+
+
+void UGunAttachmentSlotComponent::PostLoad()
+{
+	Super::PostLoad();
+	#if WITH_EDITOR
+	if (not IsRunningGame() and CurrentAttachmentClass and not CurrentAttachment)
+	{
+		CreateAttachment();
+	}
 	#endif
+}
 
 
 
@@ -57,12 +68,6 @@ void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedE
 			return;
 		}
 		CreateAttachment();
-        
-		// Mark package as dirty to save changes
-		if (GetOuter())
-		{
-			GetOuter() -> MarkPackageDirty();
-		}
 	}
 }
 
@@ -70,41 +75,36 @@ void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedE
 
 void UGunAttachmentSlotComponent::CreateAttachment()
 {
-	
 	if (CurrentAttachment and CurrentAttachment -> IsValidLowLevel())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s Attachment is valid"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
-		UE_LOG(LogTemp, Warning, TEXT("Attempt to destroy"));
-		DestroyAttachment();
+		CurrentAttachment->Destroy();
 		CurrentAttachment = nullptr;
 	}
-	
-	
-	if (not CurrentAttachment)
+    
+	if (not CurrentAttachmentClass or not AttachmentClasses.Contains(CurrentAttachmentClass))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Current Attachment is a nullptr, before checking class"));
-		CurrentAttachment = nullptr;
-	}
-	
-	
-	if (not CurrentAttachmentClass)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Current Attachment Class is a nullptr"));
 		CurrentAttachment = nullptr;
 		return;
 	}
-	
-	
-	if (not AttachmentClasses.Contains(CurrentAttachmentClass))
+    
+	// Only spawn if we're in the game world
+	if (GetWorld() and GetWorld() -> WorldType == EWorldType::Game)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Class is not a viable attachment"));
-		CurrentAttachment = nullptr;
-		return;
+		SpawnAttachment();
 	}
-	
-	
-	SpawnAttachment();
-	UE_LOG(LogTemp, Warning, TEXT("%s Attachment is spawned"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
+#if WITH_EDITOR
+	else
+	{
+		// Editor-time visualization
+		CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, GetComponentLocation(), GetComponentRotation());
+		if (not CurrentAttachment)
+		{
+			return;
+		}
+		CurrentAttachment->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+		
+	}
+#endif
 }
 
 
@@ -112,17 +112,11 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 void UGunAttachmentSlotComponent::SpawnAttachment()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Spawns Actor"));
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Owner = GetOwner();
 	
-	AGunAttachment* SpawnedAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass,  FVector(0, 0, 0), FRotator(0,0,0), SpawnParams);
-	CurrentAttachment = SpawnedAttachment;
-	
+	CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, GetRelativeLocation(), GetRelativeRotation());
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
-	CurrentAttachment -> AttachToComponent(this, AttachmentRules);
+	CurrentAttachment -> AttachToActor(GetAttachParentActor(), AttachmentRules);
 	
-	CurrentAttachment -> SetFlags(RF_Transactional);
 	UE_LOG(LogTemp, Warning, TEXT("%s Attachment is spawned"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
 }
 

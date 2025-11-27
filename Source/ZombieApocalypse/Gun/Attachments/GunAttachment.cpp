@@ -27,14 +27,8 @@ void AGunAttachment::Tick(float DeltaTime)
 
 void AGunAttachment::DestroyAttachment()
 {
-	
-	ConditionalBeginDestroy();
-	
-	FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepRelative, true);
-	DetachFromActor(DetachmentRules);
-	
-	DestroyConstructedComponents();
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+    
 	Destroy();
-	ConditionalBeginDestroy();
 }
 
