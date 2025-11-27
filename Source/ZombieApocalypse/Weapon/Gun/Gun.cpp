@@ -13,17 +13,12 @@ AGun::AGun()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-	
-	GunMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunMesh"));
-	GunMesh -> SetupAttachment(RootComponent.Get());	
-	
 
 	
 	/*
 	 * Here you can set the default stats of the gun
 	 */
-	GunTypeInText = ("Gun");
+	WeaponTypeInText = ("Gun");
 	Damage = 10;
 	FireRate = 3.f;
 	Range = 1500.f;
@@ -128,25 +123,8 @@ void AGun::StartReloading()
 
 void AGun::AddCombatHUD()
 {
-	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
-	if (not CastPlayerController)
-	{
-		return;
-	}
+	Super::AddCombatHUD();
 	
-	
-	if (not CombatHUDClass)
-	{
-		return;
-	}
-	
-
-	
-	CombatHUD = CreateWidget<UCombatHUD>(CastPlayerController, *(CombatHUDClass));
-	
-	check(CombatHUD);
-	CombatHUD -> AddToViewport();
 	CombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 	
 	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "ZombieApocalypse/Gun/Gun.h"
+#include "ZombieApocalypse/Weapon/Gun/Gun.h"
 #include "PurchasableGunInfoHUD.generated.h"
 
 /**

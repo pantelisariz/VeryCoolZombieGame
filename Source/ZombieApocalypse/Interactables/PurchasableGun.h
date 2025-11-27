@@ -8,7 +8,7 @@
 #include "Components/TextRenderComponent.h"
 #include "../HUD/PurchasableGunInfoHUD.h"
 #include "Components/WidgetComponent.h"
-#include "ZombieApocalypse/Gun/Gun.h"
+#include "ZombieApocalypse/Weapon/Gun/Gun.h"
 #include "PurchasableGun.generated.h"
 
 /**

@@ -8,13 +8,14 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
 #include "ZombieApocalypse/HUD/CombatHUD.h"
+#include "ZombieApocalypse/Weapon/Weapon.h"
 #include "Gun.generated.h"
 
 
 
 
 UCLASS()
-class ZOMBIEAPOCALYPSE_API AGun : public AActor
+class ZOMBIEAPOCALYPSE_API AGun : public AWeapon
 {
 	GENERATED_BODY()
 	
@@ -71,69 +72,53 @@ public:
 	void EndFire();
 	
 	void StartReloading();
-	
-	void AddCombatHUD();
-	
 
-	
-	
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* GunMesh;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UCombatHUD> CombatHUDClass;
-	UPROPERTY()
-	UCombatHUD* CombatHUD;
-	
-	TObjectPtr<UCameraComponent> PlayerCameraComponent;
+	virtual void AddCombatHUD() override;
 	
 
 	
 	// Gun Variables
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
-	FString GunTypeInText;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	float FireRate;
 	float TimeBetweenShots;
 	float TimeLastShot;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	float Range;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	float ReloadTime;
 	bool bIsReloading;
 	float ReloadProgress;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 MagazineCapacity;
 	int32 CurrentMagazineAmmo;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 CurrentCarryAmmo;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 MaxCarryAmmo;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 BulletPerAmmo;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Stats", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 AmmoUsedPerShot;
 	
 	
 	// Attachments
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun|Attachment", meta = ( AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Attachment", meta = ( AllowPrivateAccess="true"))
 	TArray<UGunAttachmentSlotComponent*> AttachmentSlots;
 	
-	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Gun")
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
 	void GetAllAttachments();
 	
-	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Gun")
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
 	void LogAllAttachments();
 	
 	

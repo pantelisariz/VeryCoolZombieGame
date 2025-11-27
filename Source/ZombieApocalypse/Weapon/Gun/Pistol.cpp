@@ -5,7 +5,7 @@
 
 APistol::APistol()
 {
-	GunTypeInText = ("Pistol");
+	WeaponTypeInText = ("Pistol");
 
 }
 

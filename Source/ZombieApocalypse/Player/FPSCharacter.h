@@ -6,7 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "ZombieApocalypse/Gun/Gun.h"
+#include "ZombieApocalypse/Weapon/Gun/Gun.h"
 #include "ZombieApocalypse/HUD/PlayerStatHUD.h"
 #include "FPSCharacter.generated.h"
 

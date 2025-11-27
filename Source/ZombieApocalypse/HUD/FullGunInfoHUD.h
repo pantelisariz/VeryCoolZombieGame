@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Border.h"
 #include "Components/TextBlock.h"
-#include "ZombieApocalypse/Gun/Gun.h"
+#include "ZombieApocalypse/Weapon/Gun/Gun.h"
 #include "FullGunInfoHUD.generated.h"
 
 /**
