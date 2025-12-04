@@ -19,7 +19,7 @@ AGun::AGun()
 	 * Here you can set the default stats of the gun
 	 */
 	WeaponTypeInText = ("Gun");
-	Damage = 10;
+	Damage = 90;
 	FireRate = 3.f;
 	Range = 1500.f;
 	ReloadTime = 1.5f;
@@ -57,6 +57,7 @@ void AGun::BeginPlay()
 	Super::BeginPlay();
 	GetAllAttachments();
 
+	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 }
 
 
@@ -93,7 +94,7 @@ void AGun::StartFire()
 	}
 
 	// Fire immediately then start timer for subsequent shots
-	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AGun::FireShot, 0.1f, true, 0);
+	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &AGun::Fire, 1/FireRate, true, 0);
 }
 
 
@@ -144,16 +145,14 @@ void AGun::AddCombatHUD()
 	GunCombatHUD -> AddToViewport();
 	
 	GunCombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
-	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 	
 }
 
 
 
-void AGun::FireShot()
+void AGun::Fire()
 {
-	UWorld* World = GetWorld();
-	if (!World || !PlayerCameraComponent)
+	if (not GetWorld() or not PlayerCameraComponent)
 	{
 		return;
 	}
@@ -162,7 +161,7 @@ void AGun::FireShot()
 		return;
 	}
 	
-	if (TimeLastShot + TimeBetweenShots >= GetWorld() -> TimeSeconds)
+	if (TimeLastShot + (TimeBetweenShots * 0.95) >= GetWorld() -> TimeSeconds)
 	{
 		return;
 	}
@@ -173,11 +172,24 @@ void AGun::FireShot()
 		return;
 	}
 	
+	
+	for (int BulletShot = 0; BulletShot <= BulletPerAmmo; BulletShot++)
+	{
+		GetWorldTimerManager().SetTimer(TimerHandle_MultiShot, this, &AGun::FireShot, 0.01f/FireRate, false);
+	}
+}
+
+
+
+void AGun::FireShot()
+{
+	UWorld* World = GetWorld();
+	
 	FireShotStatChanges();
 
 	// Trace origin / direction
 	const FVector TraceStart = PlayerCameraComponent -> GetComponentLocation();
-	const FVector Direction = PlayerCameraComponent-> GetForwardVector();
+	const FVector Direction = PlayerCameraComponent -> GetForwardVector();
 	const FVector TraceEnd = TraceStart + Direction * Range;
 
 	// Prepare collision params
@@ -185,6 +197,8 @@ void AGun::FireShot()
 	QueryParams.AddIgnoredActor(this);
 	QueryParams.bTraceComplex = true;
 	QueryParams.bReturnPhysicalMaterial = true;
+
+	
 
 	// Perform trace
 	FHitResult Hit;
@@ -211,8 +225,8 @@ void AGun::FireShot()
 	// If the hit actor is one of our pawns, nuke it (TODO: or apply damage later)
 	if (ACustomPawnBase* HitPawn = Cast<ACustomPawnBase>(HitActor))
 	{
-		HitPawn->Destroy();
-		CashChanged.Broadcast(HitPawn -> CashChangeValue);
+		int32 CalculatedDamage = Damage;
+		HitPawn -> TakeDamage(CalculatedDamage);
 		//apply damage placehodler for later
 		//UGameplayStatics::ApplyPointDamage(HitPawn, BaseDamage, Direction, Hit, GetController(), this, UDamageType::StaticClass());
 	}
@@ -222,6 +236,8 @@ void AGun::FireShot()
 		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
 	}
 }
+
+
 
 void AGun::FireShotStatChanges()
 {

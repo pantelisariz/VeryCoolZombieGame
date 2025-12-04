@@ -86,7 +86,6 @@ FVector APopulationSpawner::GetRandomSpawnPoint()
 
 TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass)
 {
-	TArray<FVector> SpawnPoints;
 	TArray<ACustomPawnBase*> SpawnedActors;
 	
 	for (int i = 0; i < AmountToSpawn; i++)
@@ -97,16 +96,13 @@ TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSub
 		while (!bCanSpawn)
 		{
 			RandomSpawnPoint = GetRandomSpawnPoint();
-			
-			if (SpawnPoints.Contains(RandomSpawnPoint))
+			if (RandomSpawnPoint.IsZero())
 			{
 				continue;
 			}
+			
 			bCanSpawn = true;
 		}
-
-		
-		SpawnPoints.Add(RandomSpawnPoint);
 
 		ACustomPawnBase* SpawnedActor = GetWorld() -> SpawnActor<ACustomPawnBase>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0));
 		if (not SpawnedActor)

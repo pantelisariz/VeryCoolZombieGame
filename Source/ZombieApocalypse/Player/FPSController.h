@@ -38,7 +38,8 @@ protected:
 	void FireStart();
 	void FireEnd();
 	
-	void Melee();
+	void MeleeStart();
+	void MeleeEnd();
 	
 	void Interact();
 	

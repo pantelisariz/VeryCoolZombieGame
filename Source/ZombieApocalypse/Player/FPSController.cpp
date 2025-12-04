@@ -43,11 +43,13 @@ void AFPSController::SetupInputComponent()
 	
 	EnhancedInputComponent -> BindAction(ReloadAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Reload);
 	
+	
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Started, this, &AFPSController::FireStart);
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Completed, this, &AFPSController::FireEnd);
 	
+	EnhancedInputComponent -> BindAction(MeleeAction.Get(), ETriggerEvent::Started, this, &AFPSController::MeleeStart);
+	EnhancedInputComponent -> BindAction(MeleeAction.Get(), ETriggerEvent::Completed, this, &AFPSController::MeleeEnd);
 	
-	EnhancedInputComponent -> BindAction(MeleeAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Melee);
 	
 	EnhancedInputComponent -> BindAction(PauseAction.Get(), ETriggerEvent::Completed, this, &AFPSController::TogglePause);
 	
@@ -155,6 +157,26 @@ void AFPSController::FireEnd()
 	if (FPSCharacter)
 	{
 		FPSCharacter -> CurrentGun -> EndFire();
+	}
+}
+
+
+
+void AFPSController::MeleeStart()
+{
+	if (FPSCharacter)
+	{
+		FPSCharacter -> CurrentMeleeWeapon -> StartAttack();
+	}
+}
+
+
+
+void AFPSController::MeleeEnd()
+{
+	if (FPSCharacter)
+	{
+		FPSCharacter -> CurrentMeleeWeapon -> EndAttack();
 	}
 }
 

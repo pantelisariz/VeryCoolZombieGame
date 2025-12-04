@@ -35,7 +35,14 @@ public:
 	//	+++ PAST THIS POINT OUR IMPLEMENTATION STARTS +++
 	virtual void Interact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
 
+	
+	void TakeDamage(float Damage, bool bDamagerWasMelee = false);
+	void MakeWeak();
+	void MakeNormal();
 
+	AController* WeakController;
+	FTimerHandle TimerHandle_Weak;
+	
 
 	
 	
@@ -44,7 +51,7 @@ public:
 	USkeletalMeshComponent* Mesh;
 	*/
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	USphereComponent* SphereCollider;
 
 	/*
@@ -53,18 +60,31 @@ public:
 	*/
 	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase|Stats", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	double MaxWalkSpeed;	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase|Stats", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	double MaxRunSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase|Stats", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	int32 Health;	
 	
 	// Basically money gained from killing zombies or lost when killing humans
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase|Stats", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
 	int32 CashChangeValue;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase|Stats", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	int32 HealthToBecomeWeakValue;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase|Stats", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	float WeaknessLenght;
+	bool bIsWeakened;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PawnBase", meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+	UMaterialInterface* MaterialWithHighlight;
 
+	
+	
+	
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree*  BehaviorTree;

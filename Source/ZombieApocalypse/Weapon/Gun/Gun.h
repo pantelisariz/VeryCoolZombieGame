@@ -36,6 +36,7 @@ protected:
 	
 	//Functions for shooting logic
 	//this one is for the ray casting
+	void Fire();
 	void FireShot();
 	//had to move 2 functions to public to be able to call them from the controller
 	/*   end stuff for shooting  */
@@ -57,6 +58,8 @@ protected:
 	// Probably need this to handle automatic fire
 	FTimerHandle TimerHandle_AutoFire;
 	FTimerHandle TimerHandle_Fire;
+	FTimerHandle TimerHandle_MultiShot;
+	
 	FTimerHandle TimerHandle_Reload;
 
 	

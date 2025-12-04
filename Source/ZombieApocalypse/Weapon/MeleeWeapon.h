@@ -24,10 +24,39 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+	void StartAttack();
+	void EndAttack();
+	void Attack();
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
+	
+	float TimeBetweenMeleeAttack;
+	float TimeLastMeleeAttack;
+	FTimerHandle TimerHandle_AutoAttack;
+	
+	bool bIsAttacking = false;
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 Cooldown;
+	float Cooldown;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
+	float Range;
+	
+	
 
+	
 };

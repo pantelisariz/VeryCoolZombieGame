@@ -12,6 +12,9 @@ AHuman::AHuman()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	CashChangeValue = -200;
+	
+	WeaknessLenght = 4.f;
+	HealthToBecomeWeakValue = 20;
 
 }
 

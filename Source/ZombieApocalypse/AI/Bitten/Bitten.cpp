@@ -10,6 +10,9 @@ ABitten::ABitten()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	CashChangeValue = 75;
+	
+	WeaknessLenght = 2.f;
+	HealthToBecomeWeakValue = 20;
 
 }
 

@@ -17,6 +17,9 @@ AZombie::AZombie()
 	LastBiteTime = -1;
 	
 	CashChangeValue = 100;
+	
+	WeaknessLenght = 2.f;
+	HealthToBecomeWeakValue = 5;
 
 }
 
