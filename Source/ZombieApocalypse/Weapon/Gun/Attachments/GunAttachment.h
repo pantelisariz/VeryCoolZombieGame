@@ -6,6 +6,23 @@
 #include "GameFramework/Actor.h"
 #include "GunAttachment.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EGunStatType : uint8
+{
+	Damage,
+	FireRate,
+	Range,
+	ReloadTime,
+	MagazineCapacity,
+	CurrentCarryAmmo,
+	MaxCarryAmmo,
+	BulletPerAmmo,
+	AmmoUsedPerShot
+};
+
+
+
 UCLASS()
 class ZOMBIEAPOCALYPSE_API AGunAttachment : public AActor
 {
@@ -24,5 +41,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	void DestroyAttachment();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attachment", meta = (AllowPrivateAccess = "true"))
+	TMap<EGunStatType, float> AttachmentStatChange;
 
 };
