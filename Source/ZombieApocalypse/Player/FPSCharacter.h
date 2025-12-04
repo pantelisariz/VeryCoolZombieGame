@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "ZombieApocalypse/Weapon/Gun/Gun.h"
 #include "ZombieApocalypse/HUD/PlayerStatHUD.h"
+#include "ZombieApocalypse/Weapon/MeleeWeapon.h"
 #include "FPSCharacter.generated.h"
 
 
@@ -42,10 +43,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	void SetupGun();
+	
+	void SpawnGun(TSubclassOf<AGun> GunWeaponClass);
+	void SpawnMeleeWeapon(TSubclassOf<AMeleeWeapon> MeleeWeaponClass);
+	
+	
+	
+	
+	
 	
 	UFUNCTION()
 	void ChangeCash(int32 CashChangeValue);
+	
+	
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|HUD", meta = (AllowPrivateAccess = "true"))
@@ -67,6 +77,13 @@ public:
 	int32 Cash;
 	
 	
+	
+	
+	
+	
+	
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> StartingGunClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
@@ -76,9 +93,20 @@ public:
 
 	
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Melee", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AMeleeWeapon> StartingMeleeClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Melee", meta = (AllowPrivateAccess = "true"))
+	AMeleeWeapon* CurrentMeleeWeapon;
+	
+	
+	
+	
 	// Will be empty, so we can use this point as where the gun should spawn in
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Melee", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* MeleeWeaponPlacementPoint;
 	
 	
 	

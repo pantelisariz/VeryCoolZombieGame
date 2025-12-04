@@ -38,6 +38,8 @@ protected:
 	void FireStart();
 	void FireEnd();
 	
+	void Melee();
+	
 	void Interact();
 	
 	void Reload();
@@ -67,6 +69,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Action", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> FireAction;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Action", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> MeleeAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Action", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InteractAction;

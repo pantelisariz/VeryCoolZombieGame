@@ -7,7 +7,7 @@
 #include "Attachments/GunAttachmentSlotComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
-#include "ZombieApocalypse/HUD/CombatHUD.h"
+#include "ZombieApocalypse/HUD/GunCombatHUD.h"
 #include "ZombieApocalypse/Weapon/Weapon.h"
 #include "Gun.generated.h"
 
@@ -73,8 +73,13 @@ public:
 	
 	void StartReloading();
 
-	virtual void AddCombatHUD() override;
+	void AddCombatHUD();
 	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UGunCombatHUD> GunCombatHUDClass;
+	UPROPERTY()
+	UGunCombatHUD* GunCombatHUD;
 
 	
 	// Gun Variables

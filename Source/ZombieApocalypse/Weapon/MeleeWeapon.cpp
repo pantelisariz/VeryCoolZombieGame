@@ -8,6 +8,9 @@ AMeleeWeapon::AMeleeWeapon()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	Damage = 5.0f;
+	Cooldown = 0.3f;
 
 }
 

@@ -26,5 +26,8 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
 	int32 Damage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
+	int32 Cooldown;
 
 };

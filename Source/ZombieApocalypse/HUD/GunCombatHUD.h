@@ -7,13 +7,13 @@
 #include "Components/Border.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "CombatHUD.generated.h"
+#include "GunCombatHUD.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZOMBIEAPOCALYPSE_API UCombatHUD : public UUserWidget
+class ZOMBIEAPOCALYPSE_API UGunCombatHUD : public UUserWidget
 {
 	GENERATED_BODY()
 	

@@ -39,6 +39,9 @@ AFPSCharacter::AFPSCharacter()
 	GunPlacementPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunPlacementPoint"));
 	GunPlacementPoint -> SetupAttachment(RootComponent.Get());
 	
+	MeleeWeaponPlacementPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeleeWeaponPlacementPoint"));
+	MeleeWeaponPlacementPoint -> SetupAttachment(RootComponent.Get());
+	
 	
 	
 	
@@ -90,8 +93,8 @@ void AFPSCharacter::BeginPlay()
 		return;
 	}
 	
-	CurrentGun = GetWorld() -> SpawnActor<AGun>(StartingGunClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
-	SetupGun();
+	SpawnGun(StartingGunClass);
+	
 	for (UGunAttachmentSlotComponent* GunAttachmentSlot : CurrentGun -> AttachmentSlots)
 	{
 		if (GunAttachmentSlot -> GetName() != FString("UnderBarrelAttachmentSlot"))
@@ -104,7 +107,7 @@ void AFPSCharacter::BeginPlay()
 		
 	}
 
-	
+	SpawnMeleeWeapon(StartingMeleeClass);
 	
 	
 }
@@ -126,14 +129,51 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 
 
-void AFPSCharacter::SetupGun()
+
+
+
+void AFPSCharacter::SpawnGun(TSubclassOf<AGun> GunWeaponClass)
 {
+	if (not GunWeaponClass)
+	{
+		return;
+	}
+	
+	CurrentGun = GetWorld() -> SpawnActor<AGun>(GunWeaponClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
+
+	
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
 	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
+	
 	CurrentGun -> AddCombatHUD();
+	
 }
+
+
+
+void AFPSCharacter::SpawnMeleeWeapon(TSubclassOf<AMeleeWeapon> MeleeWeaponClass)
+{
+	if (not MeleeWeaponClass)
+	{
+		return;
+	}
+	
+	CurrentMeleeWeapon = GetWorld() -> SpawnActor<AMeleeWeapon>(MeleeWeaponClass, MeleeWeaponPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
+
+	
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+	CurrentMeleeWeapon -> AttachToComponent(CameraArmComponent, AttachmentRules);
+	CurrentMeleeWeapon -> PlayerCameraComponent = CameraComponent;
+	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
+}
+
+
+
+
+
+
 
 
 

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
-#include "ZombieApocalypse/HUD/CombatHUD.h"
+#include "ZombieApocalypse/HUD/GunCombatHUD.h"
 #include "Weapon.generated.h"
 
 UCLASS()
@@ -25,15 +25,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void AddCombatHUD();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UCombatHUD> CombatHUDClass;
-	UPROPERTY()
-	UCombatHUD* CombatHUD;
+
 	
 	TObjectPtr<UCameraComponent> PlayerCameraComponent;
 	

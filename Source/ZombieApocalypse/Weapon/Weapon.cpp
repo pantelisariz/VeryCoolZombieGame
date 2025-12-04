@@ -5,7 +5,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "ZombieApocalypse/HUD/CombatHUD.h"
+#include "ZombieApocalypse/HUD/GunCombatHUD.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -31,27 +31,3 @@ void AWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-void AWeapon::AddCombatHUD()
-{
-	auto PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	APlayerController* CastPlayerController = Cast<APlayerController>(PlayerController);
-	if (not CastPlayerController)
-	{
-		return;
-	}
-	
-	
-	if (not CombatHUDClass)
-	{
-		return;
-	}
-	
-
-	
-	CombatHUD = CreateWidget<UCombatHUD>(CastPlayerController, *(CombatHUDClass));
-	
-	check(CombatHUD);
-	CombatHUD -> AddToViewport();
-}
-
