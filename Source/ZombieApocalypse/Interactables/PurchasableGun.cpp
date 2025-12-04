@@ -18,6 +18,7 @@ APurchasableGun::APurchasableGun()
 	
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereCollider -> SetupAttachment(Mesh);
+	SphereCollider -> SetSphereRadius(300.f);
 	
 	InfoWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InfoWidget"));
 	InfoWidget -> SetupAttachment(Mesh);

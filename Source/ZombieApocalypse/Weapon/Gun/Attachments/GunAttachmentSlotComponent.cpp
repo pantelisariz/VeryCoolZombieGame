@@ -71,14 +71,18 @@ void UGunAttachmentSlotComponent::SetUpAttachmentOnClassChange(FPropertyChangedE
 
 void UGunAttachmentSlotComponent::CreateAttachment()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Spawns Attachment"));
+	
 	if (CurrentAttachment and CurrentAttachment -> IsValidLowLevel())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Destroys Attachment"));
 		CurrentAttachment->Destroy();
 		CurrentAttachment = nullptr;
 	}
     
 	if (not CurrentAttachmentClass or not AttachmentClasses.Contains(CurrentAttachmentClass))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Attachment is not in list"));
 		CurrentAttachment = nullptr;
 		return;
 	}

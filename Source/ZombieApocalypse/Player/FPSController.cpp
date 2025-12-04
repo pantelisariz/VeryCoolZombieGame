@@ -131,6 +131,7 @@ void AFPSController::JumpEnd()
 void AFPSController::RunStart()
 {
 	FPSCharacter -> GetCharacterMovement() -> MaxWalkSpeed = FPSCharacter -> RunSpeed;
+	FPSCharacter -> CameraComponent -> FieldOfView += 5;
 }
 
 
@@ -138,6 +139,8 @@ void AFPSController::RunStart()
 void AFPSController::RunEnd()
 {
 	FPSCharacter -> GetCharacterMovement() -> MaxWalkSpeed = FPSCharacter -> WalkSpeed;
+	FPSCharacter -> CameraComponent -> FieldOfView -= 5;
+	
 }
 
 

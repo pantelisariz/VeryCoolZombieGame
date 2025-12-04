@@ -26,14 +26,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USpringArmComponent> CameraArmComponent;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UCameraComponent> CameraComponent;
-
-
-
 
 	
 public:	
@@ -90,8 +82,10 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> StartingGunClass;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AGunAttachment> StartingGunAttachmentClass;
+	TMap<FString, TSubclassOf<AGunAttachment>> StartingGunAttachmentClasses;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Gun", meta = (AllowPrivateAccess = "true"))
 	AGun* CurrentGun;
 
@@ -114,4 +108,12 @@ public:
 	
 	
 	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USpringArmComponent> CameraArmComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> CameraComponent;
+
 };

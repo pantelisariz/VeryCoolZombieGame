@@ -95,17 +95,28 @@ void AFPSCharacter::BeginPlay()
 	
 	SpawnGun(StartingGunClass);
 	
-	for (UGunAttachmentSlotComponent* GunAttachmentSlot : CurrentGun -> AttachmentSlots)
+	TArray<FString> StartingGunAttachmentClassesKeys;
+	StartingGunAttachmentClasses.GetKeys(StartingGunAttachmentClassesKeys);
+	
+	for (FString AttachmentSlotName : StartingGunAttachmentClassesKeys)
 	{
-		if (GunAttachmentSlot -> GetName() != FString("UnderBarrelAttachmentSlot"))
+		for (UGunAttachmentSlotComponent* GunAttachmentSlot : CurrentGun -> AttachmentSlots)
 		{
-			continue;
-		}
-		GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClass;
-		GunAttachmentSlot -> CreateAttachment();
-		UE_LOG(LogTemp, Warning, TEXT("Attachmentslot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s %s"), *AttachmentSlotName, *GunAttachmentSlot -> GetName() );
+			
+			
+			if (GunAttachmentSlot -> GetName() != AttachmentSlotName)
+			{
+				continue;
+			}
+			GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClasses[AttachmentSlotName];
+			GunAttachmentSlot -> CreateAttachment();
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
 		
+		}
 	}
+	
+
 
 	SpawnMeleeWeapon(StartingMeleeClass);
 	
