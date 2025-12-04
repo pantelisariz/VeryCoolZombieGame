@@ -18,7 +18,7 @@ AZombie::AZombie()
 	
 	CashChangeValue = 100;
 	
-	WeaknessLenght = 2.f;
+	WeaknessLenght = 1.5f;
 	HealthToBecomeWeakValue = 5;
 
 }

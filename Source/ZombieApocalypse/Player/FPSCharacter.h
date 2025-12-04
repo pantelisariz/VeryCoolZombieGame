@@ -53,7 +53,11 @@ public:
 	
 	
 	UFUNCTION()
-	void ChangeCash(int32 CashChangeValue);
+	void ChangeCash(int32 CashChangeValue);	
+	UFUNCTION()
+	void ChangeHealth(int32 HealthChangeValue);
+	UFUNCTION()
+	void ChangeAmmo(int32 AmmoChangeValue);	
 	
 	
 	

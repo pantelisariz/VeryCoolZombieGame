@@ -109,6 +109,9 @@ void AFPSCharacter::BeginPlay()
 
 	SpawnMeleeWeapon(StartingMeleeClass);
 	
+	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
+	HealthChanged.AddUObject(this, &AFPSCharacter::ChangeHealth);
+	AmmoChanged.AddUObject(this, &AFPSCharacter::ChangeAmmo);
 	
 }
 
@@ -145,7 +148,6 @@ void AFPSCharacter::SpawnGun(TSubclassOf<AGun> GunWeaponClass)
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
-	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
 	
 	CurrentGun -> AddCombatHUD();
 	
@@ -193,3 +195,17 @@ void AFPSCharacter::ChangeCash(int32 CashChangeValue)
 	PlayerInfoHUD -> UpdateCashText(Cash);
 }
 
+
+
+void AFPSCharacter::ChangeAmmo(int32 AmmoChangeValue)
+{
+	CurrentGun -> CurrentCarryAmmo += AmmoChangeValue;
+	CurrentGun -> GunCombatHUD -> UpdateBulletCount(CurrentGun -> CurrentMagazineAmmo, CurrentGun-> CurrentCarryAmmo);
+}
+
+
+
+void AFPSCharacter::ChangeHealth(int32 HealthChangeValue)
+{
+	CurrentHealth += HealthChangeValue;
+}

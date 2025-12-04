@@ -13,8 +13,8 @@ AHuman::AHuman()
 	
 	CashChangeValue = -200;
 	
-	WeaknessLenght = 4.f;
-	HealthToBecomeWeakValue = 20;
+	WeaknessLenght = 2.5f;
+	HealthToBecomeWeakValue = 25;
 
 }
 

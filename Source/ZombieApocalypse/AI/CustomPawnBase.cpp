@@ -78,7 +78,9 @@ void ACustomPawnBase::TakeDamage(float Damage, bool bDamagerWasMelee)
 {
 	if (bIsWeakened and bDamagerWasMelee)
 	{
-		CashChanged.Broadcast(CashChangeValue);
+		CashChanged.Broadcast(CashChangeValue * 2);
+		HealthChanged.Broadcast(8);
+		AmmoChanged.Broadcast(2);
 		
 		Destroy();
 		return;
@@ -86,11 +88,9 @@ void ACustomPawnBase::TakeDamage(float Damage, bool bDamagerWasMelee)
 	
 	if (bIsWeakened)
 	{
-		
-		/*
 		CashChanged.Broadcast(CashChangeValue);
+		
 		Destroy();
-		*/
 		return;
 	}
 	

@@ -11,8 +11,8 @@ ABitten::ABitten()
 	
 	CashChangeValue = 75;
 	
-	WeaknessLenght = 2.f;
-	HealthToBecomeWeakValue = 20;
+	WeaknessLenght = 1.5f;
+	HealthToBecomeWeakValue = 15;
 
 }
 
