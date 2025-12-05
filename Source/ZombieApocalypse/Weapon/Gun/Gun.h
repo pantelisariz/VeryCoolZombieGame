@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Attachments/GunAttachment.h"
 #include "Attachments/GunAttachmentSlotComponent.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/Actor.h"
 #include "ZombieApocalypse/HUD/GunCombatHUD.h"
 #include "ZombieApocalypse/Weapon/Weapon.h"
@@ -83,6 +81,8 @@ public:
 	TSubclassOf<UGunCombatHUD> GunCombatHUDClass;
 	UPROPERTY()
 	UGunCombatHUD* GunCombatHUD;
+	
+	bool bHasGottenAllAttachments;
 
 	
 	// Gun Variables
@@ -94,15 +94,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 Damage;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	int32 DamageAfterAttachments;
-	
-	
-	
-	
+	int32 DamageBeforeAttachments;
+
+
+	/**
+	 * Higher FireRate means the gun shoots faster
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	float FireRate;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	float FireRateAfterAttachments;
+	float FireRateBeforeAttachments;
 	
 	float TimeBetweenShots;
 	float TimeLastShot;
@@ -113,15 +114,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	float Range;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	float RangeAfterAttachments;
+	float RangeBeforeAttachments;
 	
 	
 	
-	
+	/**
+	 * Lower ReloadTime means lower time to reload
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	float ReloadTime;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	float ReloadTimeAfterAttachments;
+	float ReloadTimeBeforeAttachments;
 	
 	bool bIsReloading;
 	float ReloadProgress;
@@ -132,7 +135,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 MagazineCapacity;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	int32 MagazineAfterAttachments;
+	int32 MagazineCapacityBeforeAttachments;
 	
 	int32 CurrentMagazineAmmo;
 	
@@ -142,25 +145,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 CurrentCarryAmmo;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	int32 CurrentCarryAmmoAfterAttachments;
+	int32 CurrentCarryAmmoBeforeAttachments;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 MaxCarryAmmo;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	int32 MaxCarryAmmoAfterAttachments;
-	
-	
-	
-	
+	int32 MaxCarryAmmoBeforeAttachments;
+
+
+	/**
+	 * Amount of bullets shot per ammo
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 BulletPerAmmo;	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	int32 BulletPerAmmoAfterAttachments;
+	int32 BulletPerAmmoBeforeAttachments;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 AmmoUsedPerShot;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
-	int32 AmmoUsedPerShotAfterAttachments;
+	int32 AmmoUsedPerShotBeforeAttachments;
 	
 	
 	
@@ -176,6 +180,13 @@ public:
 	
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
 	void GetAllAttachments();
+	
+	
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void SetupAttachmentStats(TMap<EGunStatType, float> Map);
+	
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void AddAttachmentStatsToGun(TMap<EGunStatType, float> AttachmentStatChanges);
 	
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
 	void LogAllAttachments();

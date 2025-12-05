@@ -5,6 +5,11 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FHealthChangedDelegate, int32 /*HealthChange
 DECLARE_MULTICAST_DELEGATE_OneParam(FAmmoChangedDelegate, int32 /*AmmoChangeValue */);
 
 
+
+
+
 inline FCashChangedDelegate CashChanged;
 inline FHealthChangedDelegate HealthChanged;
 inline FAmmoChangedDelegate AmmoChanged;
+
+

@@ -160,6 +160,7 @@ void AFPSCharacter::SpawnGun(TSubclassOf<AGun> GunWeaponClass)
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
 	
+	
 	CurrentGun -> AddCombatHUD();
 	
 }

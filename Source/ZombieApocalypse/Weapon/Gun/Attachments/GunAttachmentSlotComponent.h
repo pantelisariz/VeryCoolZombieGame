@@ -7,6 +7,10 @@
 #include "Components/ActorComponent.h"
 #include "GunAttachmentSlotComponent.generated.h"
 
+
+
+DECLARE_MULTICAST_DELEGATE_TwoParams(FAttachmentCreatedDelegate, TMap<EGunStatType, float> /*AttachmentStatChanges*/);
+
 	
 UCLASS(Blueprintable, BlueprintType, EditInlineNew, ClassGroup = (Gun), meta = (BlueprintSpawnableComponent))
 
@@ -49,6 +53,13 @@ public:
 	TSubclassOf<AGunAttachment> CurrentAttachmentClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attachment", meta = ( AllowPrivateAccess="true"))
 	AGunAttachment* CurrentAttachment;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attachment", meta = (AllowPrivateAccess = "true"))
+	TMap<EGunStatType, float> AttachmentStatChange;
+	
+	
+	FAttachmentCreatedDelegate AttachmentCreated;
+	
 	
 private:
 	TArray<AGunAttachment*> Attachments;

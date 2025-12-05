@@ -15,22 +15,43 @@ AGun::AGun()
 	PrimaryActorTick.bCanEverTick = true;
 
 	
+	
+	
+	
+	
+	
+	
 	/*
 	 * Here you can set the default stats of the gun
 	 */
 	WeaponTypeInText = ("Gun");
-	Damage = 90;
+	
+	Damage = 60;
 	FireRate = 3.f;
 	Range = 1500.f;
 	ReloadTime = 1.5f;
-	
 	MagazineCapacity = 10;
 	CurrentMagazineAmmo = MagazineCapacity;
 	CurrentCarryAmmo = MagazineCapacity * 4;
 	MaxCarryAmmo = 300;
-	
 	BulletPerAmmo = 1;
 	AmmoUsedPerShot = 1;
+	
+	DamageBeforeAttachments = Damage;
+	FireRateBeforeAttachments = FireRate;
+	RangeBeforeAttachments = Range;
+	ReloadTimeBeforeAttachments = ReloadTime;
+	MagazineCapacityBeforeAttachments = MagazineCapacity;
+	CurrentCarryAmmoBeforeAttachments = CurrentCarryAmmo;
+	MaxCarryAmmoBeforeAttachments = MaxCarryAmmo;
+	BulletPerAmmoBeforeAttachments = BulletPerAmmo;
+	AmmoUsedPerShotBeforeAttachments = AmmoUsedPerShot;
+	
+	
+	
+	/*
+	 *
+	 */
 	
 	
 	
@@ -40,6 +61,12 @@ AGun::AGun()
 	
 	GunCombatHUDClass = nullptr;
 	GunCombatHUD = nullptr;
+	
+	bHasGottenAllAttachments = false;
+	
+	
+	
+	
 	
 
 }
@@ -55,7 +82,10 @@ void AGun::OnConstruction(const FTransform& Transform)
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	GetAllAttachments();
+	if (not bHasGottenAllAttachments)
+	{
+		GetAllAttachments();
+	}
 
 	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 }
@@ -247,6 +277,8 @@ void AGun::FireShotStatChanges()
 	GunCombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 }
 
+
+
 void AGun::Reload()
 {
 	if (not bIsReloading)
@@ -277,6 +309,8 @@ void AGun::Reload()
 	FinishedReloading();
 }
 
+
+
 void AGun::FinishedReloading()
 {
 	GetWorldTimerManager().ClearTimer(TimerHandle_Reload);
@@ -292,6 +326,7 @@ void AGun::FinishedReloading()
 
 void AGun::GetAllAttachments()
 {
+
 	UE_LOG(LogTemp, Warning, TEXT("Getting All Components"));
 	AttachmentSlots.Empty();
 	for (UGunAttachmentSlotComponent* GunAttachmentComponent : AttachmentSlots)
@@ -321,8 +356,94 @@ void AGun::GetAllAttachments()
 		}
 		UE_LOG(LogTemp, Warning, TEXT("Added component to Attachment Slots array"));
 		AttachmentSlots.Add(AttachmentComponent);
+		
+		
+		AttachmentComponent -> AttachmentCreated.AddUObject(this, &AGun::AddAttachmentStatsToGun);
+		
 	}
+	bHasGottenAllAttachments = true;
 }
+
+
+
+void AGun::SetupAttachmentStats(TMap<EGunStatType, float> Map)
+{
+}
+
+
+
+void AGun::AddAttachmentStatsToGun(TMap<EGunStatType, float> AttachmentStatChanges)
+{
+	
+	if (AttachmentStatChanges.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AttachmentStatChanges are empty"));
+		return;
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Amount of stat changes: %d"), AttachmentStatChanges.Num());
+	
+	TArray<EGunStatType> GunStatsInAttachment;
+	AttachmentStatChanges.GenerateKeyArray(GunStatsInAttachment);
+	
+	for (EGunStatType CurrentGunStat: GunStatsInAttachment)
+	{
+		
+		UE_LOG(LogTemp, Warning, TEXT("Current Gun Stat %d"), CurrentGunStat);
+		
+		
+		switch (CurrentGunStat)
+		{
+		case EGunStatType::Damage:
+			Damage *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;		
+			
+		case EGunStatType::FireRate:
+			FireRate *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;
+			
+		case EGunStatType::Range:
+			Range *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;
+			
+		case EGunStatType::ReloadTime:
+			ReloadTime *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;
+			
+		case EGunStatType::MagazineCapacity:
+			MagazineCapacity *= AttachmentStatChanges[CurrentGunStat];
+			CurrentMagazineAmmo = MagazineCapacity;
+			
+			break;
+			
+		case EGunStatType::CurrentCarryAmmo:
+			CurrentCarryAmmo *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;
+			
+		case EGunStatType::MaxCarryAmmo:
+			MaxCarryAmmo *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;
+			
+		case EGunStatType::BulletPerAmmo:
+			BulletPerAmmo *= AttachmentStatChanges[CurrentGunStat];
+			
+			break;
+			
+		case EGunStatType::AmmoUsedPerShot:
+			AmmoUsedPerShot *= AttachmentStatChanges[CurrentGunStat];
+			break;
+		}
+	}
+	
+	GunCombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+}
+
 
 
 

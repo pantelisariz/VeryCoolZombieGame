@@ -3,6 +3,8 @@
 
 #include "GunAttachmentSlotComponent.h"
 
+#include "ZombieApocalypse/AllDelegates.h"
+
 // Sets default values for this component's properties
 UGunAttachmentSlotComponent::UGunAttachmentSlotComponent()
 {
@@ -94,13 +96,9 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 	}
 	else
 	{
-		// Editor-time visualization
-		CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, FVector(0,0,0), FRotator(0,0,0));
-		if (not CurrentAttachment)
-		{
-			return;
-		}
-		CurrentAttachment->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+		UE_LOG(LogTemp, Warning, TEXT("Spawns Gun-Attachment in editor"));
+		
+		SpawnAttachment();
 		
 	}
 }
@@ -109,13 +107,28 @@ void UGunAttachmentSlotComponent::CreateAttachment()
 
 void UGunAttachmentSlotComponent::SpawnAttachment()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Spawns Actor"));
+	UE_LOG(LogTemp, Warning, TEXT("Spawns Gun-Attachment"));
 	
 	CurrentAttachment = GetWorld() -> SpawnActor<AGunAttachment>(CurrentAttachmentClass, FVector(0,0,0), FRotator(0,0,0));
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
-	CurrentAttachment -> AttachToActor(GetAttachParentActor(), AttachmentRules);
 	
-	UE_LOG(LogTemp, Warning, TEXT("%s Attachment is spawned"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
+	if (not CurrentAttachment)
+	{
+		return;
+	}
+	
+	CurrentAttachment -> AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	
+	// UE_LOG(LogTemp, Warning, TEXT("%s Attachment is spawned"), *CurrentAttachment -> GetClass() -> GetDisplayNameText().ToString() );
+	if (not CurrentAttachment)
+	{
+		return;
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Amount of stat changes: %d"), CurrentAttachment -> AttachmentStatChange.Num());
+	
+	
+	AttachmentStatChange = CurrentAttachment -> AttachmentStatChange;
+	AttachmentCreated.Broadcast(CurrentAttachment -> AttachmentStatChange);
 }
 
 
