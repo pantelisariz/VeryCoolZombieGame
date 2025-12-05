@@ -79,7 +79,7 @@ public:
 	void AddCombatHUD();
 	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|UI", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|UI")
 	TSubclassOf<UGunCombatHUD> GunCombatHUDClass;
 	UPROPERTY()
 	UGunCombatHUD* GunCombatHUD;
@@ -88,39 +88,90 @@ public:
 	// Gun Variables
 	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 Damage;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	float FireRate;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	int32 Damage;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	int32 DamageAfterAttachments;
+	
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	float FireRate;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	float FireRateAfterAttachments;
+	
 	float TimeBetweenShots;
 	float TimeLastShot;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	float Range;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	float ReloadTime;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	float Range;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	float RangeAfterAttachments;
+	
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	float ReloadTime;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	float ReloadTimeAfterAttachments;
+	
 	bool bIsReloading;
 	float ReloadProgress;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 MagazineCapacity;
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	int32 MagazineCapacity;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	int32 MagazineAfterAttachments;
+	
 	int32 CurrentMagazineAmmo;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 CurrentCarryAmmo;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 MaxCarryAmmo;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
-	int32 BulletPerAmmo;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats", meta = (AllowPrivateAccess = "true"))
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	int32 CurrentCarryAmmo;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	int32 CurrentCarryAmmoAfterAttachments;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	int32 MaxCarryAmmo;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	int32 MaxCarryAmmoAfterAttachments;
+	
+	
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
+	int32 BulletPerAmmo;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	int32 BulletPerAmmoAfterAttachments;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats")
 	int32 AmmoUsedPerShot;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|AttachmentStats")
+	int32 AmmoUsedPerShotAfterAttachments;
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// Attachments
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Attachment", meta = ( AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Attachment")
 	TArray<UGunAttachmentSlotComponent*> AttachmentSlots;
 	
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
