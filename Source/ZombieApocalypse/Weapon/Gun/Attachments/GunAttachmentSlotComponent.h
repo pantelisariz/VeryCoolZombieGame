@@ -9,7 +9,7 @@
 
 
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FAttachmentCreatedDelegate, TMap<EGunStatType, float> /*AttachmentStatChanges*/);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FAttachmentCreatedDelegate, TMap<EGunStatType, FGunStatChange> /*AttachmentStatChanges*/);
 
 	
 UCLASS(Blueprintable, BlueprintType, EditInlineNew, ClassGroup = (Gun), meta = (BlueprintSpawnableComponent))
@@ -55,7 +55,7 @@ public:
 	AGunAttachment* CurrentAttachment;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attachment", meta = (AllowPrivateAccess = "true"))
-	TMap<EGunStatType, float> AttachmentStatChange;
+	TMap<EGunStatType, FGunStatChange> AttachmentStatChange;
 	
 	
 	FAttachmentCreatedDelegate AttachmentCreated;

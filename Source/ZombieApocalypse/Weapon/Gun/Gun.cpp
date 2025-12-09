@@ -372,7 +372,7 @@ void AGun::SetupAttachmentStats(TMap<EGunStatType, float> Map)
 
 
 
-void AGun::AddAttachmentStatsToGun(TMap<EGunStatType, float> AttachmentStatChanges)
+void AGun::AddAttachmentStatsToGun(TMap<EGunStatType, FGunStatChange>AttachmentStatChanges)
 {
 	
 	if (AttachmentStatChanges.IsEmpty())
@@ -395,48 +395,48 @@ void AGun::AddAttachmentStatsToGun(TMap<EGunStatType, float> AttachmentStatChang
 		switch (CurrentGunStat)
 		{
 		case EGunStatType::Damage:
-			Damage *= AttachmentStatChanges[CurrentGunStat];
+			Damage = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], DamageBeforeAttachments);
 			
 			break;		
 			
 		case EGunStatType::FireRate:
-			FireRate *= AttachmentStatChanges[CurrentGunStat];
+			FireRate = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], FireRateBeforeAttachments);
 			
 			break;
 			
 		case EGunStatType::Range:
-			Range *= AttachmentStatChanges[CurrentGunStat];
+			Range = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], RangeBeforeAttachments);
 			
 			break;
 			
 		case EGunStatType::ReloadTime:
-			ReloadTime *= AttachmentStatChanges[CurrentGunStat];
+			ReloadTime = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], ReloadTimeBeforeAttachments);
 			
 			break;
 			
 		case EGunStatType::MagazineCapacity:
-			MagazineCapacity *= AttachmentStatChanges[CurrentGunStat];
+			MagazineCapacity = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], MagazineCapacityBeforeAttachments);
 			CurrentMagazineAmmo = MagazineCapacity;
 			
 			break;
 			
 		case EGunStatType::CurrentCarryAmmo:
-			CurrentCarryAmmo *= AttachmentStatChanges[CurrentGunStat];
+			CurrentCarryAmmo = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], CurrentCarryAmmoBeforeAttachments);
 			
 			break;
 			
 		case EGunStatType::MaxCarryAmmo:
-			MaxCarryAmmo *= AttachmentStatChanges[CurrentGunStat];
+			MaxCarryAmmo = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], MaxCarryAmmoBeforeAttachments);
 			
 			break;
 			
 		case EGunStatType::BulletPerAmmo:
-			BulletPerAmmo *= AttachmentStatChanges[CurrentGunStat];
+			BulletPerAmmo = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], BulletPerAmmoBeforeAttachments);
 			
 			break;
 			
 		case EGunStatType::AmmoUsedPerShot:
-			AmmoUsedPerShot *= AttachmentStatChanges[CurrentGunStat];
+			AmmoUsedPerShot = AttachmentStatChange(AttachmentStatChanges[CurrentGunStat], AmmoUsedPerShot);
 			break;
 		}
 	}
@@ -444,6 +444,36 @@ void AGun::AddAttachmentStatsToGun(TMap<EGunStatType, float> AttachmentStatChang
 	GunCombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
 }
 
+
+
+float AGun::AttachmentStatChange(FGunStatChange GunStatChange, float ValueToSetToo)
+{
+	TArray<EGunStatChangeType> GunStatChangesInAttachment;
+	GunStatChange.Values .GenerateKeyArray(GunStatChangesInAttachment);
+	
+	for (EGunStatChangeType CurrentGunStatChange: GunStatChangesInAttachment)
+	{
+		switch (CurrentGunStatChange)
+		{
+		case EGunStatChangeType::Add:
+			ValueToSetToo += GunStatChange.Values[CurrentGunStatChange];
+			return ValueToSetToo;
+			break;
+			
+		case EGunStatChangeType::Multiply:
+			ValueToSetToo *= GunStatChange.Values[CurrentGunStatChange];
+			return ValueToSetToo;
+			break;
+			
+		case EGunStatChangeType::Set:
+			ValueToSetToo = GunStatChange.Values[CurrentGunStatChange];
+			return ValueToSetToo;
+			break;
+		}
+	}
+	
+	return 0;
+}
 
 
 

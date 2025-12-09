@@ -186,7 +186,9 @@ public:
 	void SetupAttachmentStats(TMap<EGunStatType, float> Map);
 	
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AddAttachmentStatsToGun(TMap<EGunStatType, float> AttachmentStatChanges);
+	void AddAttachmentStatsToGun(TMap<EGunStatType, FGunStatChange> AttachmentStatChanges);
+	
+	float AttachmentStatChange(FGunStatChange GunStatChange,  float ValueToSetToo);
 	
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
 	void LogAllAttachments();

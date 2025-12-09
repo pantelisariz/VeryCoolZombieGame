@@ -22,6 +22,24 @@ enum class EGunStatType : uint8
 };
 
 
+UENUM(BlueprintType)
+enum class EGunStatChangeType : uint8
+{
+	Add,
+	Multiply,
+	Set
+};
+
+
+USTRUCT(BlueprintType)
+struct FGunStatChange
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EGunStatChangeType, float> Values;
+};
+
 
 UCLASS()
 class ZOMBIEAPOCALYPSE_API AGunAttachment : public AActor
@@ -42,7 +60,7 @@ public:
 	
 	void DestroyAttachment();
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attachment", meta = (AllowPrivateAccess = "true"))
-	TMap<EGunStatType, float> AttachmentStatChange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attachment")
+	TMap<EGunStatType, FGunStatChange> AttachmentStatChange;
 
 };
