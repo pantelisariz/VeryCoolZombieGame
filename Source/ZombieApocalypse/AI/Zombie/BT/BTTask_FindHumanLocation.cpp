@@ -24,14 +24,6 @@ EBTNodeResult::Type UBTTask_FindHumanLocation::ExecuteTask(UBehaviorTreeComponen
 	}
 
 	FVector const HumanCastLocation = HumanCast -> GetActorLocation();
-	if (not bSearchRandom)
-	{
-		OwnerComp.GetBlackboardComponent() -> SetValueAsVector(Out_HumanTargetLocation.SelectedKeyName, HumanCastLocation);
-
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		return EBTNodeResult::Succeeded;
-	}
-
 	FNavLocation Location;
 	UNavigationSystemV1* const Navsys = UNavigationSystemV1::GetCurrent(GetWorld());
 	if (not Navsys)
