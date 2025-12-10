@@ -88,7 +88,7 @@ TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSub
 {
 	TArray<ACustomPawnBase*> SpawnedActors;
 	
-	for (int i = 0; i < AmountToSpawn; i++)
+	while (SpawnedActors.Num() < AmountToSpawn)
 	{
 		bool bCanSpawn = false;
 		FVector RandomSpawnPoint;
