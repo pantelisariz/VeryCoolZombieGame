@@ -30,8 +30,8 @@ void AZombie_AIController::SetupPerceptionSystem()
 		SightConfig -> PointOfViewBackwardOffset = 80.0f;
 		SightConfig -> NearClippingRadius = 50.0f;
 		SightConfig -> PeripheralVisionAngleDegrees = 180.0f;
-		SightConfig -> SetMaxAge(3.0f);
-		// SightConfig -> AutoSuccessRangeFromLastSeenLocation = 50.f;
+		SightConfig -> SetMaxAge(5.0f);
+		SightConfig -> AutoSuccessRangeFromLastSeenLocation = 150.f;
 		SightConfig -> DetectionByAffiliation.bDetectEnemies = true;
 		SightConfig -> DetectionByAffiliation.bDetectFriendlies = true;
 		SightConfig -> DetectionByAffiliation.bDetectNeutrals = true;

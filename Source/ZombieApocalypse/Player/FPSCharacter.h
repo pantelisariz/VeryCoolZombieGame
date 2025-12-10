@@ -59,7 +59,7 @@ public:
 	UPROPERTY()
 	TObjectPtr<UPlayerStatHUD> PlayerInfoHUD;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Stats", meta = (AllowPrivateAccess = "true", DisplayName="Health (hp)"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Stats", meta = (AllowPrivateAccess = "true", DisplayName = "Health (hp)"))
 	int32 MaxHealth;
 	int32 CurrentHealth;
 	
@@ -69,7 +69,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Stats", meta = (AllowPrivateAccess = "true", ForceUnits = "cm/s"))
 	float WalkSpeed;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Stats", meta = (AllowPrivateAccess = "true", DisplayName="Cash ($)"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FPS_PlayerCharacter|Stats", meta = (AllowPrivateAccess = "true", DisplayName = "Cash ($)"))
 	int32 Cash;
 	
 	
