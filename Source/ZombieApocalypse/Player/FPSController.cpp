@@ -200,11 +200,8 @@ void AFPSController::Reload()
 
 void AFPSController::TogglePause()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Function Fired"));
 	if (bIsPaused)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("IF fired"));
-
 		bIsPaused = false;
 		// Unpause the game
 		SetPause(false);
@@ -212,13 +209,9 @@ void AFPSController::TogglePause()
 		bShowMouseCursor = false;
 		FInputModeGameOnly InputMode;
 		SetInputMode(InputMode);
-
-		UE_LOG(LogTemp, Warning, TEXT("IF finished"));
-
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ELSE fired"));
 
 		// Pause the game
 		SetPause(true);
@@ -230,7 +223,6 @@ void AFPSController::TogglePause()
 		//InputMode.SetWidgetToFocus(PauseMenuWidget->TakeWidget());
 		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 		SetInputMode(InputMode);
-		UE_LOG(LogTemp, Warning, TEXT("ELSE finished"));
 
 	}
 	

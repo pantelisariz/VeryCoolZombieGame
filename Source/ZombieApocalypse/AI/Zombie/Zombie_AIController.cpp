@@ -45,11 +45,21 @@ void AZombie_AIController::SetupPerceptionSystem()
 
 void AZombie_AIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
+	if (bTargetLocked) return;
 	if (!Actor->IsA(AHuman::StaticClass())) return;
 
 	GetBlackboardComponent()->SetValueAsBool("bCanSeeHuman", Stimulus.WasSuccessfullySensed());
 	GetBlackboardComponent()->SetValueAsObject("TargetActor", Stimulus.WasSuccessfullySensed() ? Actor : nullptr);
-
+	bTargetLocked = true;
+	GetWorld()->GetTimerManager().SetTimer(
+		TargetLockTimer,
+		FTimerDelegate::CreateLambda([this]()
+			{
+				bTargetLocked = false;  // unlock
+			}),
+		TargetLockDuration,
+		false
+	);
 	
 	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Zombie Location; X: %f Y: %f Z: %f"), ZombieLocation.X, ZombieLocation.Y, ZombieLocation.Z));
 	// GEngine -> AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("PawnBase Location; X: %f Y: %f Z: %f"), PawnBaseLocation.X, PawnBaseLocation.Y, PawnBaseLocation.Z));

@@ -20,5 +20,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blackboard", meta = (AllowPrivateAccess = "true"))
 	FBlackboardKeySelector In_TargetLocation;
-
+private:
+	UPROPERTY()
+	FTimerHandle DelayHandle;
 };
