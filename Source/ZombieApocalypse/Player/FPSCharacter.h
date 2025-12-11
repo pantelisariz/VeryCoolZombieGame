@@ -50,10 +50,11 @@ public:
 	void ChangeHealth(int32 HealthChangeValue);
 	UFUNCTION()
 	void ChangeAmmo(int32 AmmoChangeValue);	
+
 	UFUNCTION()
-	void GetCash();
+	void Purchase();
 	UFUNCTION()
-	void SpendMoney(Cash);
+	void SpendMoney(int32 Price);
 	
 	
 	

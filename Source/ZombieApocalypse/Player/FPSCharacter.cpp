@@ -210,17 +210,16 @@ void AFPSCharacter::ChangeAmmo(int32 AmmoChangeValue)
 	CurrentGun -> GunCombatHUD -> UpdateBulletCount(CurrentGun -> CurrentMagazineAmmo, CurrentGun-> CurrentCarryAmmo);
 }
 
-void AFPSCharacter::GetCash()
+void AFPSCharacter::Purchase(int32 Price)
 {
-
+	
 }
 
-void AFPSCharacter::SpendMoney(Cash)
+void AFPSCharacter::SpendMoney(int32 Price)
 {
-	GetCash();
-	if(Cash <=||= PriceOfItem)
+	if(Cash >= Price)
 	{
-		Purchase();
+		Purchase(Price);
 	}
 }
 
