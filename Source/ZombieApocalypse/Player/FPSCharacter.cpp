@@ -154,6 +154,11 @@ void AFPSCharacter::Interact()
 		return;
 	}
 	
+	if (TimeLastInteract + (0.5f * 0.95) >= GetWorld() -> TimeSeconds)
+	{
+		return;
+	}
+	
 	
 	
 	const FVector TraceStart = CameraComponent -> GetComponentLocation();
@@ -190,13 +195,13 @@ void AFPSCharacter::Interact()
 
 	if (AInteractableActor* HitInteractable = Cast<AInteractableActor>(HitActor))
 	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Yellow, false, 1.0f, 0, 0.5f);
+		TimeLastInteract = GetWorld() -> TimeSeconds;
 		
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Yellow, false, 1.0f, 0, 0.5f);
 		if (APurchasableActor* HitPurchasableGun = Cast<APurchasableActor>(HitActor))
 		{
 			HitPurchasableGun -> Purchase(Cash);
 		}
-		
 	}
 	else
 	{
@@ -251,21 +256,46 @@ void AFPSCharacter::SpawnMeleeWeapon(TSubclassOf<AMeleeWeapon> MeleeWeaponClass)
 
 void AFPSCharacter::SetGun(AGun* NewGun)
 {
+	FVector CurrentGunPos = FVector(0,0,0);
 	if (CurrentGun)
 	{
+		CurrentGunPos = CurrentGun -> GetActorLocation();
+		
+		FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepRelative, true);
+		CurrentGun -> DetachFromActor(DetachmentRules);
 		CurrentGun -> Destroy();
 		CurrentGun = nullptr;
 	}
 	
+	if (not NewGun)
+	{
+		return;
+	}
 	
+	
+	UE_LOG(LogTemp, Warning, TEXT("CurrentGun - X: %f, Y: %f, Z: %f"), CurrentGunPos.X, CurrentGunPos.Y, CurrentGunPos.Z);
 	CurrentGun = NewGun;
-	CurrentGun -> SetActorLocation(FVector(0,0,0));
-	CurrentGun -> SetActorRotation(FRotator(0,-90,0));
+	
+	CurrentGun -> SetActorRotation(FRotator(0,0,0));
+	CurrentGun -> SetActorLocation(CurrentGunPos);
+	
+	UE_LOG(LogTemp, Warning, TEXT("NewGun - X: %f, Y: %f, Z: %f"), CurrentGun -> GetActorLocation().X, CurrentGun -> GetActorLocation().Y, CurrentGun -> GetActorLocation().Z);
 	
 	
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
+
+	
+	
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+	CurrentGun -> AttachToActor(this, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
+	
+	CurrentGun -> SetActorLocation(GunPlacementPoint -> GetRelativeLocation());
+	
+	
+	
+	
+	UE_LOG(LogTemp, Warning, TEXT("GunPlacementPoint - X: %f, Y: %f, Z: %f"), GunPlacementPoint -> GetRelativeLocation().X, GunPlacementPoint -> GetRelativeLocation().Y, GunPlacementPoint -> GetRelativeLocation().Z);
+	UE_LOG(LogTemp, Warning, TEXT("CurrentGun - X: %f, Y: %f, Z: %f"), CurrentGun -> GetActorLocation().X, CurrentGun -> GetActorLocation().Y, CurrentGun -> GetActorLocation().Z);
 }
 
 

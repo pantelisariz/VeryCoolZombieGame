@@ -43,6 +43,9 @@ public:
 	
 	void SetGun(AGun* NewGun);
 	
+	float TimeLastInteract;
+	
+	
 	
 	
 	

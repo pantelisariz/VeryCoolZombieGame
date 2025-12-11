@@ -216,6 +216,11 @@ void APurchasableGun::Purchase(int32 PlayerCash)
 	{
 		return;
 	}
+	
+	FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepWorld, true);
+	PurchasableGun -> DetachFromActor(DetachmentRules);
+	
+	PurchasableGun -> SetActorLocation(FVector(0, 0, 0));
 	OnGunPurchased.Broadcast(PurchasableGun);
 	
 	PurchasableGun = nullptr;
