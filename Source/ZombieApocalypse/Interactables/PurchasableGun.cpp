@@ -41,70 +41,42 @@ void APurchasableGun::BeginPlay()
 	SetupStatHUD();
 	*/
 	
-	RespawnStatHUD();
-	
-}
-
-
-
-#if WITH_EDITOR
-void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-{
-	Super::PostEditChangeProperty(PropertyChangedEvent);
-	
-	SetUpGunOnClassChange(PropertyChangedEvent);
-	
-	/*
-	if (not (PropertyChangedEvent.Property and 
-PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunInfoHUDClass)))
-	{
-		return;
-	}
-	*/
+	CreatePurchasableGun();
 	if (PurchasableGunInfoHUD)
 	{
 		SetStatsToGun();
 		SetHUDVariables();
 	}
-}
-#endif
-
-
-
-void APurchasableGun::SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent)
-{
-	if (PropertyChangedEvent.Property and 
-	PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunClass))
+	
+	TArray<FString> StartingGunAttachmentClassesKeys;
+	StartingGunAttachmentClasses.GetKeys(StartingGunAttachmentClassesKeys);
+	
+	for (FString AttachmentSlotName : StartingGunAttachmentClassesKeys)
 	{
-		if (not bAutoCreateGun)
+		for (UGunAttachmentSlotComponent* GunAttachmentSlot : PurchasableGun -> AttachmentSlots)
 		{
-			return;
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s %s"), *AttachmentSlotName, *GunAttachmentSlot -> GetName() );
+			
+			
+			if (GunAttachmentSlot -> GetName() != AttachmentSlotName)
+			{
+				continue;
+			}
+			GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClasses[AttachmentSlotName];
+			GunAttachmentSlot -> CreateAttachment();
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
+		
 		}
-		CreatePurchasableGun();
 	}
+	SetGunStatsToStats();
+	SetHUDVariables();
 }
 
-
-
-void APurchasableGun::PostLoad()
-{
-	Super::PostLoad();
-	if (not IsRunningGame() and PurchasableGunClass and not PurchasableGun)
-	{
-		CreatePurchasableGun();
-	}
-}
 
 
 
 void APurchasableGun::CreatePurchasableGun()
 {
-	if (PurchasableGun and PurchasableGun -> IsValidLowLevel())
-	{
-		PurchasableGun -> ConditionalBeginDestroy();
-		PurchasableGun -> Destroy();
-		PurchasableGun = nullptr;
-	}
 	
 	if (not PurchasableGunClass)
 	{
@@ -115,7 +87,6 @@ void APurchasableGun::CreatePurchasableGun()
 	{
 		return;
 	}
-	PurchasableGun -> SetFlags(RF_Transactional);
 	SpawnPurchasableGun();
 }
 
@@ -126,6 +97,8 @@ void APurchasableGun::SpawnPurchasableGun()
 	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, FVector(0,0,0), FRotator(0,0,0));
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	PurchasableGun -> AttachToComponent(GunPlacementPoint, AttachmentRules);
+	
+	
 	
 	SetupPurchasableGun();
 }
@@ -164,7 +137,7 @@ void APurchasableGun::SetStatsToGun()
 
 void APurchasableGun::SetupPurchasableGun()
 {
-	SetGunStatsToStats();	
+	SetStatsToGun();	
 	
 	if (not PurchasableGunInfoHUD)
 	{
@@ -206,7 +179,7 @@ void APurchasableGun::RespawnStatHUD()
 	check(PurchasableGunInfoHUD);
 	
 	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
-	SetStatsToGun();
+	SetGunStatsToStats();
 	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
 	PurchasableGunInfoHUD -> SetGunInfo();
 }

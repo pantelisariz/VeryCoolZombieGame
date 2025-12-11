@@ -33,11 +33,6 @@ protected:
 	 * Cody. (2024, March 18). PostEditChangeProperty for visualizing C++ changes in an artist-friendly way. Retrieved from Medium: 
 	 * https://medium.com/@codyjmccarty/posteditchangeproperty-for-visualizing-c-changes-in-an-artist-friendly-way-7e514332eab0
 	 */
-	#if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	#endif
-	void SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent);
-	virtual void PostLoad() override;
 	
 	
 	void SetAllGunVariables(FPropertyChangedEvent& PropertyChangedEvent);
@@ -48,6 +43,8 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Attachments", meta = (AllowPrivateAccess = "true"))
+	TMap<FString, TSubclassOf<AGunAttachment>> StartingGunAttachmentClasses;
 	UPROPERTY()
 	AGun* PurchasableGun;
 	
@@ -78,8 +75,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> PurchasableGunClass;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
-	bool bAutoCreateGun;
+
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UPurchasableGunInfoHUD> PurchasableGunInfoHUDClass;

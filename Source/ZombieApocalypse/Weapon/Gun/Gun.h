@@ -21,7 +21,6 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 
-	virtual void OnConstruction(const FTransform& Transform) override;
 	
 	
 	
@@ -75,6 +74,8 @@ public:
 	void StartReloading();
 
 	void AddCombatHUD();
+	
+	
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|UI")

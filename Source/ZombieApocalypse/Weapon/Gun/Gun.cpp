@@ -71,21 +71,13 @@ AGun::AGun()
 
 }
 
-void AGun::OnConstruction(const FTransform& Transform)
-{
-	Super::OnConstruction(Transform);
-	GetAllAttachments();
-	
-}
+
 
 // Called when the game starts or when spawned
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	if (not bHasGottenAllAttachments)
-	{
-		GetAllAttachments();
-	}
+	GetAllAttachments();
 
 	TimeBetweenShots  = 1.0f / FMath::Max(0.0001f, FireRate);
 }
@@ -203,10 +195,8 @@ void AGun::Fire()
 	}
 	
 	
-	for (int BulletShot = 0; BulletShot <= BulletPerAmmo; BulletShot++)
-	{
-		GetWorldTimerManager().SetTimer(TimerHandle_MultiShot, this, &AGun::FireShot, 0.01f/FireRate, false);
-	}
+
+	GetWorldTimerManager().SetTimer(TimerHandle_MultiShot, this, &AGun::FireShot, 0.01f/FireRate, false);
 }
 
 
@@ -255,7 +245,7 @@ void AGun::FireShot()
 	// If the hit actor is one of our pawns, nuke it (TODO: or apply damage later)
 	if (ACustomPawnBase* HitPawn = Cast<ACustomPawnBase>(HitActor))
 	{
-		int32 CalculatedDamage = Damage;
+		int32 CalculatedDamage = Damage * BulletPerAmmo;
 		HitPawn -> TakeDamage(CalculatedDamage);
 		//apply damage placehodler for later
 		//UGameplayStatics::ApplyPointDamage(HitPawn, BaseDamage, Direction, Hit, GetController(), this, UDamageType::StaticClass());
@@ -362,6 +352,7 @@ void AGun::GetAllAttachments()
 		
 	}
 	bHasGottenAllAttachments = true;
+	
 }
 
 
@@ -441,7 +432,10 @@ void AGun::AddAttachmentStatsToGun(TMap<EGunStatType, FGunStatChange>AttachmentS
 		}
 	}
 	
-	GunCombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+	if (GunCombatHUD)
+	{
+		GunCombatHUD -> UpdateBulletCount(CurrentMagazineAmmo, CurrentCarryAmmo);
+	}
 }
 
 
