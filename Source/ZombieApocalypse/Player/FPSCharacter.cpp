@@ -43,8 +43,6 @@ AFPSCharacter::AFPSCharacter()
 	MeleeWeaponPlacementPoint -> SetupAttachment(RootComponent.Get());
 	
 	
-	
-	
 	RunSpeed = 1000.f;
 	WalkSpeed = 600.f;
 	
@@ -53,9 +51,6 @@ AFPSCharacter::AFPSCharacter()
 	
 	Cash = 600;
 	
-
-
-
 
 }
 
@@ -213,6 +208,20 @@ void AFPSCharacter::ChangeAmmo(int32 AmmoChangeValue)
 {
 	CurrentGun -> CurrentCarryAmmo += AmmoChangeValue;
 	CurrentGun -> GunCombatHUD -> UpdateBulletCount(CurrentGun -> CurrentMagazineAmmo, CurrentGun-> CurrentCarryAmmo);
+}
+
+void AFPSCharacter::GetCash()
+{
+
+}
+
+void AFPSCharacter::SpendMoney(Cash)
+{
+	GetCash();
+	if(Cash <=||= PriceOfItem)
+	{
+		Purchase();
+	}
 }
 
 
