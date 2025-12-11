@@ -2,13 +2,12 @@
 
 
 #include "FPSCharacter.h"
-#include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
 #include "GameFramework/DamageType.h"
-#include "../AI/CustomPawnBase.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "ZombieApocalypse/AllDelegates.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -39,6 +38,9 @@ AFPSCharacter::AFPSCharacter()
 	
 	GunPlacementPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunPlacementPoint"));
 	GunPlacementPoint -> SetupAttachment(RootComponent.Get());
+	
+	MeleeWeaponPlacementPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeleeWeaponPlacementPoint"));
+	MeleeWeaponPlacementPoint -> SetupAttachment(RootComponent.Get());
 	
 	
 	
@@ -91,11 +93,36 @@ void AFPSCharacter::BeginPlay()
 		return;
 	}
 	
-	CurrentGun = GetWorld() -> SpawnActor<AGun>(StartingGunClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
-	SetupGun();
+	SpawnGun(StartingGunClass);
+	
+	TArray<FString> StartingGunAttachmentClassesKeys;
+	StartingGunAttachmentClasses.GetKeys(StartingGunAttachmentClassesKeys);
+	
+	for (FString AttachmentSlotName : StartingGunAttachmentClassesKeys)
+	{
+		for (UGunAttachmentSlotComponent* GunAttachmentSlot : CurrentGun -> AttachmentSlots)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s %s"), *AttachmentSlotName, *GunAttachmentSlot -> GetName() );
+			
+			
+			if (GunAttachmentSlot -> GetName() != AttachmentSlotName)
+			{
+				continue;
+			}
+			GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClasses[AttachmentSlotName];
+			GunAttachmentSlot -> CreateAttachment();
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
+		
+		}
+	}
+	
 
+
+	SpawnMeleeWeapon(StartingMeleeClass);
 	
-	
+	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
+	HealthChanged.AddUObject(this, &AFPSCharacter::ChangeHealth);
+	AmmoChanged.AddUObject(this, &AFPSCharacter::ChangeAmmo);
 	
 }
 
@@ -116,14 +143,51 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 
 
-void AFPSCharacter::SetupGun()
+
+
+
+void AFPSCharacter::SpawnGun(TSubclassOf<AGun> GunWeaponClass)
 {
+	if (not GunWeaponClass)
+	{
+		return;
+	}
+	
+	CurrentGun = GetWorld() -> SpawnActor<AGun>(GunWeaponClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
+
+	
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
 	CurrentGun -> PlayerCameraComponent = CameraComponent;
-	CurrentGun -> CashGained.BindUObject(this, &AFPSCharacter::ChangeCash);
+	
+	
 	CurrentGun -> AddCombatHUD();
+	
 }
+
+
+
+void AFPSCharacter::SpawnMeleeWeapon(TSubclassOf<AMeleeWeapon> MeleeWeaponClass)
+{
+	if (not MeleeWeaponClass)
+	{
+		return;
+	}
+	
+	CurrentMeleeWeapon = GetWorld() -> SpawnActor<AMeleeWeapon>(MeleeWeaponClass, MeleeWeaponPlacementPoint -> GetRelativeLocation(), FRotator(0,-90,0));
+
+	
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+	CurrentMeleeWeapon -> AttachToComponent(CameraArmComponent, AttachmentRules);
+	CurrentMeleeWeapon -> PlayerCameraComponent = CameraComponent;
+	CashChanged.AddUObject(this, &AFPSCharacter::ChangeCash);
+}
+
+
+
+
+
+
 
 
 
@@ -143,3 +207,17 @@ void AFPSCharacter::ChangeCash(int32 CashChangeValue)
 	PlayerInfoHUD -> UpdateCashText(Cash);
 }
 
+
+
+void AFPSCharacter::ChangeAmmo(int32 AmmoChangeValue)
+{
+	CurrentGun -> CurrentCarryAmmo += AmmoChangeValue;
+	CurrentGun -> GunCombatHUD -> UpdateBulletCount(CurrentGun -> CurrentMagazineAmmo, CurrentGun-> CurrentCarryAmmo);
+}
+
+
+
+void AFPSCharacter::ChangeHealth(int32 HealthChangeValue)
+{
+	CurrentHealth += HealthChangeValue;
+}

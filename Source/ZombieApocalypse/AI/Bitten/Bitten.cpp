@@ -3,6 +3,8 @@
 
 #include "Bitten.h"
 
+#include "ZombieApocalypse/AllDelegates.h"
+
 // Sets default values
 ABitten::ABitten()
 {
@@ -10,6 +12,9 @@ ABitten::ABitten()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	CashChangeValue = 75;
+	
+	WeaknessLenght = 1.5f;
+	HealthToBecomeWeakValue = 15;
 
 }
 
@@ -35,8 +40,8 @@ void ABitten::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ABitten::ComposeAfterTime()
+void ABitten::ConvertAfterTime()
 {
-	Destroy();
+	OnBittenConvert.Broadcast(this);
 }
 

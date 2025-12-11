@@ -2,6 +2,7 @@
 
 #include "PopulationSpawner.h"
 
+#include "AllDelegates.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
 #include "Field/FieldSystemNodes.h"
@@ -31,6 +32,9 @@ APopulationSpawner::APopulationSpawner()
 void APopulationSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	OnBittenConvert.AddUObject(this, &APopulationSpawner::TryConvertBitten);
+	
 	
 	SetupHUD();
 	
@@ -86,10 +90,9 @@ FVector APopulationSpawner::GetRandomSpawnPoint()
 
 TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSubclassOf<ACustomPawnBase> SpawnClass)
 {
-	TArray<FVector> SpawnPoints;
 	TArray<ACustomPawnBase*> SpawnedActors;
 	
-	for (int i = 0; i < AmountToSpawn; i++)
+	while (SpawnedActors.Num() < AmountToSpawn)
 	{
 		bool bCanSpawn = false;
 		FVector RandomSpawnPoint;
@@ -97,16 +100,13 @@ TArray<ACustomPawnBase*> APopulationSpawner::SpawnActors(int AmountToSpawn, TSub
 		while (!bCanSpawn)
 		{
 			RandomSpawnPoint = GetRandomSpawnPoint();
-			
-			if (SpawnPoints.Contains(RandomSpawnPoint))
+			if (RandomSpawnPoint.IsZero())
 			{
 				continue;
 			}
+			
 			bCanSpawn = true;
 		}
-
-		
-		SpawnPoints.Add(RandomSpawnPoint);
 
 		ACustomPawnBase* SpawnedActor = GetWorld() -> SpawnActor<ACustomPawnBase>(SpawnClass, RandomSpawnPoint, FRotator(0,0,0));
 		if (not SpawnedActor)
@@ -203,7 +203,6 @@ void APopulationSpawner::OnBittenDestroy(AActor* ActorDestroyed)
 	}
 	BittenPopulation.Remove(BittenCast);
 	
-	TryConvertBitten(BittenCast);
 	
 	BittenPopulationCount = BittenPopulation.Num();
 	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
@@ -336,7 +335,7 @@ void APopulationSpawner::TryConvertHuman(AZombie* OwnerZombie, AHuman* Human)
 
 	
 	//my favorite part
-	GetWorldTimerManager().SetTimer(NewBitten -> BittenTurningTimerHandle, NewBitten, &ABitten::ComposeAfterTime, BittenTurningTime, false);
+	GetWorldTimerManager().SetTimer(NewBitten -> BittenTurningTimerHandle, NewBitten, &ABitten::ConvertAfterTime, BittenTurningTime, false);
 	Human -> Destroy();
 	
 	OnBittenSpawn(NewBitten);

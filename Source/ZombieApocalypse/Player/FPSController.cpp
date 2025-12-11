@@ -43,8 +43,13 @@ void AFPSController::SetupInputComponent()
 	
 	EnhancedInputComponent -> BindAction(ReloadAction.Get(), ETriggerEvent::Triggered, this, &AFPSController::Reload);
 	
+	
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Started, this, &AFPSController::FireStart);
 	EnhancedInputComponent -> BindAction(FireAction.Get(), ETriggerEvent::Completed, this, &AFPSController::FireEnd);
+	
+	EnhancedInputComponent -> BindAction(MeleeAction.Get(), ETriggerEvent::Started, this, &AFPSController::MeleeStart);
+	EnhancedInputComponent -> BindAction(MeleeAction.Get(), ETriggerEvent::Completed, this, &AFPSController::MeleeEnd);
+	
 	
 	EnhancedInputComponent -> BindAction(PauseAction.Get(), ETriggerEvent::Completed, this, &AFPSController::TogglePause);
 	
@@ -95,6 +100,8 @@ void AFPSController::Move(const FInputActionValue& Value)
 	
 }
 
+
+
 void AFPSController::Look(const FInputActionValue& Value)
 {
 	// UE_LOG(LogTemp, Warning, TEXT("Look"));
@@ -105,41 +112,78 @@ void AFPSController::Look(const FInputActionValue& Value)
 	FPSCharacter -> AddControllerPitchInput(LookAxisVector.Y);
 }
 
+
+
 void AFPSController::JumpStart()
 {
 	FPSCharacter -> Jump();
 }
+
+
 
 void AFPSController::JumpEnd()
 {
 	FPSCharacter -> StopJumping();
 }
 
+
+
 void AFPSController::RunStart()
 {
 	FPSCharacter -> GetCharacterMovement() -> MaxWalkSpeed = FPSCharacter -> RunSpeed;
+	FPSCharacter -> CameraComponent -> FieldOfView += 5;
 }
+
+
 
 void AFPSController::RunEnd()
 {
 	FPSCharacter -> GetCharacterMovement() -> MaxWalkSpeed = FPSCharacter -> WalkSpeed;
+	FPSCharacter -> CameraComponent -> FieldOfView -= 5;
+	
 }
+
+
 
 void AFPSController::FireStart()
 {
 	if (FPSCharacter)
 	{
-		FPSCharacter->CurrentGun->StartFire();
+		FPSCharacter -> CurrentGun -> StartFire();
 	}
 }
+
+
 
 void AFPSController::FireEnd()
 {
 	if (FPSCharacter)
 	{
-		FPSCharacter->CurrentGun->EndFire();
+		FPSCharacter -> CurrentGun -> EndFire();
 	}
 }
+
+
+
+void AFPSController::MeleeStart()
+{
+	if (FPSCharacter)
+	{
+		FPSCharacter -> CurrentMeleeWeapon -> StartAttack();
+	}
+}
+
+
+
+void AFPSController::MeleeEnd()
+{
+	if (FPSCharacter)
+	{
+		FPSCharacter -> CurrentMeleeWeapon -> EndAttack();
+	}
+}
+
+
 
 void AFPSController::Reload()
 {
@@ -147,10 +191,12 @@ void AFPSController::Reload()
 	
 	if (FPSCharacter and not FPSCharacter -> CurrentGun -> bIsReloading and FPSCharacter -> CurrentGun -> CurrentMagazineAmmo != FPSCharacter -> CurrentGun -> MagazineCapacity)
 	{
-		FPSCharacter->CurrentGun->StartReloading();
+		FPSCharacter -> CurrentGun -> StartReloading();
 	}
 	
 }
+
+
 
 void AFPSController::TogglePause()
 {

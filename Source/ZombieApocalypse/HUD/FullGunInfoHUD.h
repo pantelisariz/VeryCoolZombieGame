@@ -5,35 +5,29 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Border.h"
-#include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "CombatHUD.generated.h"
+#include "ZombieApocalypse/Weapon/Gun/Gun.h"
+#include "FullGunInfoHUD.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZOMBIEAPOCALYPSE_API UCombatHUD : public UUserWidget
+class ZOMBIEAPOCALYPSE_API UFullGunInfoHUD : public UUserWidget
 {
 	GENERATED_BODY()
 	
 	
+protected:
+	UPROPERTY()
+	AGun* CurrentGun;
+	
 public:
 	void NativeConstruct() override;
-
-	void UpdateAllText();
-	
-	void UpdateBulletCount(int32 NewBulletCount, int32 TotalAmmo);
-	void UpdateReloadProgressBar(float ReloadProgressPercentile);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UBorder* BulletCountBorder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
 	UTextBlock* BulletTextCounter;
-
 	
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (BindWidget))
-	UProgressBar* ReloadProgressBar;
-	float ReloadProgress;
 };

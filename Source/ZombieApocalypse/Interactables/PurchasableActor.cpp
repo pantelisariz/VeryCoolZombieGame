@@ -5,4 +5,11 @@
 
 APurchasableActor::APurchasableActor()
 {
+
 }
+
+void APurchasableActor::BeginPlay()
+{
+	Super::BeginPlay();
+}
+

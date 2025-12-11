@@ -3,6 +3,8 @@
 
 #include "Human.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 // Sets default values
 AHuman::AHuman()
 {
@@ -10,6 +12,9 @@ AHuman::AHuman()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	CashChangeValue = -200;
+	
+	WeaknessLenght = 2.5f;
+	HealthToBecomeWeakValue = 25;
 
 }
 
@@ -36,9 +41,9 @@ void AHuman::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AHuman::PrepareToBeBitten()
 {
     // Stop movement so the pawn doesn't slide while being converted
-    if (FloatingPawnMovementComponent)
+    if (GetCharacterMovement())
     {
-        FloatingPawnMovementComponent -> StopMovementImmediately();
+        GetCharacterMovement() -> StopMovementImmediately();
     }
     else
     {

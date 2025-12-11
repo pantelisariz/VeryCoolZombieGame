@@ -3,58 +3,96 @@
 
 #include "PurchasableGun.h"
 
+#include "Kismet/GameplayStatics.h"
+
 APurchasableGun::APurchasableGun()
 {
 	GunPlacementPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunPlacementPoint"));
 	GunPlacementPoint -> SetupAttachment(Mesh);	
 	
+	/*
 	TextBlock = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextBlock"));
 	TextBlock -> SetupAttachment(Mesh);	
+	*/
+	
 	
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
-	SphereCollider->SetupAttachment(Mesh);
+	SphereCollider -> SetupAttachment(Mesh);
+	SphereCollider -> SetSphereRadius(300.f);
+	
+	InfoWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InfoWidget"));
+	InfoWidget -> SetupAttachment(Mesh);
+	
 	
 	PurchasableGunClass = nullptr;
 	PurchasableGun = nullptr;
+	PurchasableGunInfoHUDClass = nullptr;
 	
 	
-	
+	RespawnStatHUD();
 }
 
 void APurchasableGun::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	/*
 	SpawnPurchasableGun();
+	SetupStatHUD();
+	*/
 	
+	RespawnStatHUD();
 	
 }
 
+
+
+#if WITH_EDITOR
 void APurchasableGun::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	
+	SetUpGunOnClassChange(PropertyChangedEvent);
+	
+	/*
 	if (not (PropertyChangedEvent.Property and 
-		PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunClass)))
+PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunInfoHUDClass)))
 	{
 		return;
 	}
-	if (not bAutoCreateGun)
+	*/
+	if (PurchasableGunInfoHUD)
 	{
-		return;
+		SetStatsToGun();
+		SetHUDVariables();
 	}
-	CreatePurchasableGun();
+}
+#endif
 
+
+
+void APurchasableGun::SetUpGunOnClassChange(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	if (PropertyChangedEvent.Property and 
+	PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(APurchasableGun, PurchasableGunClass))
+	{
+		if (not bAutoCreateGun)
+		{
+			return;
+		}
+		CreatePurchasableGun();
+	}
 }
 
 
-void APurchasableGun::SpawnPurchasableGun()
+
+void APurchasableGun::PostLoad()
 {
-	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, GunPlacementPoint -> GetRelativeLocation(), FRotator(0,0,0));
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
-	PurchasableGun -> AttachToComponent(GunPlacementPoint, AttachmentRules);
-	
-	SetupPurchasableGun();
+	Super::PostLoad();
+	if (not IsRunningGame() and PurchasableGunClass and not PurchasableGun)
+	{
+		CreatePurchasableGun();
+	}
 }
 
 
@@ -72,21 +110,31 @@ void APurchasableGun::CreatePurchasableGun()
 	{
 		return;
 	}
-	PurchasableGun = NewObject<AGun>(this, PurchasableGunClass);
+	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, FVector(0,0,0), FRotator(0,0,0));
 	if (not PurchasableGun)
 	{
 		return;
 	}
 	PurchasableGun -> SetFlags(RF_Transactional);
-	MarkPackageDirty();
 	SpawnPurchasableGun();
 }
 
 
 
-void APurchasableGun::SetupPurchasableGun()
+void APurchasableGun::SpawnPurchasableGun()
 {
-	GunTypeInText = PurchasableGun -> GunTypeInText;
+	PurchasableGun = GetWorld() -> SpawnActor<AGun>(PurchasableGunClass, FVector(0,0,0), FRotator(0,0,0));
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+	PurchasableGun -> AttachToComponent(GunPlacementPoint, AttachmentRules);
+	
+	SetupPurchasableGun();
+}
+
+
+
+void APurchasableGun::SetGunStatsToStats()
+{
+	GunTypeInText = PurchasableGun -> WeaponTypeInText;
 	Damage = PurchasableGun -> Damage;
 	FireRate = PurchasableGun -> FireRate;
 	Range = PurchasableGun -> Range;
@@ -95,8 +143,13 @@ void APurchasableGun::SetupPurchasableGun()
 	MaxCarryAmmo = PurchasableGun -> MaxCarryAmmo;
 	BulletPerAmmo = PurchasableGun -> BulletPerAmmo;
 	AmmoUsedPerShot = PurchasableGun -> AmmoUsedPerShot;
-	
-	/*
+}
+
+
+
+void APurchasableGun::SetStatsToGun()
+{
+	PurchasableGun -> WeaponTypeInText = GunTypeInText;
 	PurchasableGun -> Damage = Damage;
 	PurchasableGun -> FireRate = FireRate;
 	PurchasableGun -> Range = Range;
@@ -105,8 +158,64 @@ void APurchasableGun::SetupPurchasableGun()
 	PurchasableGun -> MaxCarryAmmo = MaxCarryAmmo;
 	PurchasableGun -> BulletPerAmmo = BulletPerAmmo;
 	PurchasableGun -> AmmoUsedPerShot = AmmoUsedPerShot;
-	*/
+}
+
+
+
+void APurchasableGun::SetupPurchasableGun()
+{
+	SetGunStatsToStats();	
 	
+	if (not PurchasableGunInfoHUD)
+	{
+		SetupStatHUD();
+		return;
+	}
+	
+	SetHUDVariables();
+	
+	/*
 	FText TextToDisplay = FText::FromString( FString::Printf(TEXT("Damage: %d \n Fire Rate: %.2f \n Range: %.2f \n  Reload Time: %.2f \n Magazine Capacity: %d \n Max Carry Ammo: %d \n Bullet per Ammo: %d \n Ammo Used Per Shot: %d"), Damage, FireRate, Range, ReloadTime, MagazineCapacity, MaxCarryAmmo, BulletPerAmmo, AmmoUsedPerShot));
 	TextBlock -> SetText(TextToDisplay);
+	*/
+}
+
+
+
+void APurchasableGun::SetupStatHUD()
+{
+	if (not PurchasableGunInfoHUDClass)
+	{
+		return;
+	}
+	
+	PurchasableGunInfoHUD = CreateWidget<UPurchasableGunInfoHUD>(GetWorld(), *(PurchasableGunInfoHUDClass));
+	
+	check(PurchasableGunInfoHUD);
+	SetHUDVariables();
+}
+
+void APurchasableGun::RespawnStatHUD()
+{
+	if (not PurchasableGunInfoHUDClass)
+	{
+		return;
+	}
+	
+	PurchasableGunInfoHUD = CreateWidget<UPurchasableGunInfoHUD>(GetWorld(), *(PurchasableGunInfoHUDClass));
+	check(PurchasableGunInfoHUD);
+	
+	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
+	SetStatsToGun();
+	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
+	PurchasableGunInfoHUD -> SetGunInfo();
+}
+
+
+void APurchasableGun::SetHUDVariables()
+{
+	InfoWidget -> SetWidget(PurchasableGunInfoHUD);
+	SetGunStatsToStats();
+	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
+	PurchasableGunInfoHUD -> SetGunInfo();
 }
