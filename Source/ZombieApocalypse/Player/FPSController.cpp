@@ -231,6 +231,5 @@ void AFPSController::TogglePause()
 
 void AFPSController::Interact()
 {
-	
+	FPSCharacter -> Interact();
 }
-

@@ -43,10 +43,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GunPlacementPoint;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Attachments", meta = (AllowPrivateAccess = "true"))
-	TMap<FString, TSubclassOf<AGunAttachment>> StartingGunAttachmentClasses;
-	UPROPERTY()
-	AGun* PurchasableGun;
+
 	
 	// This was previously used for setting text
 	/*
@@ -71,10 +68,18 @@ public:
 	
 	void SetHUDVariables();
 	
+	void CreateGunAttachments();
+	
+	virtual void Purchase(int32 PlayerCash) override;
+	
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AGun> PurchasableGunClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|Attachments", meta = (AllowPrivateAccess = "true"))
+	TMap<FString, TSubclassOf<AGunAttachment>> StartingGunAttachmentClasses;
+	UPROPERTY()
+	AGun* PurchasableGun;
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
@@ -84,8 +89,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableGun|UI", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* InfoWidget;
 
-	
-	
 	
 	
 	// Gun variables

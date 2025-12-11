@@ -4,6 +4,7 @@
 #include "PurchasableGun.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "ZombieApocalypse/AllDelegates.h"
 
 APurchasableGun::APurchasableGun()
 {
@@ -18,7 +19,7 @@ APurchasableGun::APurchasableGun()
 	
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SphereCollider -> SetupAttachment(Mesh);
-	SphereCollider -> SetSphereRadius(300.f);
+	SphereCollider -> SetSphereRadius(50.f);
 	
 	InfoWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InfoWidget"));
 	InfoWidget -> SetupAttachment(Mesh);
@@ -48,26 +49,7 @@ void APurchasableGun::BeginPlay()
 		SetHUDVariables();
 	}
 	
-	TArray<FString> StartingGunAttachmentClassesKeys;
-	StartingGunAttachmentClasses.GetKeys(StartingGunAttachmentClassesKeys);
-	
-	for (FString AttachmentSlotName : StartingGunAttachmentClassesKeys)
-	{
-		for (UGunAttachmentSlotComponent* GunAttachmentSlot : PurchasableGun -> AttachmentSlots)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s %s"), *AttachmentSlotName, *GunAttachmentSlot -> GetName() );
-			
-			
-			if (GunAttachmentSlot -> GetName() != AttachmentSlotName)
-			{
-				continue;
-			}
-			GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClasses[AttachmentSlotName];
-			GunAttachmentSlot -> CreateAttachment();
-			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
-		
-		}
-	}
+	CreateGunAttachments();
 	SetGunStatsToStats();
 	SetHUDVariables();
 }
@@ -191,4 +173,50 @@ void APurchasableGun::SetHUDVariables()
 	SetGunStatsToStats();
 	PurchasableGunInfoHUD -> SetGun(PurchasableGun);
 	PurchasableGunInfoHUD -> SetGunInfo();
+}
+
+
+
+void APurchasableGun::CreateGunAttachments()
+{
+	TArray<FString> StartingGunAttachmentClassesKeys;
+	StartingGunAttachmentClasses.GetKeys(StartingGunAttachmentClassesKeys);
+	
+	for (FString AttachmentSlotName : StartingGunAttachmentClassesKeys)
+	{
+		for (UGunAttachmentSlotComponent* GunAttachmentSlot : PurchasableGun -> AttachmentSlots)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s %s"), *AttachmentSlotName, *GunAttachmentSlot -> GetName() );
+			
+			
+			if (GunAttachmentSlot -> GetName() != AttachmentSlotName)
+			{
+				continue;
+			}
+			GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClasses[AttachmentSlotName];
+			GunAttachmentSlot -> CreateAttachment();
+			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
+		
+		}
+	}
+}
+
+
+
+void APurchasableGun::Purchase(int32 PlayerCash)
+{
+	Super::Purchase(PlayerCash);
+	
+	if (not PurchasableGun)
+	{
+		return;
+	}
+	
+	if(PlayerCash < Cost)
+	{
+		return;
+	}
+	OnGunPurchased.Broadcast(PurchasableGun);
+	
+	PurchasableGun = nullptr;
 }

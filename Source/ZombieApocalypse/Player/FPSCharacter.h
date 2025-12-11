@@ -35,9 +35,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	void Interact();
+	
 	
 	void SpawnGun(TSubclassOf<AGun> GunWeaponClass);
 	void SpawnMeleeWeapon(TSubclassOf<AMeleeWeapon> MeleeWeaponClass);
+	
+	void SetGun(AGun* NewGun);
 	
 	
 	

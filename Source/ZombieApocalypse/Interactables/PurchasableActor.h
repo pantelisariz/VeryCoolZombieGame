@@ -24,8 +24,14 @@ protected:
 	
 
 public:
+	
+	virtual void Purchase(int32 PlayerCash);
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PurchasableActor", meta = (AllowPrivateAccess = "true"))
 	int32 Cost;
+	
+	
 	
 
 	

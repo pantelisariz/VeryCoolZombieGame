@@ -8,6 +8,8 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "ZombieApocalypse/AllDelegates.h"
+#include "ZombieApocalypse/Interactables/InteractableActor.h"
+#include "ZombieApocalypse/Interactables/PurchasableGun.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -55,8 +57,8 @@ AFPSCharacter::AFPSCharacter()
 	
 
 
-
-
+	
+	OnGunPurchased.AddUObject(this, &AFPSCharacter::SetGun);
 }
 
 // Called when the game starts or when spawned
@@ -143,6 +145,68 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 
 
+void AFPSCharacter::Interact()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Melee attack"));
+	
+	if (not GetWorld() or not CameraComponent)
+	{
+		return;
+	}
+	
+	
+	
+	const FVector TraceStart = CameraComponent -> GetComponentLocation();
+	const FVector Direction = CameraComponent -> GetForwardVector();
+	const FVector TraceEnd = TraceStart + Direction * 250;
+	
+	auto NewDirection = Direction.ToOrientationQuat();
+	
+	
+	
+	FCollisionShape SweepShape;
+	SweepShape.SetCapsule(30.f,30.f);
+	
+	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
+	FHitResult Hit;
+	const bool bDidHit = GetWorld() -> SweepSingleByChannel(Hit, TraceStart, TraceEnd, NewDirection, TraceChannel, SweepShape);
+
+	if (!bDidHit)
+	{
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Blue, false, 1.0f, 0, 0.5f);
+		return;
+	}
+	
+
+	DrawDebugCapsule(GetWorld(), Hit.ImpactPoint, 10.f, 30.f, NewDirection, FColor::Red, false, 2.0f);
+	
+	AActor* HitActor = Hit.GetActor();
+	if (!HitActor)
+	{
+		// Hit something without an actor, in our case it will be probably nothing
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
+		return;
+	}
+
+	if (AInteractableActor* HitInteractable = Cast<AInteractableActor>(HitActor))
+	{
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Yellow, false, 1.0f, 0, 0.5f);
+		
+		if (APurchasableActor* HitPurchasableGun = Cast<APurchasableActor>(HitActor))
+		{
+			HitPurchasableGun -> Purchase(Cash);
+		}
+		
+	}
+	else
+	{
+		// We hit an actor that is NOT a target, this will happen a lot
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 0.5f);
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Melee attack successful"));
+}
+
 
 
 
@@ -185,9 +249,24 @@ void AFPSCharacter::SpawnMeleeWeapon(TSubclassOf<AMeleeWeapon> MeleeWeaponClass)
 
 
 
-
-
-
+void AFPSCharacter::SetGun(AGun* NewGun)
+{
+	if (CurrentGun)
+	{
+		CurrentGun -> Destroy();
+		CurrentGun = nullptr;
+	}
+	
+	
+	CurrentGun = NewGun;
+	CurrentGun -> SetActorLocation(FVector(0,0,0));
+	CurrentGun -> SetActorRotation(FRotator(0,-90,0));
+	
+	
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+	CurrentGun -> AttachToComponent(CameraArmComponent, AttachmentRules);
+	CurrentGun -> PlayerCameraComponent = CameraComponent;
+}
 
 
 
