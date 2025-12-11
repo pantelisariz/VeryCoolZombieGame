@@ -3,6 +3,8 @@
 
 #include "Bitten.h"
 
+#include "ZombieApocalypse/AllDelegates.h"
+
 // Sets default values
 ABitten::ABitten()
 {
@@ -38,8 +40,8 @@ void ABitten::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ABitten::ComposeAfterTime()
+void ABitten::ConvertAfterTime()
 {
-	Destroy();
+	OnBittenConvert.Broadcast(this);
 }
 

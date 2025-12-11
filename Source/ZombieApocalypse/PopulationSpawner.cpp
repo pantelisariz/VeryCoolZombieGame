@@ -2,6 +2,7 @@
 
 #include "PopulationSpawner.h"
 
+#include "AllDelegates.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
 #include "Field/FieldSystemNodes.h"
@@ -31,6 +32,9 @@ APopulationSpawner::APopulationSpawner()
 void APopulationSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	OnBittenConvert.AddUObject(this, &APopulationSpawner::TryConvertBitten);
+	
 	
 	SetupHUD();
 	
@@ -199,7 +203,6 @@ void APopulationSpawner::OnBittenDestroy(AActor* ActorDestroyed)
 	}
 	BittenPopulation.Remove(BittenCast);
 	
-	TryConvertBitten(BittenCast);
 	
 	BittenPopulationCount = BittenPopulation.Num();
 	CounterHUD -> BittenPopulationCount = BittenPopulationCount;
@@ -332,7 +335,7 @@ void APopulationSpawner::TryConvertHuman(AZombie* OwnerZombie, AHuman* Human)
 
 	
 	//my favorite part
-	GetWorldTimerManager().SetTimer(NewBitten -> BittenTurningTimerHandle, NewBitten, &ABitten::ComposeAfterTime, BittenTurningTime, false);
+	GetWorldTimerManager().SetTimer(NewBitten -> BittenTurningTimerHandle, NewBitten, &ABitten::ConvertAfterTime, BittenTurningTime, false);
 	Human -> Destroy();
 	
 	OnBittenSpawn(NewBitten);
