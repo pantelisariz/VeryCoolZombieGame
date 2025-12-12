@@ -191,8 +191,8 @@ public:
 	
 	float AttachmentStatChange(FGunStatChange GunStatChange,  float ValueToSetToo);
 	
-	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Weapon")
-	void LogAllAttachments();
+
+	
 	
 	
 };

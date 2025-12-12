@@ -111,7 +111,6 @@ void AFPSCharacter::BeginPlay()
 			}
 			GunAttachmentSlot -> CurrentAttachmentClass = StartingGunAttachmentClasses[AttachmentSlotName];
 			GunAttachmentSlot -> CreateAttachment();
-			UE_LOG(LogTemp, Warning, TEXT("AttachmentSlot name: %s"), *GunAttachmentSlot -> CurrentAttachmentClass -> GetDisplayNameText().ToString());
 		
 		}
 	}

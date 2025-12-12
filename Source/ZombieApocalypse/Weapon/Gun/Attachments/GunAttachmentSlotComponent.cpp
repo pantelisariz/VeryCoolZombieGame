@@ -34,14 +34,12 @@ void UGunAttachmentSlotComponent::BeginPlay()
 	}
 }
 
-
+#if WITH_EDITOR
 void UGunAttachmentSlotComponent::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	Super::PostEditChangeProperty(PropertyChangedEvent);
-	
 	SetUpAttachmentOnClassChange(PropertyChangedEvent);
 }
-
+#endif
 
 
 void UGunAttachmentSlotComponent::PostLoad()

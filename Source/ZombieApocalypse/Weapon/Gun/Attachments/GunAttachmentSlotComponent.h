@@ -25,9 +25,9 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
+#if WITH_EDITOR
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	
+#endif
 	virtual void PostLoad() override;
 
 	

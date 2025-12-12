@@ -468,19 +468,3 @@ float AGun::AttachmentStatChange(FGunStatChange GunStatChange, float ValueToSetT
 	
 	return 0;
 }
-
-
-
-void AGun::LogAllAttachments()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Log All Attachments"));
-	
-	for (UGunAttachmentSlotComponent* AttachmentComponent : AttachmentSlots)
-	{
-		for (TSubclassOf<AGunAttachment> AttachmentsClasses : AttachmentComponent -> AttachmentClasses)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *AttachmentsClasses -> GetDisplayNameText().ToString());
-		}
-	}
-	
-}
